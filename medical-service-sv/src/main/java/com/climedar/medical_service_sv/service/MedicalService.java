@@ -64,4 +64,8 @@ public class MedicalService {
         Optional.ofNullable(medicalServiceModel.getDescription())
                 .ifPresent(medicalServiceEntity::setDescription);
     }
+
+    public MedicalServiceEntity getMedicalServiceEntityById(Long id) {
+        return medicalServiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medical service not found with id: " + id));
+    }
 }
