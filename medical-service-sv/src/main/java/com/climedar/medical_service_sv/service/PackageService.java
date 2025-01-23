@@ -1,11 +1,13 @@
 package com.climedar.medical_service_sv.service;
 
+import com.climedar.library.exception.ClimedarException;
 import com.climedar.medical_service_sv.entity.MedicalPackageEntity;
 import com.climedar.medical_service_sv.entity.MedicalServiceEntity;
 import com.climedar.medical_service_sv.mapper.MedicalPackageMapper;
 import com.climedar.medical_service_sv.model.MedicalPackageModel;
 import com.climedar.medical_service_sv.model.MedicalServiceModel;
 import com.climedar.medical_service_sv.repository.MedicalPackageRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,13 +40,14 @@ public class PackageService {
 
 
     public void deletePackage(Long id) {
-        MedicalPackageEntity medicalPackageEntity = medicalPackageRepository.findById(id).orElseThrow(() -> new RuntimeException("Package not found with id: " + id));
+        MedicalPackageEntity medicalPackageEntity = medicalPackageRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+                "Package not found with id: " + id));
         medicalPackageEntity.setDeleted(true);
         medicalPackageRepository.save(medicalPackageEntity);
     }
 
     public MedicalPackageModel addServiceToPackage(Long packageId, Long serviceId) {
-        MedicalPackageEntity medicalPackageEntity = medicalPackageRepository.findById(packageId).orElseThrow(() -> new RuntimeException("Package not found with id: " + packageId));
+        MedicalPackageEntity medicalPackageEntity = medicalPackageRepository.findById(packageId).orElseThrow(() -> new EntityNotFoundException("Package not found with id: " + packageId));
         MedicalServiceEntity medicalServiceEntity = medicalService.getMedicalServiceEntityById(serviceId);
 
         if (medicalPackageEntity.getServices().contains(medicalServiceEntity)) {

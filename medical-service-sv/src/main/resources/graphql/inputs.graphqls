@@ -1,0 +1,22 @@
+input PageRequest {
+    page: Int!
+    size: Int!
+    sort: SortOptions
+}
+
+input SortOptions {
+    field: String!
+    direction: SortDirection!
+}
+
+enum SortDirection {
+    ASC
+    DESC
+}
+
+input MedicalServiceInput {
+    name: String!
+    description: String!
+    price: Float!
+    serviceType: ServiceType!
+}

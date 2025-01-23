@@ -105,6 +105,11 @@
 			<version>1.5.5.Final</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.climedar.library</groupId>
+			<artifactId>expection</artifactId>
+			<version>1.0</version>
+		</dependency>
     </dependencies>
 	<dependencyManagement>
 		<dependencies>

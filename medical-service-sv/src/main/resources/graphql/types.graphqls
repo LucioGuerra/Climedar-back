@@ -1,0 +1,42 @@
+type MedicalService {
+    id: ID!
+    code: String!
+    name: String!
+    description: String!
+    price: Float! # todo: no acepta double?
+    serviceType: ServiceType!
+}
+
+enum ServiceType {
+    GENERAL
+    SPECIALIST
+    SURGERY
+    EXAMS
+    THERAPY
+}
+
+type MedicalPackage {
+    id: ID!
+    code: String!
+    services: [MedicalService!]!
+    price: Float!
+}
+
+type PageInfo {
+    currentPage: Int!
+    totalPages: Int!
+    totalItems: Int!
+    itemsPerPage: Int!
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+}
+
+type MedicalServicePage {
+    pageInfo: PageInfo!
+    content: [MedicalService!]!
+}
+
+type MedicalPackagePage {
+    pageInfo: PageInfo!
+    content: [MedicalPackage!]!
+}

@@ -6,10 +6,14 @@ import com.climedar.medical_service_sv.mapper.MedicalServiceMapper;
 import com.climedar.medical_service_sv.repository.MedicalServiceRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -24,10 +28,12 @@ public class MedicalService {
        return medicalServiceMapper.toModel(medicalServiceEntity);
     }
 
-    public List<MedicalServiceModel> getAllMedicalServices() {
-        List<MedicalServiceEntity> medicalServiceEntities = medicalServiceRepository.findAll();
+    public Page<MedicalServiceModel> getAllMedicalServices(Pageable pageable) {
+        Specification<MedicalServiceEntity> specification = Specification.where((root, query, cb) -> cb.equal(root.get("deleted"), false));
 
-        return medicalServiceEntities.stream().map(medicalServiceMapper::toModel).toList();
+        Page<MedicalServiceEntity> medicalServiceEntities = medicalServiceRepository.findAll(specification, pageable);
+
+        return medicalServiceEntities.map(medicalServiceMapper::toModel);
     }
 
     public MedicalServiceModel createMedicalService(MedicalServiceModel medicalServiceModel) {
