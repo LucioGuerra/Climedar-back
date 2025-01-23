@@ -17,7 +17,6 @@ public interface PageInfoMapper {
     @Mapping(source = "page", target = "hasPreviousPage", qualifiedByName = "extractHasPreviousPage")
     PageInfo toPageInfo(Page<?> page);
 
-    // Métodos personalizados para extraer valores de Page
     @Named("extractPageNumber")
     default int extractPageNumber(Page<?> page) {
         return page.getNumber();

@@ -38,5 +38,5 @@ type MedicalServicePage {
 
 type MedicalPackagePage {
     pageInfo: PageInfo!
-    content: [MedicalPackage!]!
+    packages: [MedicalPackage!]!
 }

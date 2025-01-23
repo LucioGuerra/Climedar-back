@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 public class MedicalPackagePage {
     private PageInfo pageInfo;
-    private List<MedicalPackageModel> medicalPackages;
+    private List<MedicalPackageModel> packages;
 }

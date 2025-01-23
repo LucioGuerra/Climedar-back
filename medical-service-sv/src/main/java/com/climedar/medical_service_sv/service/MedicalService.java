@@ -17,7 +17,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @AllArgsConstructor
 @Service
@@ -29,8 +31,6 @@ public class MedicalService {
 
     public MedicalServiceModel getMedicalServiceById(Long id) {
        MedicalServiceEntity medicalServiceEntity = medicalServiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medical service not found with id: " + id));
-       System.out.println("MedicalService.getMedicalServiceById");
-
        return medicalServiceMapper.toModel(medicalServiceEntity);
     }
 
@@ -44,7 +44,7 @@ public class MedicalService {
 
     public MedicalServiceModel createMedicalService(MedicalServiceModel medicalServiceModel) {
         MedicalServiceEntity medicalServiceEntity = medicalServiceMapper.toEntity(medicalServiceModel);
-
+        medicalServiceEntity.setCode(generateCode());
         medicalServiceEntity = medicalServiceRepository.save(medicalServiceEntity);
 
         return medicalServiceMapper.toModel(medicalServiceEntity);
@@ -60,10 +60,11 @@ public class MedicalService {
         return medicalServiceMapper.toModel(medicalServiceEntity);
     }
 
-    public void deleteMedicalService(Long id) {
+    public Boolean deleteMedicalService(Long id) {
         MedicalServiceEntity medicalServiceEntity = medicalServiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medical service not found with id: " + id));
         medicalServiceEntity.setDeleted(true);
         medicalServiceRepository.save(medicalServiceEntity);
+        return true;
     }
 
     private void updateEntityFields(MedicalServiceModel medicalServiceModel, MedicalServiceEntity medicalServiceEntity) {
@@ -82,16 +83,8 @@ public class MedicalService {
     }
 
     public MedicalServicePage adapterGetAllMedicalServices(PageRequestInput pageRequestInput) {
-        Sort sort = Sort.unsorted();
-        if (pageRequestInput.getSortOption() != null) {
-            SortOption sortOption = pageRequestInput.getSortOption();
-            sort = Sort.by(
-                    Sort.Direction.fromString(sortOption.getDirection().name()),
-                    sortOption.getField()
-            );
-        }
-
-        Pageable pageable = PageRequest.of(pageRequestInput.getPage(), pageRequestInput.getSize(), sort);
+        Sort sort = pageRequestInput.getSort();
+        Pageable pageable = PageRequest.of(pageRequestInput.getPage()-1, pageRequestInput.getSize(), sort);
 
         Page<MedicalServiceModel> medicalServiceModels = getAllMedicalServices(pageable);
 
@@ -99,5 +92,13 @@ public class MedicalService {
         medicalServicePage.setPageInfo(pageInfoMapper.toPageInfo(medicalServiceModels));
         medicalServicePage.setServices(medicalServiceModels.getContent());
         return medicalServicePage;
+    }
+
+    public Set<MedicalServiceEntity> getMedicalServiceEntitiesByIds(List<Long> ids) {
+        return medicalServiceRepository.findByIdsAndNotDeleted(ids);
+    }
+
+    private String generateCode() {
+        return "CODE";
     }
 }

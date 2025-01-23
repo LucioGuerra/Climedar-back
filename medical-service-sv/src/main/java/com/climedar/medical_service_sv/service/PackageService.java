@@ -1,14 +1,24 @@
 package com.climedar.medical_service_sv.service;
 
 import com.climedar.library.exception.ClimedarException;
+import com.climedar.medical_service_sv.dto.request.PageRequestInput;
+import com.climedar.medical_service_sv.dto.request.SortOption;
+import com.climedar.medical_service_sv.dto.response.MedicalPackagePage;
+import com.climedar.medical_service_sv.dto.response.MedicalServicePage;
 import com.climedar.medical_service_sv.entity.MedicalPackageEntity;
 import com.climedar.medical_service_sv.entity.MedicalServiceEntity;
 import com.climedar.medical_service_sv.mapper.MedicalPackageMapper;
+import com.climedar.medical_service_sv.mapper.PageInfoMapper;
 import com.climedar.medical_service_sv.model.MedicalPackageModel;
 import com.climedar.medical_service_sv.model.MedicalServiceModel;
 import com.climedar.medical_service_sv.repository.MedicalPackageRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,19 +31,24 @@ public class PackageService {
     private final MedicalPackageRepository medicalPackageRepository;
     private final MedicalPackageMapper medicalPackageMapper;
     private final MedicalService medicalService;
+    private final PageInfoMapper pageInfoMapper;
 
     public MedicalPackageModel getPackageById(Long id) {
         MedicalPackageEntity medicalPackageEntity = medicalPackageRepository.findById(id).orElseThrow(() -> new RuntimeException("Package not found with id: " + id));
         return medicalPackageMapper.toModel(medicalPackageEntity);
     }
 
-    public List<MedicalPackageModel> getAllPackages() {
-        List<MedicalPackageEntity> medicalPackageEntities = medicalPackageRepository.findAll();
-        return medicalPackageEntities.stream().map(medicalPackageMapper::toModel).toList();
+    public Page<MedicalPackageModel> getAllPackages(Pageable pageable) {
+        Specification<MedicalPackageEntity> specification = Specification.where((root, query, cb) -> cb.equal(root.get("deleted"), false));
+        Page<MedicalPackageEntity> medicalPackageEntities = medicalPackageRepository.findAll(specification, pageable);
+        return medicalPackageEntities.map(medicalPackageMapper::toModel);
+
     }
 
-    public MedicalPackageModel createPackage(MedicalPackageModel medicalPackageModel) { //todo: modificar esto
-        MedicalPackageEntity medicalPackageEntity = medicalPackageMapper.toEntity(medicalPackageModel);
+    public MedicalPackageModel createPackage(List<Long> serviceIds) {
+        MedicalPackageEntity medicalPackageEntity = new MedicalPackageEntity();
+        medicalPackageEntity.setServices(medicalService.getMedicalServiceEntitiesByIds(serviceIds));
+        medicalPackageEntity.setCode(generateCode());
         medicalPackageEntity = medicalPackageRepository.save(medicalPackageEntity);
         return medicalPackageMapper.toModel(medicalPackageEntity);
     }
@@ -70,5 +85,21 @@ public class PackageService {
         medicalPackageEntity.removeService(medicalServiceEntity);
         medicalPackageRepository.save(medicalPackageEntity);
         return medicalPackageMapper.toModel(medicalPackageEntity);
+    }
+
+    public MedicalPackagePage adapterGetAllPackages(PageRequestInput pageRequestInput) {
+        Sort sort = pageRequestInput.getSort();
+        Pageable pageable = PageRequest.of(pageRequestInput.getPage()-1, pageRequestInput.getSize(), sort);
+
+        Page<MedicalPackageModel> medicalPackageModels = getAllPackages(pageable);
+
+        MedicalPackagePage medicalPackagePage = new MedicalPackagePage();
+        medicalPackagePage.setPageInfo(pageInfoMapper.toPageInfo(medicalPackageModels));
+        medicalPackagePage.setPackages(medicalPackageModels.getContent());
+        return medicalPackagePage;
+    }
+
+    private String generateCode() {
+        return "CODE";
     }
 }
