@@ -1,4 +1,5 @@
-package com.climedar.medical_service_sv.dto;
+package com.climedar.medical_service_sv.dto.request;
 
-public class SortDirection {
+public enum SortDirection {
+    ASC, DESC
 }

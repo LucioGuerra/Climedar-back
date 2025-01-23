@@ -33,7 +33,7 @@ public class MedicalPackageEntity {
     @Column(nullable = false, name = "updated_at")
     private LocalDateTime updatedAt;
 
-    private MedicalPackageEntity(){
+    public MedicalPackageEntity(){
         this.services = new HashSet<>();
         this.deleted = false;
     }

@@ -27,13 +27,13 @@ type PageInfo {
     totalPages: Int!
     totalItems: Int!
     itemsPerPage: Int!
-    hasNextPage: Boolean!
-    hasPreviousPage: Boolean!
+    hasNext: Boolean!
+    hasPrevious: Boolean!
 }
 
 type MedicalServicePage {
     pageInfo: PageInfo!
-    content: [MedicalService!]!
+    services: [MedicalService!]!
 }
 
 type MedicalPackagePage {

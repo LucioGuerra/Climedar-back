@@ -26,6 +26,7 @@ public class MedicalServiceEntity {
     private Double price;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "service_type")
     private ServiceType serviceType;
 
     @Column(nullable = false)
@@ -37,7 +38,7 @@ public class MedicalServiceEntity {
     @Column(nullable = false, name = "updated_at")
     private LocalDateTime updatedAt;
 
-    private MedicalServiceEntity(){
+    public MedicalServiceEntity(){
         this.deleted = false;
     }
 

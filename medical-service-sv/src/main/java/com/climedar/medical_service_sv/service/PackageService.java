@@ -32,7 +32,7 @@ public class PackageService {
         return medicalPackageEntities.stream().map(medicalPackageMapper::toModel).toList();
     }
 
-    public MedicalPackageModel createPackage(MedicalPackageModel medicalPackageModel) {
+    public MedicalPackageModel createPackage(MedicalPackageModel medicalPackageModel) { //todo: modificar esto
         MedicalPackageEntity medicalPackageEntity = medicalPackageMapper.toEntity(medicalPackageModel);
         medicalPackageEntity = medicalPackageRepository.save(medicalPackageEntity);
         return medicalPackageMapper.toModel(medicalPackageEntity);

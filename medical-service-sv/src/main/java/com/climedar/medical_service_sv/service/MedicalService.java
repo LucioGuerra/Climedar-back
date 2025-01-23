@@ -1,5 +1,9 @@
 package com.climedar.medical_service_sv.service;
 
+import com.climedar.medical_service_sv.dto.request.PageRequestInput;
+import com.climedar.medical_service_sv.dto.request.SortOption;
+import com.climedar.medical_service_sv.dto.response.MedicalServicePage;
+import com.climedar.medical_service_sv.mapper.PageInfoMapper;
 import com.climedar.medical_service_sv.model.MedicalServiceModel;
 import com.climedar.medical_service_sv.entity.MedicalServiceEntity;
 import com.climedar.medical_service_sv.mapper.MedicalServiceMapper;
@@ -8,12 +12,12 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -21,9 +25,11 @@ public class MedicalService {
 
     private final MedicalServiceRepository medicalServiceRepository;
     private final MedicalServiceMapper medicalServiceMapper;
+    private final PageInfoMapper pageInfoMapper;
 
     public MedicalServiceModel getMedicalServiceById(Long id) {
        MedicalServiceEntity medicalServiceEntity = medicalServiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medical service not found with id: " + id));
+       System.out.println("MedicalService.getMedicalServiceById");
 
        return medicalServiceMapper.toModel(medicalServiceEntity);
     }
@@ -73,5 +79,25 @@ public class MedicalService {
 
     public MedicalServiceEntity getMedicalServiceEntityById(Long id) {
         return medicalServiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medical service not found with id: " + id));
+    }
+
+    public MedicalServicePage adapterGetAllMedicalServices(PageRequestInput pageRequestInput) {
+        Sort sort = Sort.unsorted();
+        if (pageRequestInput.getSortOption() != null) {
+            SortOption sortOption = pageRequestInput.getSortOption();
+            sort = Sort.by(
+                    Sort.Direction.fromString(sortOption.getDirection().name()),
+                    sortOption.getField()
+            );
+        }
+
+        Pageable pageable = PageRequest.of(pageRequestInput.getPage(), pageRequestInput.getSize(), sort);
+
+        Page<MedicalServiceModel> medicalServiceModels = getAllMedicalServices(pageable);
+
+        MedicalServicePage medicalServicePage = new MedicalServicePage();
+        medicalServicePage.setPageInfo(pageInfoMapper.toPageInfo(medicalServiceModels));
+        medicalServicePage.setServices(medicalServiceModels.getContent());
+        return medicalServicePage;
     }
 }
