@@ -1,7 +1,6 @@
 package com.climedar.medical_service_sv.service;
 
 import com.climedar.medical_service_sv.dto.request.PageRequestInput;
-import com.climedar.medical_service_sv.dto.request.SortOption;
 import com.climedar.medical_service_sv.dto.response.MedicalServicePage;
 import com.climedar.medical_service_sv.mapper.PageInfoMapper;
 import com.climedar.medical_service_sv.model.MedicalServiceModel;
@@ -83,8 +82,7 @@ public class MedicalService {
     }
 
     public MedicalServicePage adapterGetAllMedicalServices(PageRequestInput pageRequestInput) {
-        Sort sort = pageRequestInput.getSort();
-        Pageable pageable = PageRequest.of(pageRequestInput.getPage()-1, pageRequestInput.getSize(), sort);
+        Pageable pageable = PageRequest.of(pageRequestInput.getPage()-1, pageRequestInput.getSize(), pageRequestInput.getSort());
 
         Page<MedicalServiceModel> medicalServiceModels = getAllMedicalServices(pageable);
 

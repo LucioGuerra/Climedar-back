@@ -2,15 +2,12 @@ package com.climedar.medical_service_sv.service;
 
 import com.climedar.library.exception.ClimedarException;
 import com.climedar.medical_service_sv.dto.request.PageRequestInput;
-import com.climedar.medical_service_sv.dto.request.SortOption;
 import com.climedar.medical_service_sv.dto.response.MedicalPackagePage;
-import com.climedar.medical_service_sv.dto.response.MedicalServicePage;
 import com.climedar.medical_service_sv.entity.MedicalPackageEntity;
 import com.climedar.medical_service_sv.entity.MedicalServiceEntity;
 import com.climedar.medical_service_sv.mapper.MedicalPackageMapper;
 import com.climedar.medical_service_sv.mapper.PageInfoMapper;
 import com.climedar.medical_service_sv.model.MedicalPackageModel;
-import com.climedar.medical_service_sv.model.MedicalServiceModel;
 import com.climedar.medical_service_sv.repository.MedicalPackageRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -22,7 +19,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -47,7 +43,10 @@ public class PackageService {
 
     public MedicalPackageModel createPackage(List<Long> serviceIds) {
         MedicalPackageEntity medicalPackageEntity = new MedicalPackageEntity();
-        medicalPackageEntity.setServices(medicalService.getMedicalServiceEntitiesByIds(serviceIds));
+        for (Long serviceId : serviceIds) {
+            MedicalServiceEntity medicalServiceEntity = medicalService.getMedicalServiceEntityById(serviceId);
+            medicalPackageEntity.addService(medicalServiceEntity);
+        }
         medicalPackageEntity.setCode(generateCode());
         medicalPackageEntity = medicalPackageRepository.save(medicalPackageEntity);
         return medicalPackageMapper.toModel(medicalPackageEntity);
@@ -88,8 +87,7 @@ public class PackageService {
     }
 
     public MedicalPackagePage adapterGetAllPackages(PageRequestInput pageRequestInput) {
-        Sort sort = pageRequestInput.getSort();
-        Pageable pageable = PageRequest.of(pageRequestInput.getPage()-1, pageRequestInput.getSize(), sort);
+        Pageable pageable = PageRequest.of(pageRequestInput.getPage()-1, pageRequestInput.getSize(), pageRequestInput.getSort());
 
         Page<MedicalPackageModel> medicalPackageModels = getAllPackages(pageable);
 

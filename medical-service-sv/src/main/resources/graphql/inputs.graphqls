@@ -1,10 +1,10 @@
 input PageRequest {
     page: Int!
     size: Int!
-    sort: SortOptions
+    order: Order
 }
 
-input SortOptions {
+input Order {
     field: String!
     direction: SortDirection!
 }

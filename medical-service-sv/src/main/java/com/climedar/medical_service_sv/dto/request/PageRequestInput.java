@@ -7,15 +7,15 @@ import org.springframework.data.domain.Sort;
 public class PageRequestInput {
     private int page;
     private int size;
-    private SortOption sortOption;
+    private SortOption order;
 
 
     public Sort getSort() {
         Sort sort = Sort.unsorted();
-        if (sortOption != null) {
+        if (order != null) {
             sort = Sort.by(
-                    Sort.Direction.fromString(sortOption.getDirection().name()),
-                    sortOption.getField()
+                    Sort.Direction.fromString(order.getDirection().name()),
+                    order.getField()
             );
         }
         return sort;
