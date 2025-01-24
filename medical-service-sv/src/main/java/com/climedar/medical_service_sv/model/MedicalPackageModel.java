@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class MedicalPackageModel {//todo: add validation
+public class MedicalPackageModel {
     private Long id;
     private String code;
     private Set<MedicalServiceModel> services;

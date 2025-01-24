@@ -1,25 +1,23 @@
 package com.climedar.medical_service_sv.service;
 
 import com.climedar.library.exception.ClimedarException;
-import com.climedar.medical_service_sv.dto.request.PageRequestInput;
-import com.climedar.medical_service_sv.dto.response.MedicalPackagePage;
 import com.climedar.medical_service_sv.entity.MedicalPackageEntity;
 import com.climedar.medical_service_sv.entity.MedicalServiceEntity;
 import com.climedar.medical_service_sv.mapper.MedicalPackageMapper;
-import com.climedar.medical_service_sv.mapper.PageInfoMapper;
 import com.climedar.medical_service_sv.model.MedicalPackageModel;
 import com.climedar.medical_service_sv.repository.MedicalPackageRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @AllArgsConstructor
 @Service
@@ -47,7 +45,7 @@ public class PackageService {
             MedicalServiceEntity medicalServiceEntity = medicalService.getMedicalServiceEntityById(serviceId);
             medicalPackageEntity.addService(medicalServiceEntity);
         }
-        medicalPackageEntity.setCode(generateCode());
+        medicalPackageEntity.setCode(this.generateCode(medicalPackageEntity.getServices()));
         medicalPackageEntity = medicalPackageRepository.save(medicalPackageEntity);
         return medicalPackageMapper.toModel(medicalPackageEntity);
     }
@@ -87,8 +85,22 @@ public class PackageService {
         return medicalPackageMapper.toModel(medicalPackageEntity);
     }
 
-    private String generateCode() {
-        return "CODE";
+    private String generateCode(Set<MedicalServiceEntity> services) {
+        String date = new SimpleDateFormat("yyyy").format(new Date());
+
+        StringBuilder initialServices = new StringBuilder();
+        for (MedicalServiceEntity service : services) {
+            String initial = service.getServiceType().toString().substring(0, 2).toUpperCase();
+            initialServices.append(initial).append("-");
+        }
+
+        if (!initialServices.isEmpty()) {
+            initialServices.setLength(initialServices.length() - 1);
+        }
+
+        Long count = medicalPackageRepository.count();
+        String number = String.format("%05d", count);
+        return String.format("MP-%s-%s-%s", date, initialServices, number);
     }
 
     public Boolean checkIfPackageExists(Long id) {

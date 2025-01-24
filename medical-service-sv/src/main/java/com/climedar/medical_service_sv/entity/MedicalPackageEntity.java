@@ -15,7 +15,7 @@ public class MedicalPackageEntity implements ServiceCommon{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 10)//todo: definir un patron para el codigo
+    @Column(unique = true, nullable = false, length = 28)
     private String code;
 
     @OneToMany

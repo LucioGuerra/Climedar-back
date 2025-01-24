@@ -3,8 +3,9 @@ type MedicalService {
     code: String!
     name: String!
     description: String!
-    price: Float! # todo: no acepta double?
+    price: Float!
     serviceType: ServiceType!
+    specialityId: ID!
 }
 
 enum ServiceType {

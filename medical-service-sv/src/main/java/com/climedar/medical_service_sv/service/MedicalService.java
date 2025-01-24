@@ -26,7 +26,6 @@ public class MedicalService {
 
     private final MedicalServiceRepository medicalServiceRepository;
     private final MedicalServiceMapper medicalServiceMapper;
-    private final PageInfoMapper pageInfoMapper;
 
     public MedicalServiceModel getMedicalServiceById(Long id) {
        MedicalServiceEntity medicalServiceEntity = medicalServiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medical service not found with id: " + id));
@@ -43,7 +42,8 @@ public class MedicalService {
 
     public MedicalServiceModel createMedicalService(MedicalServiceModel medicalServiceModel) {
         MedicalServiceEntity medicalServiceEntity = medicalServiceMapper.toEntity(medicalServiceModel);
-        medicalServiceEntity.setCode(generateCode());
+        //todo: Realizar pegada a doctor-sv para obtener la especialidad por el id
+        medicalServiceEntity.setCode(generateCode(medicalServiceEntity.getServiceType().toString(), "Especialidad"));
         medicalServiceEntity = medicalServiceRepository.save(medicalServiceEntity);
 
         return medicalServiceMapper.toModel(medicalServiceEntity);
@@ -81,12 +81,25 @@ public class MedicalService {
         return medicalServiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medical service not found with id: " + id));
     }
 
-    public Set<MedicalServiceEntity> getMedicalServiceEntitiesByIds(List<Long> ids) {
-        return medicalServiceRepository.findByIdsAndNotDeleted(ids);
-    }
 
-    private String generateCode() {
-        return "CODE";
+    private String generateCode(String serviceType, String serviceSpeciality) {
+        String type;
+        if(serviceType.length() >= 4){
+            type = serviceType.substring(0, 4);
+        }else{
+            type = String.format("%-4s", serviceType).replace(' ', 'X');
+        }
+
+        String area;
+        if(serviceType.length() >= 3){
+            area = serviceSpeciality.substring(0, 3);
+        }else{
+            area = String.format("%-3s", serviceSpeciality).replace(' ', 'X');
+        }
+
+        Long count = medicalServiceRepository.count();
+        String number = String.format("%05d", count);
+        return String.format("MS-%s-%s-%s", type, area, number);
     }
 
     public Boolean checkIfMedicalServiceExists(Long id) {
