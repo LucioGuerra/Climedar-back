@@ -81,17 +81,6 @@ public class MedicalService {
         return medicalServiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medical service not found with id: " + id));
     }
 
-    public MedicalServicePage adapterGetAllMedicalServices(PageRequestInput pageRequestInput) {
-        Pageable pageable = PageRequest.of(pageRequestInput.getPage()-1, pageRequestInput.getSize(), pageRequestInput.getSort());
-
-        Page<MedicalServiceModel> medicalServiceModels = getAllMedicalServices(pageable);
-
-        MedicalServicePage medicalServicePage = new MedicalServicePage();
-        medicalServicePage.setPageInfo(pageInfoMapper.toPageInfo(medicalServiceModels));
-        medicalServicePage.setServices(medicalServiceModels.getContent());
-        return medicalServicePage;
-    }
-
     public Set<MedicalServiceEntity> getMedicalServiceEntitiesByIds(List<Long> ids) {
         return medicalServiceRepository.findByIdsAndNotDeleted(ids);
     }

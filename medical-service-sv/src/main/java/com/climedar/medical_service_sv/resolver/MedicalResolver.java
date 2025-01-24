@@ -1,9 +1,9 @@
 package com.climedar.medical_service_sv.resolver;
 
+import com.climedar.medical_service_sv.adapter.GraphqlResolverAdapter;
 import com.climedar.medical_service_sv.dto.request.PageRequestInput;
 import com.climedar.medical_service_sv.dto.response.MedicalServicePage;
 import com.climedar.medical_service_sv.model.MedicalServiceModel;
-import com.climedar.medical_service_sv.service.MedicalService;
 import lombok.AllArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -14,30 +14,30 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class MedicalResolver {
 
-    private final MedicalService medicalService;
+    private final GraphqlResolverAdapter graphqlAdapter;
 
     @QueryMapping
     public MedicalServiceModel getMedicalServiceById(@Argument Long id) {
-        return medicalService.getMedicalServiceById(id);
+        return graphqlAdapter.getMedicalServiceById(id);
     }
 
     @QueryMapping
     public MedicalServicePage getAllMedicalServices(@Argument PageRequestInput input) {
-        return medicalService.adapterGetAllMedicalServices(input);
+        return graphqlAdapter.getAllMedicalServices(input);
     }
 
     @MutationMapping
     public MedicalServiceModel createMedicalService(@Argument MedicalServiceModel input) {
-        return medicalService.createMedicalService(input);
+        return graphqlAdapter.createMedicalService(input);
     }
 
     @MutationMapping
     public MedicalServiceModel updateMedicalService(@Argument Long id, @Argument MedicalServiceModel input) {
-        return medicalService.updateMedicalService(id, input);
+        return graphqlAdapter.updateMedicalService(id, input);
     }
 
     @MutationMapping
     public Boolean deleteMedicalService(@Argument Long id) {
-        return medicalService.deleteMedicalService(id);
+        return graphqlAdapter.deleteMedicalService(id);
     }
 }

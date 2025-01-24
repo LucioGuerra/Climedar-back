@@ -28,7 +28,6 @@ public class PackageService {
     private final MedicalPackageRepository medicalPackageRepository;
     private final MedicalPackageMapper medicalPackageMapper;
     private final MedicalService medicalService;
-    private final PageInfoMapper pageInfoMapper;
 
     public MedicalPackageModel getPackageById(Long id) {
         MedicalPackageEntity medicalPackageEntity = medicalPackageRepository.findById(id).orElseThrow(() -> new RuntimeException("Package not found with id: " + id));
@@ -54,11 +53,12 @@ public class PackageService {
     }
 
 
-    public void deletePackage(Long id) {
+    public Boolean deletePackage(Long id) {
         MedicalPackageEntity medicalPackageEntity = medicalPackageRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
                 "Package not found with id: " + id));
         medicalPackageEntity.setDeleted(true);
         medicalPackageRepository.save(medicalPackageEntity);
+        return true;
     }
 
     public MedicalPackageModel addServiceToPackage(Long packageId, Long serviceId) {
@@ -85,17 +85,6 @@ public class PackageService {
         medicalPackageEntity.removeService(medicalServiceEntity);
         medicalPackageRepository.save(medicalPackageEntity);
         return medicalPackageMapper.toModel(medicalPackageEntity);
-    }
-
-    public MedicalPackagePage adapterGetAllPackages(PageRequestInput pageRequestInput) {
-        Pageable pageable = PageRequest.of(pageRequestInput.getPage()-1, pageRequestInput.getSize(), pageRequestInput.getSort());
-
-        Page<MedicalPackageModel> medicalPackageModels = getAllPackages(pageable);
-
-        MedicalPackagePage medicalPackagePage = new MedicalPackagePage();
-        medicalPackagePage.setPageInfo(pageInfoMapper.toPageInfo(medicalPackageModels));
-        medicalPackagePage.setPackages(medicalPackageModels.getContent());
-        return medicalPackagePage;
     }
 
     private String generateCode() {

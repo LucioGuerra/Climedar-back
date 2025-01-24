@@ -1,5 +1,6 @@
 package com.climedar.medical_service_sv.resolver;
 
+import com.climedar.medical_service_sv.adapter.GraphqlResolverAdapter;
 import com.climedar.medical_service_sv.dto.request.PageRequestInput;
 import com.climedar.medical_service_sv.dto.response.MedicalPackagePage;
 import com.climedar.medical_service_sv.model.MedicalPackageModel;
@@ -16,35 +17,35 @@ import java.util.List;
 @Controller
 public class PackageResolver {
 
-    private final PackageService packageService;
+    private final GraphqlResolverAdapter graphqlAdapter;
 
     @QueryMapping
     public MedicalPackageModel getMedicalPackageById(@Argument Long id) {
-        return packageService.getPackageById(id);
+        return graphqlAdapter.getPackageById(id);
     }
 
     @QueryMapping
     public MedicalPackagePage getAllMedicalPackages(@Argument PageRequestInput input) {
-        return packageService.adapterGetAllPackages(input);
+        return graphqlAdapter.getAllPackages(input);
     }
 
     @MutationMapping
     public MedicalPackageModel createMedicalPackage(@Argument List<Long> servicesIds) {
-        return packageService.createPackage(servicesIds);
+        return graphqlAdapter.createPackage(servicesIds);
     }
 
     @MutationMapping
-    public void deleteMedicalPackage(@Argument Long id) {
-        packageService.deletePackage(id);
+    public Boolean deleteMedicalPackage(@Argument Long id) {
+        return graphqlAdapter.deletePackage(id);
     }
 
     @MutationMapping
     public MedicalPackageModel addServiceToMedicalPackage(@Argument Long id, @Argument Long serviceId) {
-        return packageService.addServiceToPackage(id, serviceId);
+        return graphqlAdapter.addServiceToPackage(id, serviceId);
     }
 
     @MutationMapping
     public MedicalPackageModel removeServiceFromMedicalPackage(@Argument Long id, @Argument Long serviceId) {
-        return packageService.removeServiceFromPackage(id, serviceId);
+        return graphqlAdapter.removeServiceFromPackage(id, serviceId);
     }
 }
