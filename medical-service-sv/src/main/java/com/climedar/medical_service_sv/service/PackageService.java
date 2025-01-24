@@ -19,6 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -99,5 +100,10 @@ public class PackageService {
 
     private String generateCode() {
         return "CODE";
+    }
+
+    public Boolean checkIfPackageExists(Long id) {
+        Optional<MedicalPackageEntity> medicalPackageEntity = medicalPackageRepository.findByIdAndNotDeleted(id);
+        return medicalPackageEntity.isPresent();
     }
 }

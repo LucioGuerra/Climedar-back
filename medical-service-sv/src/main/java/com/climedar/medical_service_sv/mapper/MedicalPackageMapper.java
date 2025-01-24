@@ -5,10 +5,11 @@ import com.climedar.medical_service_sv.entity.MedicalServiceEntity;
 import com.climedar.medical_service_sv.model.MedicalPackageModel;
 import com.climedar.medical_service_sv.model.MedicalServiceModel;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface MedicalPackageMapper {
-    MedicalPackageModel toModel(MedicalPackageEntity entity);
 
-    MedicalPackageEntity toEntity(MedicalPackageModel dto);
+    @Mapping(target = "price", expression = "java(entity.getPrice())")
+    MedicalPackageModel toModel(MedicalPackageEntity entity);
 }

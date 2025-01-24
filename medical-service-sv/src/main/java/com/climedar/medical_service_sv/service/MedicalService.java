@@ -99,4 +99,9 @@ public class MedicalService {
     private String generateCode() {
         return "CODE";
     }
+
+    public Boolean checkIfMedicalServiceExists(Long id) {
+        Optional<MedicalServiceEntity> medicalServiceEntity = medicalServiceRepository.findByIdAndNotDeleted(id);
+        return medicalServiceEntity.isPresent();
+    }
 }

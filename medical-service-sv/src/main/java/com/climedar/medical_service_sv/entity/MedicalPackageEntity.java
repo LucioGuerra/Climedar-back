@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Data
 @Entity
-public class MedicalPackageEntity {
+public class MedicalPackageEntity implements ServiceCommon{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,9 +20,6 @@ public class MedicalPackageEntity {
 
     @OneToMany
     private Set<MedicalServiceEntity> services;
-
-    @Column(nullable = false)
-    private Double price;
 
     @Column(nullable = false)
     private Boolean deleted;
@@ -38,18 +35,18 @@ public class MedicalPackageEntity {
         this.deleted = false;
     }
 
+    @Override
+    public double getPrice() {
+        double sumPrice = this.services.stream().mapToDouble(MedicalServiceEntity::getPrice).sum();
+        return sumPrice * 0.85;
+    }
+
     public void addService(MedicalServiceEntity service){
         services.add(service);
-        calculatePrice();
     }
 
     public void removeService(MedicalServiceEntity service){
         services.remove(service);
-        calculatePrice();
-    }
-
-    private void calculatePrice(){
-        this.price = services.stream().mapToDouble(MedicalServiceEntity::getPrice).sum()*0.85;
     }
 
     @PrePersist

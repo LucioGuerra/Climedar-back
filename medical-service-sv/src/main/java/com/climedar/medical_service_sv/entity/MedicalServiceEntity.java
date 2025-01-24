@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-public class MedicalServiceEntity {
+public class MedicalServiceEntity implements ServiceCommon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +40,11 @@ public class MedicalServiceEntity {
 
     public MedicalServiceEntity(){
         this.deleted = false;
+    }
+
+    @Override
+    public double getPrice() {
+        return this.price;
     }
 
     @PrePersist
