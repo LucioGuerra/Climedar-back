@@ -38,6 +38,12 @@ public class Address {
     @Column(nullable = false, length = 10)
     private String postalCode;
 
+    private boolean deleted;
+
+    public Address() {
+        this.deleted = false;
+    }
+
     @CreatedDate
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;

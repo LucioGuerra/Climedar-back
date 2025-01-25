@@ -46,6 +46,12 @@ public class Person {
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Address address;
 
+    private boolean deleted;
+
+    public Person() {
+        this.deleted = false;
+    }
+
     @CreatedDate
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
