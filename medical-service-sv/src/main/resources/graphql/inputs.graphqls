@@ -21,3 +21,11 @@ input MedicalServiceInput {
     serviceType: ServiceType!
     specialityId: ID!
 }
+
+input MedicalSpecificationInput {
+    code: String
+    name: String
+    description: String
+    serviceType: ServiceType
+    specialityId: ID
+}

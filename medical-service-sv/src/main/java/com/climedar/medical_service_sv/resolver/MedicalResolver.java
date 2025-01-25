@@ -2,6 +2,7 @@ package com.climedar.medical_service_sv.resolver;
 
 import com.climedar.medical_service_sv.adapter.GraphqlResolverAdapter;
 import com.climedar.medical_service_sv.dto.request.PageRequestInput;
+import com.climedar.medical_service_sv.dto.request.SpecificationDTO;
 import com.climedar.medical_service_sv.dto.response.MedicalServicePage;
 import com.climedar.medical_service_sv.model.MedicalServiceModel;
 import lombok.AllArgsConstructor;
@@ -22,8 +23,8 @@ public class MedicalResolver {
     }
 
     @QueryMapping
-    public MedicalServicePage getAllMedicalServices(@Argument PageRequestInput input) {
-        return graphqlAdapter.getAllMedicalServices(input);
+    public MedicalServicePage getAllMedicalServices(@Argument PageRequestInput pageRequest, @Argument SpecificationDTO specification) {
+        return graphqlAdapter.getAllMedicalServices(pageRequest, specification);
     }
 
     @MutationMapping

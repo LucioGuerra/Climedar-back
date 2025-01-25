@@ -1,6 +1,7 @@
 package com.climedar.medical_service_sv.adapter;
 
 import com.climedar.medical_service_sv.dto.request.PageRequestInput;
+import com.climedar.medical_service_sv.dto.request.SpecificationDTO;
 import com.climedar.medical_service_sv.dto.response.MedicalPackagePage;
 import com.climedar.medical_service_sv.dto.response.MedicalServicePage;
 import com.climedar.medical_service_sv.mapper.PageInfoMapper;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -56,10 +58,11 @@ public class GraphqlResolverAdapter {
     }
 
 
-    public MedicalServicePage getAllMedicalServices(PageRequestInput input) {
+    public MedicalServicePage getAllMedicalServices(PageRequestInput input, SpecificationDTO specificationDTO) {
         Pageable pageable = PageRequest.of(input.getPage()-1, input.getSize(), input.getSort());
 
-        Page<MedicalServiceModel> medicalServiceModels = medicalService.getAllMedicalServices(pageable);
+        Page<MedicalServiceModel> medicalServiceModels = medicalService.getAllMedicalServices(pageable, specificationDTO.getName(), specificationDTO.getCode(),
+                specificationDTO.getDescription(), specificationDTO.getServiceType(), specificationDTO.getSpecialityId());
 
         MedicalServicePage medicalServicePage = new MedicalServicePage();
         medicalServicePage.setPageInfo(pageInfoMapper.toPageInfo(medicalServiceModels));

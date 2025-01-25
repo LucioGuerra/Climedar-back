@@ -2,11 +2,13 @@ package com.climedar.medical_service_sv.service;
 
 import com.climedar.medical_service_sv.dto.request.PageRequestInput;
 import com.climedar.medical_service_sv.dto.response.MedicalServicePage;
+import com.climedar.medical_service_sv.entity.ServiceType;
 import com.climedar.medical_service_sv.mapper.PageInfoMapper;
 import com.climedar.medical_service_sv.model.MedicalServiceModel;
 import com.climedar.medical_service_sv.entity.MedicalServiceEntity;
 import com.climedar.medical_service_sv.mapper.MedicalServiceMapper;
 import com.climedar.medical_service_sv.repository.MedicalServiceRepository;
+import com.climedar.medical_service_sv.specification.MedicalSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,8 +34,15 @@ public class MedicalService {
        return medicalServiceMapper.toModel(medicalServiceEntity);
     }
 
-    public Page<MedicalServiceModel> getAllMedicalServices(Pageable pageable) {
-        Specification<MedicalServiceEntity> specification = Specification.where((root, query, cb) -> cb.equal(root.get("deleted"), false));
+    public Page<MedicalServiceModel> getAllMedicalServices(Pageable pageable, String name, String code,
+                                                           String description, ServiceType serviceType, Long specialityId) {
+
+        Specification<MedicalServiceEntity> specification = Specification.where(MedicalSpecification.deletedEqual(false))
+                .and(MedicalSpecification.codeContains(code))
+                .and(MedicalSpecification.nameContains(name))
+                .and(MedicalSpecification.descriptionContains(description))
+                .and(MedicalSpecification.serviceTypeEqual(serviceType))
+                .and(MedicalSpecification.specialityIdEqual(specialityId));
 
         Page<MedicalServiceEntity> medicalServiceEntities = medicalServiceRepository.findAll(specification, pageable);
 

@@ -29,6 +29,9 @@ public class MedicalServiceEntity implements ServiceCommon {
     @Column(nullable = false, name = "service_type")
     private ServiceType serviceType;
 
+    @Column(nullable = false, name = "speciality_id")
+    private Long specialityId;
+
     @Column(nullable = false)
     private Boolean deleted;
 

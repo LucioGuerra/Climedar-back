@@ -1,5 +1,5 @@
 type Query {
-    getAllMedicalServices(input: PageRequest!): MedicalServicePage!
+    getAllMedicalServices(pageRequest: PageRequest!, specification: MedicalSpecificationInput): MedicalServicePage!
     getMedicalServiceById(id: ID!): MedicalService!
 
     getAllMedicalPackages(input: PageRequest!): MedicalPackagePage!
