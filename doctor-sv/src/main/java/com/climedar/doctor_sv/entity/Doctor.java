@@ -24,7 +24,7 @@ public class Doctor {
     @Column(nullable = false)
     private Long personId;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Shift> shifts;
 
     @ManyToOne
