@@ -19,6 +19,7 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/graphiql/**").permitAll()
                         .requestMatchers("/graphql/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")

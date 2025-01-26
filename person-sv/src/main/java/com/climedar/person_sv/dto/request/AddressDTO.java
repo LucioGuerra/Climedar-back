@@ -1,9 +1,9 @@
-package com.climedar.person_sv.dto.request.create;
+package com.climedar.person_sv.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record CreateAddressDTO(
+public record AddressDTO(
         @NotBlank(message = "Street cannot be empty")
         @Size(max = 100, message = "Street must not exceed 100 characters")
         String street,
