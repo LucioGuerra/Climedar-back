@@ -43,7 +43,7 @@ public class Person {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
     private Address address;
 
     private boolean deleted;

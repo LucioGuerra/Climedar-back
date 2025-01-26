@@ -1,7 +1,7 @@
 package com.climedar.person_sv.service;
 
-import com.climedar.person_sv.dto.request.CreatePersonDTO;
-import com.climedar.person_sv.dto.request.UpdatePersonDTO;
+import com.climedar.person_sv.dto.request.create.CreatePersonDTO;
+import com.climedar.person_sv.dto.request.update.UpdatePersonDTO;
 import com.climedar.person_sv.dto.response.GetPersonDTO;
 import com.climedar.person_sv.entity.Person;
 import com.climedar.person_sv.mapper.PersonMapper;
@@ -21,14 +21,15 @@ public class PersonService {
     private final AddressService addressService;
 
     public ResponseEntity<GetPersonDTO> getPersonById(Long id) {
-        Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Person not found with id: " + id));
+        Person person = personRepository.findByIdAndNotDeleted(id).orElseThrow(() -> new EntityNotFoundException(
+                "Person not found with id: " + id));
         return ResponseEntity.status(HttpStatus.OK).body(personMapper.toDTO(person));
     }
 
     public ResponseEntity<GetPersonDTO> createPerson(CreatePersonDTO createPersonDTO) {
         Person person = personMapper.toEntity(createPersonDTO);
 
-        person.setAddress(addressService.asigneeAddress(createPersonDTO.address()));
+        person.setAddress(addressService.createAddress(createPersonDTO.address()));
 
         personRepository.save(person);
         return ResponseEntity.status(HttpStatus.CREATED).body(personMapper.toDTO(person));
@@ -39,7 +40,7 @@ public class PersonService {
         personMapper.updateEntity(person, updatePersonDTO);
 
         if (updatePersonDTO.address() != null) {
-            person.setAddress(addressService.asigneeAddress(updatePersonDTO.address()));
+            person.setAddress(addressService.createAddress(updatePersonDTO.address()));
         }
 
         personRepository.save(person);
