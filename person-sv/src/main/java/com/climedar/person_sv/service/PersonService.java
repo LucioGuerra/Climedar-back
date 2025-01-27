@@ -56,8 +56,8 @@ public class PersonService {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    public ResponseEntity<Optional<GetPersonDTO>> getPersonByDni(String dni) {
-        Optional<Person> person = personRepository.findByDni(dni);
-        return ResponseEntity.status(HttpStatus.OK).body(person.map(personMapper::toDTO));
+    public ResponseEntity<GetPersonDTO> getPersonByDni(String dni) {
+        Person person = personRepository.findByDni(dni).orElseThrow(() -> new EntityNotFoundException("Person not found with dni: " + dni));
+        return ResponseEntity.status(HttpStatus.OK).body(personMapper.toDTO(person));
     }
 }

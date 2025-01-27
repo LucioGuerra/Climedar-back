@@ -1,13 +1,12 @@
 package com.climedar.doctor_sv.service;
 
-import com.climedar.doctor_sv.dto.response.DoctorPage;
 import com.climedar.doctor_sv.entity.Doctor;
 import com.climedar.doctor_sv.external.model.Gender;
 import com.climedar.doctor_sv.external.model.Person;
 import com.climedar.doctor_sv.mapper.DoctorMapper;
 import com.climedar.doctor_sv.model.DoctorModel;
 import com.climedar.doctor_sv.repository.DoctorRepository;
-import com.climedar.doctor_sv.repository.PersonRepository;
+import com.climedar.doctor_sv.repository.feign.PersonRepository;
 import com.climedar.doctor_sv.specification.DoctorSpecification;
 import com.climedar.library.exception.ClimedarException;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,7 +17,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -59,46 +57,55 @@ public class DoctorService {
 
     @Transactional
     public DoctorModel createDoctor(DoctorModel doctorModel) {
-        Optional<Person> person = personRepository.findByDni(doctorModel.getDni());
-
-        if (person.isEmpty()) {
-            Person newPerson = new Person(
-                    doctorModel.getName(),
-                    doctorModel.getSurname(),
-                    doctorModel.getDni(),
-                    doctorModel.getEmail(),
-                    doctorModel.getPhone(),
-                    doctorModel.getBirthdate(),
-                    doctorModel.getAddress(),
-                    doctorModel.getGender()
-            );
-            person = personRepository.createPerson(newPerson);
-        }else if (person.get().isDeleted()) {
-            Person newPerson = new Person(
-                    doctorModel.getName(),
-                    doctorModel.getSurname(),
-                    doctorModel.getDni(),
-                    doctorModel.getEmail(),
-                    doctorModel.getPhone(),
-                    doctorModel.getBirthdate(),
-                    doctorModel.getAddress(),
-                    doctorModel.getGender()
-            );
-            person = personRepository.updatePerson(person.get().getPersonId(), newPerson);
-        } else if (!this.personDataMatcher(person.get(), doctorModel)) {
-            throw new ClimedarException("PERSON_DATA_MISMATCH", "Person data mismatch");
+        Optional<Person> personOptional = personRepository.findByDni(doctorModel.getDni());
+        Person person;
+        if (personOptional.isEmpty()) {
+            person = this.createNewPerson(doctorModel);
+        }else {
+            person = this.handleExistingPerson(personOptional.get(), doctorModel);
         }
 
-        if (doctorRepository.existsByPersonId(person.get().getPersonId())) {
-            throw new ClimedarException("DOCTOR_ALREADY_EXIST", "Doctor already exists");
+        if (doctorRepository.existsByPersonId(person.getPersonId())) {
+            throw new ClimedarException("DOCTOR_ALREADY_EXISTS", "Doctor already exists");
         }
 
         Doctor doctor = doctorMapper.toEntity(doctorModel);
+        doctor.setPersonId(person.getPersonId());
         doctor.setSpeciality(specialityService.findById(doctorModel.getSpeciality().getId()));
-        doctor.setPersonId(person.get().getPersonId());
         doctorRepository.save(doctor);
 
-        return doctorMapper.toModel(doctor, person.get());
+        return doctorMapper.toModel(doctor, person);
+    }
+
+    private Person handleExistingPerson(Person existingPerson, DoctorModel doctorModel) {
+        if (existingPerson.isDeleted()) { //todo: verificar si eso realmente funciona
+            Person updatedPerson = this.buildPerson(doctorModel);
+            return personRepository.updatePerson(existingPerson.getPersonId(), updatedPerson);
+        }
+
+        if (!personDataMatcher(existingPerson, doctorModel)) {
+            throw new ClimedarException("PERSON_DATA_MISMATCH", "Person data mismatch");
+        }
+
+        return existingPerson;
+    }
+
+    private Person createNewPerson(DoctorModel doctorModel) {
+        Person person = this.buildPerson(doctorModel);
+        return personRepository.createPerson(person);
+    }
+
+    private Person buildPerson(DoctorModel doctorModel) {
+        return new Person(
+                doctorModel.getName(),
+                doctorModel.getSurname(),
+                doctorModel.getDni(),
+                doctorModel.getEmail(),
+                doctorModel.getPhone(),
+                doctorModel.getBirthdate(),
+                doctorModel.getAddress(),
+                doctorModel.getGender()
+        );
     }
 
     private boolean personDataMatcher(Person person, DoctorModel doctorModel) {

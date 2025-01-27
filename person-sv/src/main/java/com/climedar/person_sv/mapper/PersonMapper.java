@@ -16,6 +16,7 @@ public interface PersonMapper {
     @Mapping(target = "address", ignore = true)
     Person toEntity(CreatePersonDTO personDTO);
 
+    @Mapping(target = "personId", source = "id")
     GetPersonDTO toDTO(Person person);
 
     @Mapping(target = "address", ignore = true)

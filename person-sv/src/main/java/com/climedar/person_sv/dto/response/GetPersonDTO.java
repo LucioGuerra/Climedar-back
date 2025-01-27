@@ -14,6 +14,6 @@ public record GetPersonDTO(
         String phone,
         Gender gender,
         GetAddressDTO address,
-        boolean deleted
+        Boolean deleted
 ) {
 }
