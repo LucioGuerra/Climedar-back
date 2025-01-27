@@ -1,0 +1,70 @@
+type Shift{
+    id: ID!
+    date: String!
+    start: String!
+    patients: Int!
+    state: ShiftState!
+}
+
+enum ShiftState{
+    AVAILABLE
+    OCCUPIED
+    CANCELLED
+}
+
+type Doctor {
+    id: ID!
+    specialty: Speciality!
+    shifts: [Shift]!
+    name: String!
+    surname: String!
+    dni: String!
+    gender: Gender!
+    birthDate: String!
+    salary: Float!
+    email: String!
+    phone: String!
+    address: Address!
+}
+
+type Address {
+    street: String!
+    number: String!
+    floor: String
+    apartment: String
+    city: String!
+    province: String!
+    postalCode: String!
+}
+
+type Speciality {
+    id: ID!
+    code: String!
+    name: String!
+    description: String!
+}
+
+type PageInfo {
+    currentPage: Int!
+    totalPages: Int!
+    totalItems: Int!
+    itemsPerPage: Int!
+    hasNext: Boolean!
+    hasPrevious: Boolean!
+}
+
+type DoctorPage {
+    pageInfo: PageInfo!
+    doctors: [Doctor]!
+}
+
+type ShiftPage {
+    pageInfo: PageInfo!
+    shifts: [Shift]!
+}
+
+enum Gender {
+    MALE
+    FEMALE
+    OTHER
+}

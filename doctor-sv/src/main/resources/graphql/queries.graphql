@@ -1,0 +1,10 @@
+type Query {
+    getAllDoctors(pageRequest: PageRequest!, specification: DoctorSpecification): DoctorPage!
+    getDoctorById(id: ID!): Doctor!
+
+    getAllShifts(pageRequest: PageRequest!, specification: ShiftSpecification): ShiftPage!
+    getShiftById(id: ID!): Shift!
+
+    getAllSpecialities: [Speciality]!
+    getSpecialityById(id: ID!): Speciality!
+}

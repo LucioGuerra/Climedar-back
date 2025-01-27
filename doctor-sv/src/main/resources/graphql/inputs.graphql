@@ -1,0 +1,105 @@
+input DoctorInput {
+    name: String!
+    surname: String!
+    dni: String!
+    gender: Gender!
+    birthDate: String!
+    salary: Float!
+    email: String!
+    phone: String!
+    specialtyId: ID!
+    address: AddressInput!
+}
+
+input AddressInput {
+    street: String!
+    number: String!
+    floor: String
+    apartment: String
+    city: String!
+    province: String!
+    postalCode: String!
+}
+
+input ShiftInput { #todo: pensar como hacer el builder
+    date: String!
+    startTime: String!
+    patients: Int!
+    doctorId: ID
+}
+
+input SpecialityInput {
+    code: String!
+    name: String!
+    description: String!
+}
+
+input PageRequest {
+    page: Int!
+    size: Int!
+    order: Order
+}
+
+input Order {
+    field: String!
+    direction: SortDirection!
+}
+
+enum SortDirection {
+    ASC
+    DESC
+}
+
+input ShiftSpecification {
+    date: String
+    startTime: String
+    patients: Int
+    shiftState: ShiftState
+    doctorId: ID
+}
+
+input DoctorSpecification {
+    name: String
+    surname: String
+    dni: String
+    gender: Gender
+    salary: Float
+    shiftId: ID
+    specialtyId: ID
+}
+
+input UpdateDoctorInput {
+    name: String
+    surname: String
+    dni: String
+    gender: Gender
+    birthDate: String
+    salary: Float
+    email: String
+    phone: String
+    specialtyId: ID
+    address: AddressInput
+}
+
+input UpdateAddressInput {
+    street: String
+    number: String
+    floor: String
+    apartment: String
+    city: String
+    province: String
+    postalCode: String
+}
+
+input UpdateShiftInput { #todo: pensar como hacer el builder
+    date: String
+    startTime: String
+    patients: Int
+    doctorId: ID
+}
+
+input UpdateSpecialityInput {
+    code: String
+    name: String
+    description: String
+}
