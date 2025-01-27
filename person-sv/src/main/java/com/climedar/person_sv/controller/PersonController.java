@@ -23,7 +23,7 @@ public class PersonController {
     }
 
     @GetMapping("/dni/{dni}")
-    public ResponseEntity<Optional<GetPersonDTO>> getPersonByDni(@PathVariable String dni) {
+    public ResponseEntity<GetPersonDTO> getPersonByDni(@PathVariable String dni) {
         return personService.getPersonByDni(dni);
     }
 
@@ -33,7 +33,8 @@ public class PersonController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<GetPersonDTO> updatePerson(@PathVariable Long id, @RequestBody UpdatePersonDTO updatePersonDTO) {
+    public ResponseEntity<GetPersonDTO> updatePerson(@PathVariable Long id,
+                                                      @RequestBody UpdatePersonDTO updatePersonDTO) {
         return personService.updatePerson(id, updatePersonDTO);
     }
 

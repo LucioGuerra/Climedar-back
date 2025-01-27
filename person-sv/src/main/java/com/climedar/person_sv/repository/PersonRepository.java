@@ -13,6 +13,6 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     @Query("SELECT m FROM Person m WHERE m.id = :id AND m.deleted = false")
     Optional<Person> findByIdAndNotDeleted(Long id);
 
-    @Query("SELECT m FROM Person m WHERE m.dni = :dni AND m.deleted = false")
-    Optional<Person> findByDniAndNotDeleted(String dni);
+    @Query("SELECT m FROM Person m WHERE m.dni = :dni")
+    Optional<Person> findByDni(String dni);
 }

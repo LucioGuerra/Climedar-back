@@ -57,7 +57,7 @@ public class PersonService {
     }
 
     public ResponseEntity<Optional<GetPersonDTO>> getPersonByDni(String dni) {
-        Optional<Person> person = personRepository.findByDniAndNotDeleted(dni);
+        Optional<Person> person = personRepository.findByDni(dni);
         return ResponseEntity.status(HttpStatus.OK).body(person.map(personMapper::toDTO));
     }
 }

@@ -23,6 +23,6 @@ public interface PersonRepository {
     Optional<Person> createPerson(Person person);
 
     @PatchMapping("/api/public/persons/{id}")
-    void updatePerson(@PathVariable Long id, Person person);
+    Optional<Person> updatePerson(@PathVariable Long id, Person person);
 
 }

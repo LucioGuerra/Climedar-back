@@ -73,9 +73,24 @@ public class DoctorService {
                     doctorModel.getGender()
             );
             person = personRepository.createPerson(newPerson);
-        } else if (person.get().equals(doctorModel)) {
-            throw new ClimedarException("PERSON_HAS_DUPLICATED_DNI",
-                    "Person with dni: " + doctorModel.getDni() + " already exists and has different data");
+        }else if (person.get().isDeleted()) {
+            Person newPerson = new Person(
+                    doctorModel.getName(),
+                    doctorModel.getSurname(),
+                    doctorModel.getDni(),
+                    doctorModel.getEmail(),
+                    doctorModel.getPhone(),
+                    doctorModel.getBirthdate(),
+                    doctorModel.getAddress(),
+                    doctorModel.getGender()
+            );
+            person = personRepository.updatePerson(person.get().getPersonId(), newPerson);
+        } else if (!this.personDataMatcher(person.get(), doctorModel)) {
+            throw new ClimedarException("PERSON_DATA_MISMATCH", "Person data mismatch");
+        }
+
+        if (doctorRepository.existsByPersonId(person.get().getPersonId())) {
+            throw new ClimedarException("DOCTOR_ALREADY_EXIST", "Doctor already exists");
         }
 
         Doctor doctor = doctorMapper.toEntity(doctorModel);
@@ -84,5 +99,16 @@ public class DoctorService {
         doctorRepository.save(doctor);
 
         return doctorMapper.toModel(doctor, person.get());
+    }
+
+    private boolean personDataMatcher(Person person, DoctorModel doctorModel) {
+        return person.getName().equals(doctorModel.getName()) &&
+                person.getSurname().equals(doctorModel.getSurname()) &&
+                person.getDni().equals(doctorModel.getDni()) &&
+                person.getEmail().equals(doctorModel.getEmail()) &&
+                person.getPhone().equals(doctorModel.getPhone()) &&
+                person.getBirthdate().equals(doctorModel.getBirthdate()) &&
+                person.getAddress().equals(doctorModel.getAddress()) &&
+                person.getGender().equals(doctorModel.getGender());
     }
 }

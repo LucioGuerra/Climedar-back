@@ -13,6 +13,7 @@ public record GetPersonDTO(
         String email,
         String phone,
         Gender gender,
-        GetAddressDTO address
+        GetAddressDTO address,
+        boolean deleted
 ) {
 }
