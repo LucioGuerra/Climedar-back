@@ -1,5 +1,6 @@
 package com.climedar.doctor_sv.model;
 
+import com.climedar.doctor_sv.external.model.Address;
 import com.climedar.doctor_sv.external.model.Person;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,4 +14,5 @@ public class DoctorModel extends Person {
     private Double salary;
     private SpecialityModel speciality;
     private List<ShiftModel> shifts;
+
 }

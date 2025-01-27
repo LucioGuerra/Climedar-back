@@ -5,7 +5,7 @@ import com.climedar.person_sv.entity.Gender;
 import java.time.LocalDate;
 
 public record GetPersonDTO(
-        Long id,
+        Long personId,
         String name,
         String surname,
         String dni,

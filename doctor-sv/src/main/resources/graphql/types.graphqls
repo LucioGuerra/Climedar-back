@@ -14,13 +14,13 @@ enum ShiftState{
 
 type Doctor {
     id: ID!
-    specialty: Speciality!
+    speciality: Speciality!
     shifts: [Shift]!
     name: String!
     surname: String!
     dni: String!
     gender: Gender!
-    birthDate: String!
+    birthdate: String!
     salary: Float!
     email: String!
     phone: String!

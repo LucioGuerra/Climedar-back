@@ -8,9 +8,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/public/person")
+@RequestMapping("/api/public/persons")
 public class PersonController {
 
     private final PersonService personService;
@@ -18,6 +20,11 @@ public class PersonController {
     @GetMapping("/{id}")
     public ResponseEntity<GetPersonDTO> getPersonById(@PathVariable Long id) {
         return personService.getPersonById(id);
+    }
+
+    @GetMapping("/dni/{dni}")
+    public ResponseEntity<Optional<GetPersonDTO>> getPersonByDni(@PathVariable String dni) {
+        return personService.getPersonByDni(dni);
     }
 
     @PostMapping

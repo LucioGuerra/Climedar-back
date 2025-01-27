@@ -3,11 +3,11 @@ input DoctorInput {
     surname: String!
     dni: String!
     gender: Gender!
-    birthDate: String!
+    birthdate: String!
     salary: Float!
     email: String!
     phone: String!
-    specialtyId: ID!
+    speciality: SpecialityInput!
     address: AddressInput!
 }
 
@@ -29,9 +29,10 @@ input ShiftInput { #todo: pensar como hacer el builder
 }
 
 input SpecialityInput {
-    code: String!
-    name: String!
-    description: String!
+    id: ID!
+    code: String
+    name: String
+    description: String
 }
 
 input PageRequest {

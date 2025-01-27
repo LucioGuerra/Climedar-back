@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @AllArgsConstructor
 @Service
 public class PersonService {
@@ -36,7 +38,7 @@ public class PersonService {
     }
 
     public ResponseEntity<GetPersonDTO> updatePerson(Long id, UpdatePersonDTO updatePersonDTO) {
-        Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Person not found with id: " + id));
+        Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Person not found with personId: " + id));
         personMapper.updateEntity(person, updatePersonDTO);
 
         if (updatePersonDTO.address() != null) {
@@ -48,9 +50,14 @@ public class PersonService {
     }
 
     public ResponseEntity<Void> deletePerson(Long id) {
-        Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Person not found with id: " + id));
+        Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Person not found with personId: " + id));
         person.setDeleted(true);
         personRepository.save(person);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    public ResponseEntity<Optional<GetPersonDTO>> getPersonByDni(String dni) {
+        Optional<Person> person = personRepository.findByDniAndNotDeleted(dni);
+        return ResponseEntity.status(HttpStatus.OK).body(person.map(personMapper::toDTO));
     }
 }

@@ -21,13 +21,13 @@ public class Doctor {
     @Column(nullable = false)
     private Double salary;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private Long personId;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Shift> shifts;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Speciality speciality;
 
     @Column(nullable = false)
