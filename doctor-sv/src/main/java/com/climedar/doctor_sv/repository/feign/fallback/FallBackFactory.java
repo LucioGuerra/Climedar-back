@@ -6,7 +6,9 @@ import feign.FeignException;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Component
 public class FallBackFactory  implements FallbackFactory<PersonRepository> {
@@ -17,6 +19,11 @@ public class FallBackFactory  implements FallbackFactory<PersonRepository> {
             @Override
             public Person findById(Long id) {
                 return null;
+            }
+
+            @Override
+            public List<Person> findAllById(Set<Long> ids) {
+                return List.of();
             }
 
             @Override

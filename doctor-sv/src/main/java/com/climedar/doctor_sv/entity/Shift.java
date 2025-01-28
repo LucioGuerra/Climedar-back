@@ -23,17 +23,23 @@ public class Shift {
     private LocalDate date;
 
     @Column(nullable = false)
-    private LocalTime start;
+    private LocalTime startTime;
+
+    @Column(nullable = false)
+    private LocalTime endTime;
 
     @Column(nullable = false)
     private Integer patients;
+
+    @Column(length = 50)
+    private String place;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ShiftState state;
 
     @Column(nullable = false)
-    private Boolean deleted = false;
+    private Boolean deleted;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
