@@ -19,7 +19,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -53,9 +58,21 @@ public class DoctorService {
 
         Page<Doctor> doctors = doctorRepository.findAll(specification, pageable);
 
-        //todo: refactorizar y hacer que se junten todos los personId y luego hacer una sola consulta
 
-        return doctors.map(doctor -> doctorMapper.toModel(doctor, personRepository.findById(doctor.getPersonId())));
+        Set<Long> personIds = doctors.stream()
+                .map(Doctor::getPersonId)
+                .collect(Collectors.toSet());
+
+        Map<Long, Person> personMap = personIds.isEmpty()
+                ? Collections.emptyMap()
+                : personRepository.findAllById(personIds).stream()
+                .collect(Collectors.toMap(Person::getPersonId, Function.identity()));
+
+
+        return doctors.map(doctor -> {
+            Person person = personMap.get(doctor.getPersonId());
+            return doctorMapper.toModel(doctor, person);
+        });
     }
 
     @Transactional
