@@ -64,7 +64,6 @@ input DoctorSpecification {
     surname: String
     dni: String
     gender: Gender
-    salary: Float
     shiftId: ID
     specialtyId: ID
 }

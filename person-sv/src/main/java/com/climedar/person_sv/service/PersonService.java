@@ -45,6 +45,8 @@ public class PersonService {
             person.setAddress(addressService.createAddress(updatePersonDTO.address()));
         }
 
+        //todo: Si se cambia el dni se deberia crear otra persona
+
         personRepository.save(person);
         return ResponseEntity.status(HttpStatus.OK).body(personMapper.toDTO(person));
     }

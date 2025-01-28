@@ -30,6 +30,8 @@ public record UpdatePersonDTO(
         Gender gender,
 
         @Valid
-        CreateAddressDTO address
+        CreateAddressDTO address,
+
+        Boolean deleted
 ) {
 }

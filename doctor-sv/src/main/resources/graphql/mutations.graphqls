@@ -1,7 +1,7 @@
 type Mutation {
     createDoctor(doctor: DoctorInput!): Doctor!
     updateDoctor(id: ID!, doctor: UpdateDoctorInput!): Doctor!
-    deleteDoctor(id: ID!): Doctor!
+    deleteDoctor(id: ID!): Boolean!
 
     createShift(shift: ShiftInput!): Shift!
     updateShift(id: ID!, shift: UpdateShiftInput!): Shift!

@@ -1,9 +1,11 @@
 package com.climedar.doctor_sv.service;
 
 import com.climedar.doctor_sv.entity.Doctor;
+import com.climedar.doctor_sv.entity.Speciality;
 import com.climedar.doctor_sv.external.model.Gender;
 import com.climedar.doctor_sv.external.model.Person;
 import com.climedar.doctor_sv.mapper.DoctorMapper;
+import com.climedar.doctor_sv.mapper.PersonMapper;
 import com.climedar.doctor_sv.model.DoctorModel;
 import com.climedar.doctor_sv.repository.DoctorRepository;
 import com.climedar.doctor_sv.repository.feign.PersonRepository;
@@ -27,6 +29,7 @@ public class DoctorService {
     private final DoctorMapper doctorMapper;
     private final PersonRepository personRepository;
     private final SpecialityService specialityService;
+    private final PersonMapper personMapper;
 
 
     public DoctorModel getDoctorById(Long id) {
@@ -77,9 +80,39 @@ public class DoctorService {
         return doctorMapper.toModel(doctor, person);
     }
 
+    @Transactional
+    public DoctorModel updateDoctor(Long id, DoctorModel doctorModel) {
+        Doctor doctor = doctorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Doctor not found" +
+                " with id: " + id));
+
+        Person personToUpdate = personRepository.findById(doctor.getPersonId());
+
+        if (this.personDataMatcher(personToUpdate, doctorModel)) {
+            personMapper.updatePerson(personToUpdate, doctorModel);
+            personRepository.updatePerson(personToUpdate.getPersonId(), personToUpdate);
+        }
+
+        doctorMapper.updateEntity(doctor, doctorModel);
+        doctorRepository.save(doctor);
+
+        return doctorMapper.toModel(doctor, personToUpdate);
+    }
+
+    @Transactional
+    public Boolean deleteDoctor(Long id) {
+        Doctor doctor = doctorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Doctor not found" +
+                " with id: " + id));
+
+        doctor.setDeleted(true);
+        doctorRepository.save(doctor);
+
+        return true;
+    }
+
     private Person handleExistingPerson(Person existingPerson, DoctorModel doctorModel) {
         if (existingPerson.isDeleted()) { //todo: verificar si eso realmente funciona
-            Person updatedPerson = this.buildPerson(doctorModel);
+            Person updatedPerson = personMapper.toPerson(doctorModel);
+            updatedPerson.setDeleted(false);
             return personRepository.updatePerson(existingPerson.getPersonId(), updatedPerson);
         }
 
@@ -91,22 +124,10 @@ public class DoctorService {
     }
 
     private Person createNewPerson(DoctorModel doctorModel) {
-        Person person = this.buildPerson(doctorModel);
+        Person person = personMapper.toPerson(doctorModel);
         return personRepository.createPerson(person);
     }
 
-    private Person buildPerson(DoctorModel doctorModel) {
-        return new Person(
-                doctorModel.getName(),
-                doctorModel.getSurname(),
-                doctorModel.getDni(),
-                doctorModel.getEmail(),
-                doctorModel.getPhone(),
-                doctorModel.getBirthdate(),
-                doctorModel.getAddress(),
-                doctorModel.getGender()
-        );
-    }
 
     private boolean personDataMatcher(Person person, DoctorModel doctorModel) {
         return person.getName().equals(doctorModel.getName()) &&
