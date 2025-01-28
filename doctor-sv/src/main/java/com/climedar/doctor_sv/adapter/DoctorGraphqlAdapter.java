@@ -1,12 +1,13 @@
 package com.climedar.doctor_sv.adapter;
 
-import coclimedar.library.dto.request.PageRequestInput;
-import coclimedar.library.mapper.PageInfoMapper;
+
 import com.climedar.doctor_sv.dto.request.DoctorSpecificationDTO;
 import com.climedar.doctor_sv.dto.response.DoctorPage;
 import com.climedar.doctor_sv.model.DoctorModel;
 import com.climedar.doctor_sv.service.DoctorService;
 import com.climedar.doctor_sv.specification.DoctorSpecification;
+import com.climedar.library.dto.request.PageRequestInput;
+import com.climedar.library.mapper.PageInfoMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

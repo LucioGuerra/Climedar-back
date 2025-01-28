@@ -1,4 +1,4 @@
-package coclimedar.library;
+package com.climedar.library;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

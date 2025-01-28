@@ -1,6 +1,6 @@
-package coclimedar.library.mapper;
+package com.climedar.library.mapper;
 
-import coclimedar.library.dto.response.PageInfo;
+import com.climedar.library.dto.response.PageInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

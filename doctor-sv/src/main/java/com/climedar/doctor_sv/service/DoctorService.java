@@ -1,7 +1,6 @@
 package com.climedar.doctor_sv.service;
 
 import com.climedar.doctor_sv.entity.Doctor;
-import com.climedar.doctor_sv.entity.Speciality;
 import com.climedar.doctor_sv.external.model.Gender;
 import com.climedar.doctor_sv.external.model.Person;
 import com.climedar.doctor_sv.mapper.DoctorMapper;
@@ -91,7 +90,7 @@ public class DoctorService {
 
         Doctor doctor = doctorMapper.toEntity(doctorModel);
         doctor.setPersonId(person.getPersonId());
-        doctor.setSpeciality(specialityService.findById(doctorModel.getSpeciality().getId()));
+        doctor.setSpeciality(specialityService.findEntityById(doctorModel.getSpeciality().getId()));
         doctorRepository.save(doctor);
 
         return doctorMapper.toModel(doctor, person);

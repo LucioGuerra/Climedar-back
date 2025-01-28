@@ -1,13 +1,13 @@
-package coclimedar.library.mapper;
+package com.climedar.library.mapper;
 
-import coclimedar.library.dto.response.PageInfo;
+import com.climedar.library.dto.response.PageInfo;
 import javax.annotation.processing.Generated;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-01-28T08:49:13-0300",
+    date = "2025-01-28T10:50:14-0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.11 (Oracle Corporation)"
 )
 @Component

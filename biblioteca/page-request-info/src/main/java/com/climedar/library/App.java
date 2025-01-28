@@ -1,4 +1,4 @@
-package coclimedar.library;
+package com.climedar.library;
 
 /**
  * Hello world!

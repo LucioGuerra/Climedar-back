@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="AR"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-17\bin"/>
-    <property name="sun.java.command" value="C:\Users\lucio\AppData\Local\Temp\surefire9803185896374673170\surefirebooter-20250128084914945_3.jar C:\Users\lucio\AppData\Local\Temp\surefire9803185896374673170 2025-01-28T08-49-14_836-jvmRun1 surefire-20250128084914945_1tmp surefire_0-20250128084914945_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\lucio\AppData\Local\Temp\surefire8209531256216166490\surefirebooter-20250128104554060_3.jar C:\Users\lucio\AppData\Local\Temp\surefire8209531256216166490 2025-01-28T10-45-53_966-jvmRun1 surefire-20250128104554060_1tmp surefire_0-20250128104554060_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="E:\Hackacode\Clidemar-back\biblioteca\page-request-info\target\test-classes;E:\Hackacode\Clidemar-back\biblioteca\page-request-info\target\classes;C:\Users\lucio\.m2\repository\junit\junit\3.8.1\junit-3.8.1.jar;C:\Users\lucio\.m2\repository\org\projectlombok\lombok\1.18.36\lombok-1.18.36.jar;C:\Users\lucio\.m2\repository\org\springframework\data\spring-data-commons\3.4.1\spring-data-commons-3.4.1.jar;C:\Users\lucio\.m2\repository\org\springframework\spring-core\6.2.1\spring-core-6.2.1.jar;C:\Users\lucio\.m2\repository\org\springframework\spring-jcl\6.2.1\spring-jcl-6.2.1.jar;C:\Users\lucio\.m2\repository\org\springframework\spring-beans\6.2.1\spring-beans-6.2.1.jar;C:\Users\lucio\.m2\repository\org\slf4j\slf4j-api\2.0.2\slf4j-api-2.0.2.jar;C:\Users\lucio\.m2\repository\org\mapstruct\mapstruct\1.5.5.Final\mapstruct-1.5.5.Final.jar;C:\Users\lucio\.m2\repository\org\mapstruct\mapstruct-processor\1.5.5.Final\mapstruct-processor-1.5.5.Final.jar;C:\Users\lucio\.m2\repository\org\springframework\spring-context\6.2.1\spring-context-6.2.1.jar;C:\Users\lucio\.m2\repository\org\springframework\spring-aop\6.2.1\spring-aop-6.2.1.jar;C:\Users\lucio\.m2\repository\org\springframework\spring-expression\6.2.1\spring-expression-6.2.1.jar;C:\Users\lucio\.m2\repository\io\micrometer\micrometer-observation\1.14.2\micrometer-observation-1.14.2.jar;C:\Users\lucio\.m2\repository\io\micrometer\micrometer-commons\1.14.2\micrometer-commons-1.14.2.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\lucio\AppData\Local\Temp\surefire9803185896374673170\surefirebooter-20250128084914945_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\lucio\AppData\Local\Temp\surefire8209531256216166490\surefirebooter-20250128104554060_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.11+7-LTS-207"/>

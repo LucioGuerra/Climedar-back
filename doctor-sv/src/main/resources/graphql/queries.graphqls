@@ -5,6 +5,6 @@ type Query {
     getAllShifts(pageRequest: PageRequest!, specification: ShiftSpecification): ShiftPage!
     getShiftById(id: ID!): Shift!
 
-    getAllSpecialities: [Speciality]!
+    getAllSpecialities(pageRequest: PageRequest!, specification: SpecialitySpecification): SpecialityPage!
     getSpecialityById(id: ID!): Speciality!
 }

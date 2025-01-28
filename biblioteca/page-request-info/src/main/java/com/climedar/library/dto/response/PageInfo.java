@@ -1,4 +1,4 @@
-package coclimedar.library.dto.response;
+package com.climedar.library.dto.response;
 
 import lombok.Data;
 

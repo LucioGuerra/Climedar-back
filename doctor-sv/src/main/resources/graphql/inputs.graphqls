@@ -68,6 +68,12 @@ input DoctorSpecification {
     specialtyId: ID
 }
 
+input SpecialitySpecification {
+    code: String
+    name: String
+    description: String
+}
+
 input UpdateDoctorInput {
     name: String
     surname: String

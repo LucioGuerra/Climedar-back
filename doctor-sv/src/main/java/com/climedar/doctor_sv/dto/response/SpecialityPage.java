@@ -1,6 +1,6 @@
 package com.climedar.doctor_sv.dto.response;
 
-import coclimedar.library.dto.response.PageInfo;
+import com.climedar.library.dto.response.PageInfo;
 import com.climedar.doctor_sv.model.SpecialityModel;
 import lombok.Data;
 
