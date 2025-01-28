@@ -31,7 +31,7 @@ public class Doctor {
     private Speciality speciality;
 
     @Column(nullable = false)
-    private Boolean deleted = false;
+    private Boolean deleted;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)

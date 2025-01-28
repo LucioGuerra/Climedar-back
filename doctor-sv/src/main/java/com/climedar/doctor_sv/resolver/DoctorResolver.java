@@ -1,6 +1,6 @@
 package com.climedar.doctor_sv.resolver;
 
-import coclimedar.library.dto.request.PageRequestInput;
+import com.climedar.library.dto.request.PageRequestInput;
 import com.climedar.doctor_sv.adapter.DoctorGraphqlAdapter;
 import com.climedar.doctor_sv.dto.request.DoctorSpecificationDTO;
 import com.climedar.doctor_sv.dto.response.DoctorPage;

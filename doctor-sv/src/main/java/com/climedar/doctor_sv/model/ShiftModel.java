@@ -11,7 +11,9 @@ import java.time.LocalTime;
 public class ShiftModel {
     private Long id;
     private LocalDate date;
-    private LocalTime start;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private Integer patients;
+    private String place;
     private ShiftState state;
 }

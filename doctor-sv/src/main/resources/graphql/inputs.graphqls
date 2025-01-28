@@ -24,8 +24,10 @@ input AddressInput {
 input ShiftInput { #todo: pensar como hacer el builder
     date: String!
     startTime: String!
+    endTime: String!
     patients: Int!
-    doctorId: ID
+    place: String
+    doctorId: ID!
 }
 
 input SpecialityInput {
@@ -54,9 +56,11 @@ enum SortDirection {
 input ShiftSpecification {
     date: String
     startTime: String
+    endTime: String
     patients: Int
     shiftState: ShiftState
     doctorId: ID
+    place: String
 }
 
 input DoctorSpecification {
@@ -100,8 +104,10 @@ input UpdateAddressInput {
 input UpdateShiftInput { #todo: pensar como hacer el builder
     date: String
     startTime: String
+    endTime: String
     patients: Int
     doctorId: ID
+    place: String
 }
 
 input UpdateSpecialityInput {

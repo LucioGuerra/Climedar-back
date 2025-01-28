@@ -18,6 +18,6 @@ public interface DoctorMapper {
     DoctorModel toModel(Doctor doctor, Person person);
 
     @Mapping(target = "personId", ignore = true)
-    @Mapping(target = "speciality", source = "doctor.speciality")
+    @Mapping(target = "speciality",expression = "java(doctor.getSpeciality())")
     void updateEntity(@MappingTarget Doctor doctor, DoctorModel doctorModel);
 }

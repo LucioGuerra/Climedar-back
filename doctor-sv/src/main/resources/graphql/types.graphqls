@@ -1,9 +1,11 @@
 type Shift{
     id: ID!
     date: String!
-    start: String!
+    startTime: String!
+    endTime: String!
     patients: Int!
     state: ShiftState!
+    place: String
 }
 
 enum ShiftState{
