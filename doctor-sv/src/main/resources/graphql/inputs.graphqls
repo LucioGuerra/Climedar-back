@@ -21,13 +21,37 @@ input AddressInput {
     postalCode: String!
 }
 
-input ShiftInput { #todo: pensar como hacer el builder
+input ShiftInput {
     date: String!
     startTime: String!
     endTime: String!
     patients: Int!
     place: String
     doctorId: ID!
+    recurringShift: RecurringShiftInput
+    shiftCreateType: ShiftCreateType!
+}
+
+enum ShiftCreateType {
+    SINGLE_PATIENT
+    TIME_BASED
+    PATIENT_BASED
+}
+
+input RecurringShiftInput {
+    startDate: String!
+    endDate: String!
+    validDays: [DayOfWeek]!
+}
+
+enum DayOfWeek {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
 }
 
 input SpecialityInput {

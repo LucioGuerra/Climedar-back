@@ -2,8 +2,8 @@ type Shift{
     id: ID!
     date: String!
     startTime: String!
-    endTime: String!
-    patients: Int!
+    endTime: String
+    patients: Int
     state: ShiftState!
     place: String
 }
