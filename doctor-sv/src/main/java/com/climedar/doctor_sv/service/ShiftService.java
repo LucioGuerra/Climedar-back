@@ -1,6 +1,7 @@
 package com.climedar.doctor_sv.service;
 
 import com.climedar.doctor_sv.dto.request.CreateShiftDTO;
+import com.climedar.doctor_sv.dto.request.specification.ShiftSpecificationDTO;
 import com.climedar.doctor_sv.entity.Doctor;
 import com.climedar.doctor_sv.entity.Shift;
 import com.climedar.doctor_sv.entity.ShiftState;
@@ -9,6 +10,7 @@ import com.climedar.doctor_sv.model.DoctorModel;
 import com.climedar.doctor_sv.model.ShiftModel;
 import com.climedar.doctor_sv.repository.ShiftRepository;
 import com.climedar.doctor_sv.specification.ShiftSpecification;
+import com.climedar.library.exception.ClimedarException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,18 +35,9 @@ public class ShiftService {
         return shiftMapper.toModel(shift);
     }
 
-    public Page<ShiftModel> getAllShifts(Pageable pageable, LocalDate date, LocalDate fromDate, LocalDate toDate,
-                                         LocalTime startTime, LocalTime endTime, Integer patients, String place,
-                                         ShiftState state, Long doctorId) {
+    public Page<ShiftModel> getAllShifts(Pageable pageable, ShiftSpecificationDTO shiftSpecificationDTO) {
 
-        Specification<Shift> specification = Specification.where(ShiftSpecification.byDeleted(false))
-                .and(ShiftSpecification.byDate(date, fromDate, toDate))
-                .and(ShiftSpecification.byStartTime(startTime))
-                .and(ShiftSpecification.byEndTime(endTime))
-                .and(ShiftSpecification.byPatients(patients))
-                .and(ShiftSpecification.byPlace(place))
-                .and(ShiftSpecification.byState(state))
-                .and(ShiftSpecification.byDoctorId(doctorId));
+        Specification<Shift> specification = getShiftSpecification(shiftSpecificationDTO);
 
         Page<Shift> shifts = shiftRepository.findAll(specification, pageable);
 
@@ -95,11 +88,21 @@ public class ShiftService {
         return shiftMapper.toModel(shift);
     }
 
-    public ShiftModel updateShift(Long id, ShiftModel shiftModel) {
-        Shift shift = shiftRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + id));
-        shiftMapper.updateEntity(shift, shiftModel);
-        shiftRepository.save(shift);
-        return shiftMapper.toModel(shift);
+    public ShiftModel updateShift(Long id, ShiftModel shiftModel, ShiftSpecificationDTO shiftSpecificationDTO) {
+
+        Specification<Shift> specification = getShiftSpecification(shiftSpecificationDTO);
+        List<Shift> shifts = shiftRepository.findAll(specification);
+
+        if (shifts.isEmpty()){
+            throw new ClimedarException("NO_SHIFTS_FOUND", "No shifts found with the given criteria");
+        }
+
+        shifts.forEach(shift -> {
+            shiftMapper.updateEntity(shift, shiftModel);
+            shiftRepository.save(shift);
+        });
+
+        return shiftMapper.toModel(shifts.get(0));
     }
 
     public Boolean deleteShift(Long id) {
@@ -108,4 +111,17 @@ public class ShiftService {
         shiftRepository.save(shift);
         return true;
     }
+
+    private static Specification<Shift> getShiftSpecification(ShiftSpecificationDTO shiftSpecificationDTO) {
+        return Specification.where(ShiftSpecification.byDeleted(false))
+                .and(ShiftSpecification.byDate(shiftSpecificationDTO.getDate(), shiftSpecificationDTO.getFromDate(), shiftSpecificationDTO.getToDate()))
+                .and(ShiftSpecification.byStartTime(shiftSpecificationDTO.getStartTime()))
+                .and(ShiftSpecification.byEndTime(shiftSpecificationDTO.getEndTime()))
+                .and(ShiftSpecification.byPatients(shiftSpecificationDTO.getPatients()))
+                .and(ShiftSpecification.byPlace(shiftSpecificationDTO.getPlace()))
+                .and(ShiftSpecification.byState(shiftSpecificationDTO.getState()))
+                .and(ShiftSpecification.byDoctorId(shiftSpecificationDTO.getDoctorId()));
+    }
+
+
 }

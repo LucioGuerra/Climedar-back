@@ -1,6 +1,7 @@
 package com.climedar.doctor_sv.model;
 
 import com.climedar.doctor_sv.entity.ShiftState;
+import jakarta.validation.constraints.AssertTrue;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -16,4 +17,9 @@ public class ShiftModel {
     private Integer patients;
     private String place;
     private ShiftState state;
+
+    @AssertTrue(message = "Shift must have either end time or patients")
+    private boolean isValidShift(){
+        return (endTime == null) != (patients == null);
+    }
 }

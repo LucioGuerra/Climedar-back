@@ -24,8 +24,8 @@ input AddressInput {
 input ShiftInput {
     date: String!
     startTime: String!
-    endTime: String!
-    patients: Int!
+    endTime: String
+    patients: Int
     place: String
     doctorId: ID!
     recurringShift: RecurringShiftInput
