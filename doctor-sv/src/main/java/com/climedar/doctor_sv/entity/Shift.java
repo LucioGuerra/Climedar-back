@@ -1,5 +1,9 @@
 package com.climedar.doctor_sv.entity;
 
+import com.climedar.doctor_sv.builder.shift.RecurringBuilder;
+import com.climedar.doctor_sv.builder.shift.SinglePatientBuilder;
+import com.climedar.doctor_sv.builder.shift.StarTimePatientBuilder;
+import com.climedar.doctor_sv.builder.shift.StartEndTimeBuilder;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -25,10 +29,8 @@ public class Shift {
     @Column(nullable = false)
     private LocalTime startTime;
 
-    @Column(nullable = false)
     private LocalTime endTime;
 
-    @Column(nullable = false)
     private Integer patients;
 
     @Column(length = 50)
@@ -56,5 +58,21 @@ public class Shift {
     public Shift() {
         this.deleted = false;
         this.state = ShiftState.AVAILABLE;
+    }
+
+    public static StartEndTimeBuilder startEndTimeBuilder() {
+        return new StartEndTimeBuilder();
+    }
+
+    public static StarTimePatientBuilder startTimePatientBuilder() {
+        return new StarTimePatientBuilder();
+    }
+
+    public static SinglePatientBuilder singlePatientShiftBuilder() {
+        return new SinglePatientBuilder();
+    }
+
+    public static RecurringBuilder recurringShiftBuilder() {
+        return new RecurringBuilder();
     }
 }
