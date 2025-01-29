@@ -4,7 +4,7 @@ type Mutation {
     deleteDoctor(id: ID!): Boolean!
 
     createShift(shift: ShiftInput!): Shift!
-    updateShift(id: ID!, shift: UpdateShiftInput!): Shift!
+    updateShift(id: ID!, shift: UpdateShiftInput!, specification: ShiftSpecification!): Shift!
     deleteShift(id: ID!): Shift!
 
     createSpeciality(speciality: SpecialityInput!): Speciality!
