@@ -5,6 +5,7 @@ import com.climedar.doctor_sv.entity.ShiftState;
 import com.climedar.doctor_sv.mapper.ShiftMapper;
 import com.climedar.doctor_sv.model.ShiftModel;
 import com.climedar.doctor_sv.repository.ShiftRepository;
+import com.climedar.doctor_sv.specification.ShiftSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,12 +28,21 @@ public class ShiftService {
         return shiftMapper.toModel(shift);
     }
 
-    public Page<ShiftModel> getAllShifts(Pageable pageable, LocalDate date, LocalTime startTime,
-                                         LocalTime endTime, Integer patients, String place,
+    public Page<ShiftModel> getAllShifts(Pageable pageable, LocalDate date, LocalDate fromDate, LocalDate toDate,
+                                         LocalTime startTime, LocalTime endTime, Integer patients, String place,
                                          ShiftState state, Long doctorId) {
 
-        Specification<Shift> specification = Specification.where(null);
+        Specification<Shift> specification = Specification.where(ShiftSpecification.byDeleted(false))
+                .and(ShiftSpecification.byDate(date, fromDate, toDate))
+                .and(ShiftSpecification.byStartTime(startTime))
+                .and(ShiftSpecification.byEndTime(endTime))
+                .and(ShiftSpecification.byPatients(patients))
+                .and(ShiftSpecification.byPlace(place))
+                .and(ShiftSpecification.byState(state))
+                .and(ShiftSpecification.byDoctorId(doctorId));
+
         Page<Shift> shifts = shiftRepository.findAll(specification, pageable);
+
         return shifts.map(shiftMapper::toModel);
     }
 

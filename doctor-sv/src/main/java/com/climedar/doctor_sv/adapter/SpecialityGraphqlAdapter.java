@@ -2,7 +2,7 @@ package com.climedar.doctor_sv.adapter;
 
 import com.climedar.library.dto.request.PageRequestInput;
 import com.climedar.library.mapper.PageInfoMapper;
-import com.climedar.doctor_sv.dto.request.SpecialitySpecificationDTO;
+import com.climedar.doctor_sv.dto.request.specification.SpecialitySpecificationDTO;
 import com.climedar.doctor_sv.dto.response.SpecialityPage;
 import com.climedar.doctor_sv.model.SpecialityModel;
 import com.climedar.doctor_sv.service.SpecialityService;

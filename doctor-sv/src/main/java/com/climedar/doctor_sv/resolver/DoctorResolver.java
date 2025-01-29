@@ -2,7 +2,7 @@ package com.climedar.doctor_sv.resolver;
 
 import com.climedar.library.dto.request.PageRequestInput;
 import com.climedar.doctor_sv.adapter.DoctorGraphqlAdapter;
-import com.climedar.doctor_sv.dto.request.DoctorSpecificationDTO;
+import com.climedar.doctor_sv.dto.request.specification.DoctorSpecificationDTO;
 import com.climedar.doctor_sv.dto.response.DoctorPage;
 import com.climedar.doctor_sv.model.DoctorModel;
 import lombok.AllArgsConstructor;

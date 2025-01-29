@@ -1,4 +1,4 @@
-package com.climedar.doctor_sv.dto.request;
+package com.climedar.doctor_sv.dto.request.specification;
 
 import com.climedar.doctor_sv.external.model.Gender;
 import lombok.Data;

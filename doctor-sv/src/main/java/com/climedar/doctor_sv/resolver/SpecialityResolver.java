@@ -1,7 +1,7 @@
 package com.climedar.doctor_sv.resolver;
 
 import com.climedar.doctor_sv.adapter.SpecialityGraphqlAdapter;
-import com.climedar.doctor_sv.dto.request.SpecialitySpecificationDTO;
+import com.climedar.doctor_sv.dto.request.specification.SpecialitySpecificationDTO;
 import com.climedar.doctor_sv.dto.response.SpecialityPage;
 import com.climedar.doctor_sv.model.SpecialityModel;
 import com.climedar.library.dto.request.PageRequestInput;

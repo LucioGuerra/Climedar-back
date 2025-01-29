@@ -38,6 +38,10 @@ public class Shift {
     @Column(nullable = false)
     private ShiftState state;
 
+    @ManyToOne
+    @JoinColumn(name = "doctor_id", nullable = false)
+    private Doctor doctor;
+
     @Column(nullable = false)
     private Boolean deleted;
 
