@@ -21,7 +21,7 @@ public class Doctor {
     @Column(nullable = false)
     private Double salary;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "person_id", nullable = false, unique = true)
     private Long personId;
 
     @OneToMany(cascade = CascadeType.ALL)

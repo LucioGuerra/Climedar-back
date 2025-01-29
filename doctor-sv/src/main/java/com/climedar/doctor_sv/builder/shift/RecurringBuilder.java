@@ -30,8 +30,8 @@ public class RecurringBuilder {
         return this;
     }
 
-    public RecurringBuilder validDays(DayOfWeek... validDays) {
-        this.validDays = Set.of(validDays);
+    public RecurringBuilder validDays(Set<DayOfWeek> validDays) {
+        this.validDays = validDays;
         return this;
     }
 

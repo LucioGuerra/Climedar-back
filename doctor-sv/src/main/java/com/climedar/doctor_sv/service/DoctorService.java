@@ -155,4 +155,9 @@ public class DoctorService {
                 person.getAddress().equals(doctorModel.getAddress()) &&
                 person.getGender().equals(doctorModel.getGender());
     }
+
+    public Doctor getDoctorEntityById(Long id) {
+        return doctorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Doctor not found" +
+                " with id: " + id));
+    }
 }
