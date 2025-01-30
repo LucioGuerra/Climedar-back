@@ -79,6 +79,8 @@ enum SortDirection {
 
 input ShiftSpecification {
     date: String
+    fromDate: String
+    toDate: String
     startTime: String
     endTime: String
     patients: Int

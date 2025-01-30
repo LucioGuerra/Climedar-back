@@ -17,6 +17,7 @@ public class ShiftModel {
     private Integer patients;
     private String place;
     private ShiftState state;
+    private DoctorModel doctor;
 
     @AssertTrue(message = "Shift must have either end time or patients")
     private boolean isValidShift(){
