@@ -42,6 +42,9 @@ public class ShiftGraphqlAdapter {
     public ShiftPage getAllShifts(PageRequestInput pageRequest, ShiftSpecificationDTO specification) {
         Pageable pageable = PageRequest.of(pageRequest.getPage()-1, pageRequest.getSize(), pageRequest.getSort());
 
+        if (specification == null) {
+            specification = new ShiftSpecificationDTO();
+        }
         Page<ShiftModel> shifts = shiftService.getAllShifts(pageable, specification);
 
         ShiftPage shiftPage = new ShiftPage();

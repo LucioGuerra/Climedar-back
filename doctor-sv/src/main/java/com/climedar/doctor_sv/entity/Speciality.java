@@ -17,7 +17,7 @@ public class Speciality {
     @Column(nullable = false, length = 150)
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String code;
 
     private Boolean deleted;

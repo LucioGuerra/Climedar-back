@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @AllArgsConstructor
 @Service
@@ -60,5 +62,11 @@ public class PersonService {
     public ResponseEntity<GetPersonDTO> getPersonByDni(String dni) {
         Person person = personRepository.findByDni(dni).orElseThrow(() -> new EntityNotFoundException("Person not found with dni: " + dni));
         return ResponseEntity.status(HttpStatus.OK).body(personMapper.toDTO(person));
+    }
+
+    public ResponseEntity<List<GetPersonDTO>> getPersonsByIds(Set<Long> ids) {
+        List<Person> persons = personRepository.findAllByIdAndNotDeleted(ids);
+        List<GetPersonDTO> personsDTO = persons.stream().map(personMapper::toDTO).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(personsDTO);
     }
 }

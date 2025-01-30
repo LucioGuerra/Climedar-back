@@ -17,7 +17,7 @@ public interface PersonRepository {
     Person findById(@PathVariable Long id);
 
     @GetMapping("/api/public/persons/ids")
-    List<Person> findAllById(@RequestBody Set<Long> ids);
+    List<Person> findAllById(@RequestParam Set<Long> ids);
 
     @GetMapping("/api/public/persons/dni/{dni}")
     Optional<Person> findByDni(@PathVariable String dni);

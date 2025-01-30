@@ -38,6 +38,9 @@ public class SpecialityGraphqlAdapter {
     public SpecialityPage getAllSpecialities(PageRequestInput pageRequestInput, SpecialitySpecificationDTO specification) {
         Pageable pageable = PageRequest.of(pageRequestInput.getPage()-1, pageRequestInput.getSize(), pageRequestInput.getSort());
 
+        if (specification == null) {
+            specification = new SpecialitySpecificationDTO();
+        }
         Page<SpecialityModel> specialities = specialityService.getAllSpecialities(pageable, specification.getName(),
                 specification.getDescription(), specification.getCode());
 

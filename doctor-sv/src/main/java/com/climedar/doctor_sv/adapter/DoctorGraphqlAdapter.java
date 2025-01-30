@@ -39,6 +39,10 @@ public class DoctorGraphqlAdapter {
     public DoctorPage getAllDoctors(PageRequestInput pageRequestInput, DoctorSpecificationDTO specification) {
         Pageable pageable = PageRequest.of(pageRequestInput.getPage()-1, pageRequestInput.getSize(), pageRequestInput.getSort());
 
+        if (specification == null) {
+            specification = new DoctorSpecificationDTO();
+        }
+
         Page<DoctorModel> doctors = doctorService.getAllDoctors(pageable, specification.getName(),
                 specification.getSurname(), specification.getDni(), specification.getGender(),
                 specification.getShiftId(), specification.getSpecialtyId());
