@@ -115,6 +115,16 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.climedar.library</groupId>
+			<artifactId>expection</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.climedar.library</groupId>
+			<artifactId>page-request-info</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
