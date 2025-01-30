@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -124,4 +126,10 @@ public class ShiftService {
     }
 
 
+    public Set<LocalDate> getDatesWithShifts(LocalDate fromDate, LocalDate toDate) {
+        Specification<Shift> specification = Specification.where(ShiftSpecification.byDeleted(false))
+                .and(ShiftSpecification.byDate(null, fromDate, toDate));
+
+        return shiftRepository.findAll(specification).stream().map(Shift::getDate).collect(Collectors.toSet());
+    }
 }

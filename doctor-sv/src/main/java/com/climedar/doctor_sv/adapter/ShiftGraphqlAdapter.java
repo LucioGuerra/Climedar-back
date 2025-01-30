@@ -16,6 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.util.Set;
+
 @AllArgsConstructor
 @Component
 public class ShiftGraphqlAdapter {
@@ -52,5 +55,9 @@ public class ShiftGraphqlAdapter {
         shiftPage.setPageInfo(pageInfoMapper.toPageInfo(shifts));
         return shiftPage;
 
+    }
+
+    public Set<LocalDate> getDatesWithShifts(LocalDate fromDate, LocalDate toDate) {
+        return shiftService.getDatesWithShifts(fromDate, toDate);
     }
 }

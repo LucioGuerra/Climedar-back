@@ -23,4 +23,12 @@ public class ShiftModel {
     private boolean isValidShift(){
         return (endTime == null) != (patients == null);
     }
+
+    @AssertTrue(message = "Start time must be before end time")
+    public boolean isStartTimeBeforeEndTime() {
+        if (startTime == null || endTime == null) {
+            return true;
+        }
+        return startTime.isBefore(endTime);
+    }
 }

@@ -14,6 +14,9 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDate;
+import java.util.Set;
+
 @AllArgsConstructor
 @Controller
 public class ShiftResolver {
@@ -29,6 +32,11 @@ public class ShiftResolver {
     @QueryMapping
     public ShiftPage getAllShifts(@Argument PageRequestInput pageRequest, @Argument ShiftSpecificationDTO specification) {
         return shiftAdapter.getAllShifts(pageRequest, specification);
+    }
+
+    @QueryMapping
+    public Set<LocalDate> getDatesWithShifts(@Argument LocalDate fromDate, @Argument LocalDate toDate) {
+        return shiftAdapter.getDatesWithShifts(fromDate, toDate);
     }
 
     @MutationMapping

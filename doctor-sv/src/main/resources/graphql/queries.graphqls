@@ -4,6 +4,7 @@ type Query {
 
     getAllShifts(pageRequest: PageRequest!, specification: ShiftSpecification): ShiftPage!
     getShiftById(id: ID!): Shift!
+    getDatesWithShifts(fromDate: String!, toDate: String!): [String]!
 
     getAllSpecialities(pageRequest: PageRequest!, specification: SpecialitySpecification): SpecialityPage!
     getSpecialityById(id: ID!): Speciality!
