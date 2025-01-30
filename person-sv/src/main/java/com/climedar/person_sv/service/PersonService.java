@@ -4,10 +4,15 @@ import com.climedar.person_sv.dto.request.create.CreatePersonDTO;
 import com.climedar.person_sv.dto.request.update.UpdatePersonDTO;
 import com.climedar.person_sv.dto.response.GetPersonDTO;
 import com.climedar.person_sv.entity.Person;
+import com.climedar.person_sv.entity.Gender;
 import com.climedar.person_sv.mapper.PersonMapper;
 import com.climedar.person_sv.repository.PersonRepository;
+import com.climedar.person_sv.specification.PersonSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -67,6 +72,21 @@ public class PersonService {
     public ResponseEntity<List<GetPersonDTO>> getPersonsByIds(Set<Long> ids) {
         List<Person> persons = personRepository.findAllByIdAndNotDeleted(ids);
         List<GetPersonDTO> personsDTO = persons.stream().map(personMapper::toDTO).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(personsDTO);
+    }
+
+    public ResponseEntity<Page<GetPersonDTO>> getAllPersons(Pageable pageable, String name,
+                                                            String surname, String dni,
+                                                            Gender gender) {
+
+        Specification<Person> specification = Specification.where(PersonSpecification.deletedEqual(false))
+                .and(PersonSpecification.nameLike(name))
+                .and(PersonSpecification.surnameLike(surname))
+                .and(PersonSpecification.dniLike(dni))
+                .and(PersonSpecification.genderEqual(gender));
+
+        Page<Person> persons = personRepository.findAll(specification, pageable);
+        Page<GetPersonDTO> personsDTO = persons.map(personMapper::toDTO);
         return ResponseEntity.status(HttpStatus.OK).body(personsDTO);
     }
 }

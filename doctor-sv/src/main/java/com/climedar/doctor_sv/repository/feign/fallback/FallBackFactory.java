@@ -1,11 +1,16 @@
 package com.climedar.doctor_sv.repository.feign.fallback;
 
+import com.climedar.doctor_sv.external.model.Gender;
 import com.climedar.doctor_sv.external.model.Person;
 import com.climedar.doctor_sv.repository.feign.PersonRepository;
 import feign.FeignException;
 import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,6 +40,11 @@ public class FallBackFactory  implements FallbackFactory<PersonRepository> {
                     throw (RuntimeException) cause;
                 }
                 throw new RuntimeException("Unhandled exception in Feign client", cause);
+            }
+
+            @Override
+            public Page<Person> getAllPersons(Pageable pageable, String name, String surname, String dni, Gender gender) {
+                return new PageImpl<>(new ArrayList<>());
             }
 
             @Override

@@ -12,16 +12,12 @@ import com.climedar.doctor_sv.specification.DoctorSpecification;
 import com.climedar.library.exception.ClimedarException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -47,31 +43,47 @@ public class DoctorService {
                                     Gender gender, Long shiftId,
                                     Long specialtyId) {
 
-        Specification<Doctor> specification = Specification.where(DoctorSpecification.deletedEqual(false))
-                .and(DoctorSpecification.nameLike(name))
-                .and(DoctorSpecification.surnameLike(surname))
-                .and(DoctorSpecification.dniLike(dni))
-                .and(DoctorSpecification.genderEqual(gender)
-                .and(DoctorSpecification.shiftIdEqual(shiftId)
-                .and(DoctorSpecification.specialtyIdEqual(specialtyId))));
 
-        Page<Doctor> doctors = doctorRepository.findAll(specification, pageable);
+        Page<Person> personPage = personRepository.getAllPersons(pageable, name, surname, dni, gender);
 
+        if (personPage.isEmpty()) {
+            return new PageImpl<>(Collections.emptyList(), pageable, 0);
+        }
 
-        Set<Long> personIds = doctors.stream()
-                .map(Doctor::getPersonId)
+        Set<Long> personIds = personPage
+                .getContent()
+                .stream()
+                .map(Person::getPersonId)
                 .collect(Collectors.toSet());
 
-        Map<Long, Person> personMap = personIds.isEmpty()
-                ? Collections.emptyMap()
-                : personRepository.findAllById(personIds).stream()
-                .collect(Collectors.toMap(Person::getPersonId, Function.identity()));
+        Specification<Doctor> doctorSpec = Specification
+                .where(DoctorSpecification.deletedEqual(false))
+                .and(DoctorSpecification.personIdIn(personIds))
+                .and(DoctorSpecification.specialtyIdEqual(specialtyId))
+                .and(DoctorSpecification.shiftIdEqual(shiftId));
 
+        List<Doctor> doctorList = doctorRepository.findAll(doctorSpec);
 
-        return doctors.map(doctor -> {
-            Person person = personMap.get(doctor.getPersonId());
-            return doctorMapper.toModel(doctor, person);
-        });
+        if (doctorList.isEmpty()) {
+            return new PageImpl<>(Collections.emptyList(), pageable, 0);
+        }
+
+        Map<Long, Doctor> doctorByPersonId = doctorList
+                .stream()
+                .collect(Collectors.toMap(Doctor::getPersonId, Function.identity()));
+
+        List<DoctorModel> finalDoctorModels = new ArrayList<>();
+
+        for (Person person : personPage.getContent()) {
+            Doctor doctor = doctorByPersonId.get(person.getPersonId());
+            if (doctor == null) {
+                continue;
+            }
+            DoctorModel model = doctorMapper.toModel(doctor, person);
+            finalDoctorModels.add(model);
+        }
+
+        return new PageImpl<>(finalDoctorModels, pageable, personPage.getTotalElements());
     }
 
     @Transactional
