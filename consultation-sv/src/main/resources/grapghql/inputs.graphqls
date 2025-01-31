@@ -2,7 +2,7 @@ input ConsultationInput{
     patientId: ID!
     shiftId: ID!
     startTime: String!
-    estimatedTime: String!
+    estimatedTDuration: String!
     description: String
     observation: String
     medicalServices: ID!
@@ -14,7 +14,7 @@ input ConsultationSpecification{
     date: String
     fromTime: String
     toTime: String
-    estimatedTime: String
+    estimatedDuration: String
     description: String
     observation: String
     medicalServices: ID

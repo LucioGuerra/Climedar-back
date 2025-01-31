@@ -2,7 +2,7 @@ type Consultation{
     id: ID!
     date: String!
     startTime: String!
-    estimatedTime: String!
+    estimatedDuration: String!
     description: String!
     medicalServices: MedicalServices!
     finalPrice: Float!
@@ -17,10 +17,7 @@ type Doctor{
     name: String!
     surname: String!
     dni: String!
-    gender: Gender!
-    birthdate: String!
     salary: Float!
-    email: String!
     phone: String!
 }
 
@@ -66,12 +63,6 @@ type Patient{ # todo: Esperar a que nacho me pase el modelo de datos
     name: String!
     cpf: String!
     birthDate: String!
-}
-
-enum Gender{
-    MALE
-    FEMALE
-    OTHER
 }
 
 type PageInfo {
