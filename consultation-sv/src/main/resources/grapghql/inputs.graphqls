@@ -15,7 +15,6 @@ input ConsultationSpecification{
     startTime: String
     fromTime: String
     toTime: String
-    estimatedDuration: String
     description: String
     observation: String
     medicalServices: ID

@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ConsultationRepository extends JpaRepository<Consultation, Long>,
         JpaSpecificationExecutor<Consultation> {
+
+    Integer countByShiftId(Long shiftId);
 }

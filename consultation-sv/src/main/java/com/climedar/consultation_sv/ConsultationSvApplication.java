@@ -6,7 +6,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@SpringBootApplication(scanBasePackages = "com.climedar")
+@SpringBootApplication
 @EnableDiscoveryClient
 @FeignClient
 @EnableJpaAuditing
