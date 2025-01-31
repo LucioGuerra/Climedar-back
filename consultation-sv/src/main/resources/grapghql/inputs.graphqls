@@ -1,0 +1,38 @@
+input ConsultationInput{
+    patientId: ID!
+    shiftId: ID!
+    startTime: String!
+    estimatedTime: String!
+    description: String
+    observation: String
+    medicalServices: ID!
+}
+
+input ConsultationSpecification{
+    patientId: ID
+    doctorId: ID
+    date: String
+    fromTime: String
+    toTime: String
+    estimatedTime: String
+    description: String
+    observation: String
+    medicalServices: ID
+}
+
+input PageRequest{
+    page: Int!
+    size: Int!
+    order: Order
+}
+
+input Order {
+    field: String!
+    direction: SortDirection!
+}
+
+enum SortDirection {
+    ASC
+    DESC
+}
+

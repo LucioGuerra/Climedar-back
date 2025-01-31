@@ -1,0 +1,89 @@
+type Consultation{
+    id: ID!
+    date: String!
+    startTime: String!
+    estimatedTime: String!
+    description: String!
+    medicalServices: MedicalServices!
+    finalPrice: Float!
+    observation: String
+    doctor: Doctor!
+    patient: Patient!
+}
+
+type Doctor{
+    id: ID!
+    speciality: Speciality!
+    name: String!
+    surname: String!
+    dni: String!
+    gender: Gender!
+    birthdate: String!
+    salary: Float!
+    email: String!
+    phone: String!
+}
+
+type Speciality {
+    id: ID!
+    code: String!
+    name: String!
+    description: String!
+}
+
+interface MedicalServices{
+    id: ID!
+    code: String!
+    price: Float!
+}
+
+type MedicalService implements MedicalServices{
+    id: ID!
+    code: String!
+    price: Float!
+    name: String!
+    description: String!
+    serviceType: ServiceType!
+}
+
+type MedicalPackage implements MedicalServices{
+    id: ID!
+    code: String!
+    price: Float!
+    services: [MedicalService]!
+}
+
+enum ServiceType {
+    GENERAL
+    SPECIALIST
+    SURGERY
+    EXAMS
+    THERAPY
+}
+
+type Patient{ # todo: Esperar a que nacho me pase el modelo de datos
+    id: ID!
+    name: String!
+    cpf: String!
+    birthDate: String!
+}
+
+enum Gender{
+    MALE
+    FEMALE
+    OTHER
+}
+
+type PageInfo {
+    currentPage: Int!
+    totalPages: Int!
+    totalItems: Int!
+    itemsPerPage: Int!
+    hasNext: Boolean!
+    hasPrevious: Boolean!
+}
+
+type ConsultationPage {
+    pageInfo: PageInfo!
+    consultations: [Consultation]!
+}
