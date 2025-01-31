@@ -27,7 +27,7 @@ public class Consultation {
     private Duration estimatedDuration;
 
     @Column(nullable = false, updatable = false)
-    private Float price;
+    private Float finalPrice;
 
     @Column(nullable = false, length = 500)
     private String description;

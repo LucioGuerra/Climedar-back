@@ -12,6 +12,7 @@ input ConsultationSpecification{
     patientId: ID
     doctorId: ID
     date: String
+    startTime: String
     fromTime: String
     toTime: String
     estimatedDuration: String
