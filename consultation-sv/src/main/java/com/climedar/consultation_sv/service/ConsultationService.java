@@ -1,6 +1,7 @@
 package com.climedar.consultation_sv.service;
 
 import com.climedar.consultation_sv.dto.request.CreateConsultationDTO;
+import com.climedar.consultation_sv.dto.request.UpdateConsultationDTO;
 import com.climedar.consultation_sv.entity.Consultation;
 import com.climedar.consultation_sv.external.model.doctor.Shift;
 import com.climedar.consultation_sv.external.model.medical_service.MedicalServices;
@@ -104,7 +105,7 @@ public class ConsultationService {
         return consultationMapper.toModel(consultation, shift, patient, medicalServices);
     }
 
-    public ConsultationModel updateConsultation(Long id, CreateConsultationDTO createConsultationDTO) {
+    public ConsultationModel updateConsultation(Long id, UpdateConsultationDTO updateConsultationDTO) {
         Consultation consultation = consultationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Consultation not found with id: " + id));
         Shift shift = shiftRepository.findById(consultation.getShiftId());
         Patient patient = patientRepository.findById(consultation.getPatientId());

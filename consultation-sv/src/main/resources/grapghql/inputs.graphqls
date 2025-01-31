@@ -8,6 +8,15 @@ input ConsultationInput{
     medicalServices: ID!
 }
 
+input UpdateConsultationInput{
+    patientId: ID
+    startTime: String
+    estimatedTDuration: String
+    description: String
+    observation: String
+    medicalServices: ID
+}
+
 input ConsultationSpecification{
     patientId: ID
     doctorId: ID
