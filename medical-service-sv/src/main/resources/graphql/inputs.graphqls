@@ -1,0 +1,42 @@
+input PageRequest {
+    page: Int!
+    size: Int!
+    order: Order
+}
+
+input Order {
+    field: String!
+    direction: SortDirection!
+}
+
+enum SortDirection {
+    ASC
+    DESC
+}
+
+input MedicalServiceInput {
+    name: String!
+    description: String!
+    price: Float!
+    serviceType: ServiceType!
+    specialityId: ID!
+}
+
+input UpdateMedicalServiceInput {
+    name: String
+    description: String
+    price: Float
+}
+
+input MedicalSpecificationInput {
+    code: String
+    name: String
+    description: String
+    serviceType: ServiceType
+    specialityId: ID
+}
+
+input MedicalPackageInput {
+    name: String!
+    servicesIds: [ID!]!
+}
