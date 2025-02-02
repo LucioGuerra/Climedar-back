@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Data
 @Entity
-public class MedicalPackageEntity implements ServiceCommon{
+public class MedicalPackageEntity extends MedicalServices{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +17,9 @@ public class MedicalPackageEntity implements ServiceCommon{
 
     @Column(unique = true, nullable = false, length = 28)
     private String code;
+
+    @Column(nullable = false)
+    private String name;
 
     @OneToMany
     private Set<MedicalServiceEntity> services;
@@ -36,7 +39,7 @@ public class MedicalPackageEntity implements ServiceCommon{
     }
 
     @Override
-    public double getPrice() {
+    public Double getPrice() {
         double sumPrice = this.services.stream().mapToDouble(MedicalServiceEntity::getPrice).sum();
         return sumPrice * 0.85;
     }

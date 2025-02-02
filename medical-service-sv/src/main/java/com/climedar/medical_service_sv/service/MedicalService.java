@@ -3,11 +3,13 @@ package com.climedar.medical_service_sv.service;
 import com.climedar.medical_service_sv.dto.request.PageRequestInput;
 import com.climedar.medical_service_sv.dto.response.MedicalServicePage;
 import com.climedar.medical_service_sv.entity.ServiceType;
+import com.climedar.medical_service_sv.external.model.Speciality;
 import com.climedar.medical_service_sv.mapper.PageInfoMapper;
 import com.climedar.medical_service_sv.model.MedicalServiceModel;
 import com.climedar.medical_service_sv.entity.MedicalServiceEntity;
 import com.climedar.medical_service_sv.mapper.MedicalServiceMapper;
 import com.climedar.medical_service_sv.repository.MedicalServiceRepository;
+import com.climedar.medical_service_sv.repository.SpecialityRepository;
 import com.climedar.medical_service_sv.specification.MedicalSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -28,6 +30,7 @@ public class MedicalService {
 
     private final MedicalServiceRepository medicalServiceRepository;
     private final MedicalServiceMapper medicalServiceMapper;
+    private final SpecialityRepository specialityRepository;
 
     public MedicalServiceModel getMedicalServiceById(Long id) {
        MedicalServiceEntity medicalServiceEntity = medicalServiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medical service not found with id: " + id));
@@ -51,8 +54,8 @@ public class MedicalService {
 
     public MedicalServiceModel createMedicalService(MedicalServiceModel medicalServiceModel) {
         MedicalServiceEntity medicalServiceEntity = medicalServiceMapper.toEntity(medicalServiceModel);
-        //todo: Realizar pegada a doctor-sv para obtener la especialidad por el id
-        medicalServiceEntity.setCode(generateCode(medicalServiceEntity.getServiceType().toString(), "Especialidad"));
+        Speciality speciality = specialityRepository.getSpecialityById(medicalServiceModel.getSpecialityId());
+        medicalServiceEntity.setCode(generateCode(medicalServiceEntity.getServiceType().toString(), speciality.getName()));
         medicalServiceEntity = medicalServiceRepository.save(medicalServiceEntity);
 
         return medicalServiceMapper.toModel(medicalServiceEntity);

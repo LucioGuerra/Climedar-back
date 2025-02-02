@@ -7,11 +7,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-public class MedicalServiceEntity implements ServiceCommon {
+public class MedicalServiceEntity extends MedicalServices{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @Column(unique = true, nullable = false, length = 17)
     private String code;
@@ -46,7 +43,7 @@ public class MedicalServiceEntity implements ServiceCommon {
     }
 
     @Override
-    public double getPrice() {
+    public Double getPrice() {
         return this.price;
     }
 
