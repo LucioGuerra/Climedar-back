@@ -1,0 +1,143 @@
+input DoctorInput {
+    name: String!
+    surname: String!
+    dni: String!
+    gender: Gender!
+    birthdate: String!
+    salary: Float!
+    email: String!
+    phone: String!
+    speciality: SpecialityInput!
+    address: AddressInput!
+}
+
+input AddressInput {
+    street: String!
+    number: String!
+    floor: String
+    apartment: String
+    city: String!
+    province: String!
+    postalCode: String!
+}
+
+input ShiftInput {
+    date: String!
+    startTime: String!
+    endTime: String
+    patients: Int
+    place: String
+    doctorId: ID!
+    recurringShift: RecurringShiftInput
+    shiftCreateType: ShiftCreateType!
+}
+
+enum ShiftCreateType {
+    SINGLE_PATIENT
+    TIME_BASED
+    PATIENT_BASED
+}
+
+input RecurringShiftInput {
+    startDate: String!
+    endDate: String!
+    validDays: [DayOfWeek]!
+}
+
+enum DayOfWeek {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
+}
+
+input SpecialityInput {
+    id: ID!
+    code: String
+    name: String
+    description: String
+}
+
+input PageRequest {
+    page: Int!
+    size: Int!
+    order: Order
+}
+
+input Order {
+    field: String!
+    direction: SortDirection!
+}
+
+enum SortDirection {
+    ASC
+    DESC
+}
+
+input ShiftSpecification {
+    date: String
+    fromDate: String
+    toDate: String
+    startTime: String
+    endTime: String
+    patients: Int
+    shiftState: ShiftState
+    doctorId: ID
+    place: String
+}
+
+input DoctorSpecification {
+    name: String
+    surname: String
+    dni: String
+    gender: Gender
+    shiftId: ID
+    specialtyId: ID
+}
+
+input SpecialitySpecification {
+    code: String
+    name: String
+    description: String
+}
+
+input UpdateDoctorInput {
+    name: String
+    surname: String
+    dni: String
+    gender: Gender
+    birthDate: String
+    salary: Float
+    email: String
+    phone: String
+    specialtyId: ID
+    address: AddressInput
+}
+
+input UpdateAddressInput {
+    street: String
+    number: String
+    floor: String
+    apartment: String
+    city: String
+    province: String
+    postalCode: String
+}
+
+input UpdateShiftInput { #todo: pensar como hacer el builder
+    date: String
+    startTime: String
+    endTime: String
+    patients: Int
+    doctorId: ID
+    place: String
+}
+
+input UpdateSpecialityInput {
+    code: String
+    name: String
+    description: String
+}

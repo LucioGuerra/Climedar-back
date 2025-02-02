@@ -1,0 +1,4 @@
+com\climedar\library\dto\ApiError.class
+com\climedar\library\App.class
+com\climedar\library\handler\GlobalExceptionHandler.class
+com\climedar\library\exception\ClimedarException.class

@@ -1,0 +1,13 @@
+type Mutation {
+    createDoctor(doctor: DoctorInput!): Doctor!
+    updateDoctor(id: ID!, doctor: UpdateDoctorInput!): Doctor!
+    deleteDoctor(id: ID!): Boolean!
+
+    createShift(shift: ShiftInput!): Shift!
+    updateShift(id: ID!, shift: UpdateShiftInput!, specification: ShiftSpecification!): Shift!
+    deleteShift(id: ID!): Shift!
+
+    createSpeciality(speciality: SpecialityInput!): Speciality!
+    updateSpeciality(id: ID!, speciality: UpdateSpecialityInput!): Speciality!
+    deleteSpeciality(id: ID!): Speciality!
+}
