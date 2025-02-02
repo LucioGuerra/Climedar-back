@@ -19,5 +19,5 @@ public class ConsultationModel {
     private String observation;
     private Doctor doctor;
     private Patient patient;
-    private MedicalServices medicalService;
+    private MedicalServices medicalServices;
 }

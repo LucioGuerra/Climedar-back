@@ -18,7 +18,7 @@ public interface ConsultationMapper {
     @Mapping(target = "finalPrice", source = "medicalServices.price")
     @Mapping(target = "doctor", source = "shift.doctor")
     //@Mapping(target = "patient", source = "patient")
-    @Mapping(target = "medicalService", source = "medicalServices")
+    @Mapping(target = "medicalServices", source = "medicalServices")
     @Mapping(target = "id", source = "consultation.id")
     @Mapping(target = "startTime", source = "shift.startTime")
     @Mapping(target = "estimatedDuration", source = "medicalServices.estimatedDuration")
