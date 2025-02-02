@@ -4,6 +4,7 @@ import com.climedar.consultation_sv.dto.request.CreateConsultationDTO;
 import com.climedar.consultation_sv.dto.request.UpdateConsultationDTO;
 import com.climedar.consultation_sv.entity.Consultation;
 import com.climedar.consultation_sv.external.model.doctor.Shift;
+import com.climedar.consultation_sv.external.model.doctor.ShiftState;
 import com.climedar.consultation_sv.external.model.medical_service.MedicalServices;
 import com.climedar.consultation_sv.external.model.patient.Patient;
 import com.climedar.consultation_sv.mapper.ConsultationMapper;
@@ -46,7 +47,7 @@ public class ConsultationService {
         Shift shift = shiftRepository.findById(consultation.getShiftId());
         Patient patient = patientRepository.findById(consultation.getPatientId());
         MedicalServices medicalServices = medicalServicesRepository.findById(consultation.getMedicalServicesId());
-        return consultationMapper.toModel(consultation, shift, patient, medicalServices);
+        return consultationMapper.toModel(consultation, shift, medicalServices);
     }
 
     public Page<ConsultationModel> getAllConsultations(Pageable pageable, Long patientId, Long doctorId,
@@ -87,37 +88,43 @@ public class ConsultationService {
             Shift shift = shiftMap.get(consultation.getShiftId());
             Patient patient = patientMap.get(consultation.getPatientId());
             MedicalServices medicalService = medicalServiceMap.get(consultation.getMedicalServicesId());
-            return consultationMapper.toModel(consultation, shift, patient, medicalService);
+            return consultationMapper.toModel(consultation, shift, medicalService);
         });
     }
 
     public ConsultationModel createConsultation(CreateConsultationDTO createConsultationDTO) {
         Shift shift = shiftRepository.findById(createConsultationDTO.shiftId());
-        Patient patient = patientRepository.findById(createConsultationDTO.patientId());
+        if (shift.getState() == ShiftState.OCCUPIED) {
+            throw new ClimedarException("SHIFT_IS_OCCUPIED", "Shift is already occupied");
+        }
+
+        //Patient patient = patientRepository.findById(createConsultationDTO.patientId());
         MedicalServices medicalServices = medicalServicesRepository.findById(createConsultationDTO.medicalServiceId());
 
         Consultation consultation = consultationMapper.toEntity(createConsultationDTO);
-        //todo: si la duracion estimada es de service se debe agregar aca
 
-        shiftValidations(shift, consultation);
+
         consultationRepository.save(consultation);
 
-        return consultationMapper.toModel(consultation, shift, patient, medicalServices);
+        return consultationMapper.toModel(consultation, shift, medicalServices);//todo: agregar patient
     }
 
     public ConsultationModel updateConsultation(Long id, UpdateConsultationDTO updateConsultationDTO) {
         Consultation consultation = consultationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Consultation not found with id: " + id));
         Shift shift = shiftRepository.findById(consultation.getShiftId());
+
+
+
         Patient patient = patientRepository.findById(consultation.getPatientId());
         MedicalServices medicalServices = medicalServicesRepository.findById(consultation.getMedicalServicesId());
 
-        ConsultationModel consultationModel = consultationMapper.toModel(consultation, shift, patient, medicalServices);
+        ConsultationModel consultationModel = consultationMapper.toModel(consultation, shift, medicalServices);
         consultationMapper.updateEntity(consultationModel, consultation);
 
-        shiftValidations(shift, consultation);
+
         consultationRepository.save(consultation);
 
-        return consultationMapper.toModel(consultation, shift, patient, medicalServices);
+        return consultationMapper.toModel(consultation, shift, medicalServices);
     }
 
     public Boolean deleteConsultation(Long id) {
@@ -127,17 +134,6 @@ public class ConsultationService {
         return true;
     }
 
-    private void shiftValidations(Shift shift, Consultation consultation) {
-        if (shift.getEndTime() != null){
-            if (consultation.getStartTime().isBefore(shift.getEndTime()) && consultation.getStartTime().isAfter(shift.getStartTime())) {
-                throw new ClimedarException("INVALID_START_TIME", "The start time is not valid, it must be between the shift start and end time");
-            }
-        }else {
-            if(consultationRepository.countByShiftId(shift.getId()) > shift.getPatients()){
-                throw new ClimedarException("SHIFT_FULL", "The shift is full");
-            }
-        }
-    }
 
 
 }

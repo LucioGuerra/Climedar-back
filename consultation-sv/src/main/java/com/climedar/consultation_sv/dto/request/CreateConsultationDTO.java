@@ -6,8 +6,6 @@ import java.time.LocalTime;
 public record CreateConsultationDTO(
         Long patientId,
         Long medicalServiceId,
-        Duration estimatedDuration, //todo: deberia ser parte del servicio
-        LocalTime startTime,
         String description,
         String observation,
         Long shiftId

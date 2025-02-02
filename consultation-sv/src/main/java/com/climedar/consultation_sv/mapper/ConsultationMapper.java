@@ -19,7 +19,7 @@ public interface ConsultationMapper {
     @Mapping(target = "doctor", source = "shift.doctor")
     @Mapping(target = "patient", source = "patient")
     @Mapping(target = "medicalService", source = "medicalServices")
-    ConsultationModel toModel(Consultation consultation, Shift shift, Patient patient, MedicalServices medicalServices);
+    ConsultationModel toModel(Consultation consultation, Shift shift, MedicalServices medicalServices);
 
     Consultation toEntity(CreateConsultationDTO createConsultationDTO);
 

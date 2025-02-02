@@ -23,9 +23,6 @@ public class Consultation {
     @Column(nullable = false)
     private LocalTime startTime;
 
-    @Column(name = "estimated_duration", nullable = false)
-    private Duration estimatedDuration;
-
     @Column(nullable = false, updatable = false)
     private Float finalPrice;
 
