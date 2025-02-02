@@ -37,7 +37,9 @@ public class ShiftService {
 
     public ShiftModel getShiftById(Long id) {
         Shift shift = shiftRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + id));
-        return shiftMapper.toModel(shift);
+        ShiftModel shiftModel = shiftMapper.toModel(shift);
+        shiftModel.setDoctor(doctorService.getDoctorById(shift.getDoctor().getId()));
+        return shiftModel;
     }
 
     public Page<ShiftModel> getAllShifts(Pageable pageable, ShiftSpecificationDTO shiftSpecificationDTO) {
