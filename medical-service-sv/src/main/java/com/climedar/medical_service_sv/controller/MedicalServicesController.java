@@ -1,7 +1,6 @@
 package com.climedar.medical_service_sv.controller;
 
-import com.climedar.medical_service_sv.entity.MedicalServicesEntity;
-import com.climedar.medical_service_sv.model.MedicalServices;
+import com.climedar.medical_service_sv.dto.response.MedicalServicesWrapped;
 import com.climedar.medical_service_sv.service.MedicalServicesService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,7 @@ public class MedicalServicesController {
     private final MedicalServicesService medicalServicesService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<MedicalServices> getMedicalServicesById(@PathVariable Long id) {
+    public ResponseEntity<MedicalServicesWrapped> getMedicalServicesById(@PathVariable Long id) {
         return ResponseEntity.status(200).body(medicalServicesService.getMedicalServicesById(id));
     }
 }

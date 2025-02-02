@@ -22,7 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
@@ -46,7 +45,7 @@ public class ConsultationService {
         Consultation consultation = consultationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Consultation not found with id: " + id));
         Shift shift = shiftRepository.findById(consultation.getShiftId());
         //Patient patient = patientRepository.findById(consultation.getPatientId());
-        MedicalServices medicalServices = medicalServicesRepository.findById(consultation.getMedicalServicesId());
+        MedicalServices medicalServices = medicalServicesRepository.findById(consultation.getMedicalServicesId()).getMedicalServices();
         return consultationMapper.toModel(consultation, shift, medicalServices);
     }
 
@@ -99,14 +98,22 @@ public class ConsultationService {
         }
 
         //Patient patient = patientRepository.findById(createConsultationDTO.patientId());
-        MedicalServices medicalServices = medicalServicesRepository.findById(createConsultationDTO.medicalServiceId());
+        Patient patient = new Patient();
+        MedicalServices medicalServices =
+                medicalServicesRepository.findById(createConsultationDTO.medicalServices()).getMedicalServices();
 
-        Consultation consultation = consultationMapper.toEntity(createConsultationDTO);
-
-
+        Consultation consultation = consultationMapper.toEntity(createConsultationDTO, shift, medicalServices);
+        consultation.setFinalPrice(calculateFinalPrice(medicalServices, patient));
         consultationRepository.save(consultation);
 
         return consultationMapper.toModel(consultation, shift, medicalServices);//todo: agregar patient
+    }
+
+    private Double calculateFinalPrice(MedicalServices medicalServices, Patient patient) {
+        if (patient.getMedicalSecure() == null) {
+            return medicalServices.getPrice();
+        }
+        return medicalServices.getPrice() * 0.80;
     }
 
     public ConsultationModel updateConsultation(Long id, UpdateConsultationDTO updateConsultationDTO) {
@@ -116,7 +123,7 @@ public class ConsultationService {
 
 
         //Patient patient = patientRepository.findById(consultation.getPatientId());
-        MedicalServices medicalServices = medicalServicesRepository.findById(consultation.getMedicalServicesId());
+        MedicalServices medicalServices = medicalServicesRepository.findById(consultation.getMedicalServicesId()).getMedicalServices();
 
         ConsultationModel consultationModel = consultationMapper.toModel(consultation, shift, medicalServices);
         consultationMapper.updateEntity(consultationModel, consultation);

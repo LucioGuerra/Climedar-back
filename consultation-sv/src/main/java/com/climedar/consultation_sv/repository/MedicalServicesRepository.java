@@ -1,5 +1,6 @@
 package com.climedar.consultation_sv.repository;
 
+import com.climedar.consultation_sv.dto.request.MedicalServicesWrapped;
 import com.climedar.consultation_sv.external.model.medical_service.MedicalServices;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,7 @@ import java.util.Set;
 @FeignClient(name = "medical-service-sv")
 public interface MedicalServicesRepository {
     @GetMapping("/api/public/medical-services/{id}")
-    MedicalServices findById(@PathVariable Long id);
+    MedicalServicesWrapped findById(@PathVariable Long id);
 
     @GetMapping("/api/public/medical-services/ids")
     List<MedicalServices> findAllById(@RequestParam Set<Long> ids);

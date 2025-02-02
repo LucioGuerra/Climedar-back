@@ -50,5 +50,6 @@ public class ConsultationGraphqlAdapter {
         ConsultationPage consultationPage = new ConsultationPage();
         consultationPage.setPageInfo(pageInfoMapper.toPageInfo(consultationModelPage));
         consultationPage.setConsultations(consultationModelPage.getContent());
+        return consultationPage;
     }
 }

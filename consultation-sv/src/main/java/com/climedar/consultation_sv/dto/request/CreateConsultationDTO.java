@@ -5,7 +5,7 @@ import java.time.LocalTime;
 
 public record CreateConsultationDTO(
         Long patientId,
-        Long medicalServiceId,
+        Long medicalServices,
         String description,
         String observation,
         Long shiftId

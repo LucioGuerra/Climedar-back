@@ -9,7 +9,7 @@ import lombok.Data;
 import java.time.Duration;
 
 @Data
-public class MedicalServiceModel implements MedicalServices {
+public class MedicalServiceModel {
     private Long id;
     private String code;
 

@@ -24,7 +24,7 @@ public class Consultation {
     private LocalTime startTime;
 
     @Column(nullable = false, updatable = false)
-    private Float finalPrice;
+    private Double finalPrice;
 
     @Column(nullable = false, length = 500)
     private String description;
