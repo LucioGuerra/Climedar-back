@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
-@FeignClient(name = "speciality-sv")
+@FeignClient(name = "doctor-sv")
 public interface SpecialityRepository {
 
-    @GetMapping("/api/pubic/specialities/{id}")
+    @GetMapping("/api/public/specialities/{id}")
     Speciality getSpecialityById(@PathVariable Long id);
 }

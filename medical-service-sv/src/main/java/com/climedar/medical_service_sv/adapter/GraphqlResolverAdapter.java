@@ -61,6 +61,9 @@ public class GraphqlResolverAdapter {
     public MedicalServicePage getAllMedicalServices(PageRequestInput input, SpecificationDTO specificationDTO) {
         Pageable pageable = PageRequest.of(input.getPage()-1, input.getSize(), input.getSort());
 
+        if (specificationDTO == null) {
+            specificationDTO = new SpecificationDTO();
+        }
         Page<MedicalServiceModel> medicalServiceModels = medicalService.getAllMedicalServices(pageable, specificationDTO.getName(), specificationDTO.getCode(),
                 specificationDTO.getDescription(), specificationDTO.getServiceType(), specificationDTO.getSpecialityId());
 
