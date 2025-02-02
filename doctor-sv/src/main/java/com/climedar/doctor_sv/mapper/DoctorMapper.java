@@ -15,6 +15,7 @@ public interface DoctorMapper {
     @Mapping(target = "personId", expression = "java(person.getPersonId())")
     @Mapping(target = "speciality", source = "doctor.speciality")
     @Mapping(target = "deleted", ignore = true)
+    @Mapping(target = "shifts", ignore = true)
     DoctorModel toModel(Doctor doctor, Person person);
 
     @Mapping(target = "personId", ignore = true)

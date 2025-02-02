@@ -5,6 +5,7 @@ import com.climedar.doctor_sv.dto.request.specification.ShiftSpecificationDTO;
 import com.climedar.doctor_sv.entity.Doctor;
 import com.climedar.doctor_sv.entity.Shift;
 import com.climedar.doctor_sv.entity.ShiftState;
+import com.climedar.doctor_sv.external.model.Person;
 import com.climedar.doctor_sv.mapper.ShiftMapper;
 import com.climedar.doctor_sv.model.DoctorModel;
 import com.climedar.doctor_sv.model.ShiftModel;
@@ -21,7 +22,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -40,10 +43,20 @@ public class ShiftService {
     public Page<ShiftModel> getAllShifts(Pageable pageable, ShiftSpecificationDTO shiftSpecificationDTO) {
 
         Specification<Shift> specification = getShiftSpecification(shiftSpecificationDTO);
-
         Page<Shift> shifts = shiftRepository.findAll(specification, pageable);
 
-        return shifts.map(shiftMapper::toModel);
+        Set<Doctor> doctors = shifts.stream()
+                .map(Shift::getDoctor)
+                .collect(Collectors.toSet());
+
+
+        Map<Long, DoctorModel> doctorModelMap = doctorService.getDoctorsModelsFromDoctors(doctors);
+
+        return shifts.map(shift -> {
+            ShiftModel shiftModel = shiftMapper.toModel(shift);
+            shiftModel.setDoctor(doctorModelMap.get(shift.getDoctor().getId()));
+            return shiftModel;
+        });
     }
 
     public ShiftModel createShift(CreateShiftDTO shiftDTO) {
