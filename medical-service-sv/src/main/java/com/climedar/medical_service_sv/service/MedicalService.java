@@ -1,10 +1,8 @@
 package com.climedar.medical_service_sv.service;
 
-import com.climedar.medical_service_sv.dto.request.PageRequestInput;
-import com.climedar.medical_service_sv.dto.response.MedicalServicePage;
+import com.climedar.medical_service_sv.dto.request.UpdateMedicalServiceDTO;
 import com.climedar.medical_service_sv.entity.ServiceType;
 import com.climedar.medical_service_sv.external.model.Speciality;
-import com.climedar.medical_service_sv.mapper.PageInfoMapper;
 import com.climedar.medical_service_sv.model.MedicalServiceModel;
 import com.climedar.medical_service_sv.entity.MedicalServiceEntity;
 import com.climedar.medical_service_sv.mapper.MedicalServiceMapper;
@@ -13,16 +11,13 @@ import com.climedar.medical_service_sv.repository.SpecialityRepository;
 import com.climedar.medical_service_sv.specification.MedicalSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @AllArgsConstructor
 @Service
@@ -31,6 +26,7 @@ public class MedicalService {
     private final MedicalServiceRepository medicalServiceRepository;
     private final MedicalServiceMapper medicalServiceMapper;
     private final SpecialityRepository specialityRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public MedicalServiceModel getMedicalServiceById(Long id) {
        MedicalServiceEntity medicalServiceEntity = medicalServiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medical service not found with id: " + id));
@@ -61,7 +57,7 @@ public class MedicalService {
         return medicalServiceMapper.toModel(medicalServiceEntity);
     }
 
-    public MedicalServiceModel updateMedicalService(Long id, MedicalServiceModel medicalServiceModel) {
+    public MedicalServiceModel updateMedicalService(Long id, UpdateMedicalServiceDTO medicalServiceModel) {
         MedicalServiceEntity medicalServiceEntity = medicalServiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medical service not found with id: " + id));
 
         updateEntityFields(medicalServiceModel, medicalServiceEntity);
@@ -74,18 +70,17 @@ public class MedicalService {
     public Boolean deleteMedicalService(Long id) {
         MedicalServiceEntity medicalServiceEntity = medicalServiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medical service not found with id: " + id));
         medicalServiceEntity.setDeleted(true);
+        eventPublisher.publishEvent(medicalServiceEntity);
         medicalServiceRepository.save(medicalServiceEntity);
         return true;
     }
 
-    private void updateEntityFields(MedicalServiceModel medicalServiceModel, MedicalServiceEntity medicalServiceEntity) {
-        Optional.ofNullable(medicalServiceModel.getName())
+    private void updateEntityFields(UpdateMedicalServiceDTO medicalServiceModel, MedicalServiceEntity medicalServiceEntity) {
+        Optional.ofNullable(medicalServiceModel.name())
                 .ifPresent(medicalServiceEntity::setName);
-        Optional.ofNullable(medicalServiceModel.getPrice())
+        Optional.ofNullable(medicalServiceModel.price())
                 .ifPresent(medicalServiceEntity::setPrice);
-        Optional.ofNullable(medicalServiceModel.getServiceType())
-                .ifPresent(medicalServiceEntity::setServiceType);
-        Optional.ofNullable(medicalServiceModel.getDescription())
+        Optional.ofNullable(medicalServiceModel.description())
                 .ifPresent(medicalServiceEntity::setDescription);
     }
 
@@ -102,16 +97,17 @@ public class MedicalService {
             type = String.format("%-4s", serviceType).replace(' ', 'X');
         }
 
-        String area;
+        String speciality;
+        serviceSpeciality = serviceSpeciality.toUpperCase();
         if(serviceType.length() >= 3){
-            area = serviceSpeciality.substring(0, 3);
+            speciality = serviceSpeciality.substring(0, 3);
         }else{
-            area = String.format("%-3s", serviceSpeciality).replace(' ', 'X');
+            speciality = String.format("%-3s", serviceSpeciality).replace(' ', 'X');
         }
 
         Long count = medicalServiceRepository.count();
         String number = String.format("%05d", count);
-        return String.format("MS-%s-%s-%s", type, area, number);
+        return String.format("MS-%s-%s-%s", type, speciality, number);
     }
 
     public Boolean checkIfMedicalServiceExists(Long id) {

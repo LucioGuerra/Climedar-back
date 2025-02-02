@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
-public class MedicalServiceModel {
+public class MedicalServiceModel implements MedicalServices {
     private Long id;
     private String code;
 

@@ -3,6 +3,7 @@ package com.climedar.medical_service_sv.resolver;
 import com.climedar.medical_service_sv.adapter.GraphqlResolverAdapter;
 import com.climedar.medical_service_sv.dto.request.PageRequestInput;
 import com.climedar.medical_service_sv.dto.request.SpecificationDTO;
+import com.climedar.medical_service_sv.dto.request.UpdateMedicalServiceDTO;
 import com.climedar.medical_service_sv.dto.response.MedicalServicePage;
 import com.climedar.medical_service_sv.model.MedicalServiceModel;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,7 @@ public class MedicalResolver {
     }
 
     @MutationMapping
-    public MedicalServiceModel updateMedicalService(@Argument Long id, @Argument MedicalServiceModel input) {
+    public MedicalServiceModel updateMedicalService(@Argument Long id, @Argument UpdateMedicalServiceDTO input) {
         return graphqlAdapter.updateMedicalService(id, input);
     }
 

@@ -1,7 +1,9 @@
 package com.climedar.medical_service_sv.adapter;
 
+import com.climedar.medical_service_sv.dto.request.CreatePackageDTO;
 import com.climedar.medical_service_sv.dto.request.PageRequestInput;
 import com.climedar.medical_service_sv.dto.request.SpecificationDTO;
+import com.climedar.medical_service_sv.dto.request.UpdateMedicalServiceDTO;
 import com.climedar.medical_service_sv.dto.response.MedicalPackagePage;
 import com.climedar.medical_service_sv.dto.response.MedicalServicePage;
 import com.climedar.medical_service_sv.mapper.PageInfoMapper;
@@ -13,10 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @AllArgsConstructor
 @Component
@@ -41,8 +40,8 @@ public class GraphqlResolverAdapter {
         return packageService.getPackageById(id);
     }
 
-    public MedicalPackageModel createPackage(List<Long> serviceIds) {
-        return packageService.createPackage(serviceIds);
+    public MedicalPackageModel createPackage(CreatePackageDTO input) {
+        return packageService.createPackage(input);
     }
 
     public Boolean deletePackage(Long id) {
@@ -81,7 +80,7 @@ public class GraphqlResolverAdapter {
         return medicalService.createMedicalService(input);
     }
 
-    public MedicalServiceModel updateMedicalService(Long id, MedicalServiceModel input) {
+    public MedicalServiceModel updateMedicalService(Long id, UpdateMedicalServiceDTO input) {
         return medicalService.updateMedicalService(id, input);
     }
 

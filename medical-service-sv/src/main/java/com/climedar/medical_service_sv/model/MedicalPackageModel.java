@@ -5,9 +5,10 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class MedicalPackageModel {
+public class MedicalPackageModel implements MedicalServices {
     private Long id;
     private String code;
+    private String name;
     private Set<MedicalServiceModel> services;
     private Double price;
 }

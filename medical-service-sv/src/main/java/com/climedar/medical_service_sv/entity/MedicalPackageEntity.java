@@ -2,14 +2,16 @@ package com.climedar.medical_service_sv.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-public class MedicalPackageEntity extends MedicalServices{
+public class MedicalPackageEntity extends MedicalServicesEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +23,7 @@ public class MedicalPackageEntity extends MedicalServices{
     @Column(nullable = false)
     private String name;
 
-    @OneToMany
+    @ManyToMany
     private Set<MedicalServiceEntity> services;
 
     @Column(nullable = false)

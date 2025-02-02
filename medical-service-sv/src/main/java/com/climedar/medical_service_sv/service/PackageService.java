@@ -1,6 +1,7 @@
 package com.climedar.medical_service_sv.service;
 
 import com.climedar.library.exception.ClimedarException;
+import com.climedar.medical_service_sv.dto.request.CreatePackageDTO;
 import com.climedar.medical_service_sv.entity.MedicalPackageEntity;
 import com.climedar.medical_service_sv.entity.MedicalServiceEntity;
 import com.climedar.medical_service_sv.mapper.MedicalPackageMapper;
@@ -8,10 +9,12 @@ import com.climedar.medical_service_sv.model.MedicalPackageModel;
 import com.climedar.medical_service_sv.repository.MedicalPackageRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,9 +42,11 @@ public class PackageService {
 
     }
 
-    public MedicalPackageModel createPackage(List<Long> serviceIds) {
+    @Transactional
+    public MedicalPackageModel createPackage(CreatePackageDTO createPackageDTO) {
         MedicalPackageEntity medicalPackageEntity = new MedicalPackageEntity();
-        for (Long serviceId : serviceIds) {
+        medicalPackageEntity.setName(createPackageDTO.name());
+        for (Long serviceId : createPackageDTO.servicesIds()) {
             MedicalServiceEntity medicalServiceEntity = medicalService.getMedicalServiceEntityById(serviceId);
             medicalPackageEntity.addService(medicalServiceEntity);
         }
@@ -59,6 +64,7 @@ public class PackageService {
         return true;
     }
 
+    @Transactional
     public MedicalPackageModel addServiceToPackage(Long packageId, Long serviceId) {
         MedicalPackageEntity medicalPackageEntity = medicalPackageRepository.findById(packageId).orElseThrow(() -> new EntityNotFoundException("Package not found with id: " + packageId));
         MedicalServiceEntity medicalServiceEntity = medicalService.getMedicalServiceEntityById(serviceId);
@@ -72,6 +78,7 @@ public class PackageService {
         return medicalPackageMapper.toModel(medicalPackageEntity);
     }
 
+    @Transactional
     public MedicalPackageModel removeServiceFromPackage(Long packageId, Long serviceId) {
         MedicalPackageEntity medicalPackageEntity = medicalPackageRepository.findById(packageId).orElseThrow(() -> new RuntimeException("Package not found with id: " + packageId));
         MedicalServiceEntity medicalServiceEntity = medicalService.getMedicalServiceEntityById(serviceId);
@@ -83,6 +90,15 @@ public class PackageService {
         medicalPackageEntity.removeService(medicalServiceEntity);
         medicalPackageRepository.save(medicalPackageEntity);
         return medicalPackageMapper.toModel(medicalPackageEntity);
+    }
+
+    @EventListener
+    public void handleMedicalServiceDeleted(MedicalServiceEntity medicalServiceEntity) {
+        List<MedicalPackageEntity> medicalPackageEntities = medicalPackageRepository.findByServiceId(medicalServiceEntity.getId());
+        for (MedicalPackageEntity medicalPackageEntity : medicalPackageEntities) {
+            medicalPackageEntity.removeService(medicalServiceEntity);
+            medicalPackageRepository.save(medicalPackageEntity);
+        }
     }
 
     private String generateCode(Set<MedicalServiceEntity> services) {

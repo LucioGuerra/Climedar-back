@@ -18,6 +18,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/graphiql/**").permitAll()
                         .requestMatchers("/graphql/**").permitAll()

@@ -2,12 +2,14 @@ package com.climedar.medical_service_sv.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-public class MedicalServiceEntity extends MedicalServices{
+public class MedicalServiceEntity extends MedicalServicesEntity {
 
 
     @Column(unique = true, nullable = false, length = 17)

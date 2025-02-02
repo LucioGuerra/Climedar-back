@@ -1,6 +1,7 @@
 package com.climedar.medical_service_sv.resolver;
 
 import com.climedar.medical_service_sv.adapter.GraphqlResolverAdapter;
+import com.climedar.medical_service_sv.dto.request.CreatePackageDTO;
 import com.climedar.medical_service_sv.dto.request.PageRequestInput;
 import com.climedar.medical_service_sv.dto.response.MedicalPackagePage;
 import com.climedar.medical_service_sv.model.MedicalPackageModel;
@@ -30,8 +31,8 @@ public class PackageResolver {
     }
 
     @MutationMapping
-    public MedicalPackageModel createMedicalPackage(@Argument List<Long> servicesIds) {
-        return graphqlAdapter.createPackage(servicesIds);
+    public MedicalPackageModel createMedicalPackage(@Argument CreatePackageDTO input) {
+        return graphqlAdapter.createPackage(input);
     }
 
     @MutationMapping

@@ -22,10 +22,21 @@ input MedicalServiceInput {
     specialityId: ID!
 }
 
+input UpdateMedicalServiceInput {
+    name: String
+    description: String
+    price: Float
+}
+
 input MedicalSpecificationInput {
     code: String
     name: String
     description: String
     serviceType: ServiceType
     specialityId: ID
+}
+
+input MedicalPackageInput {
+    name: String!
+    servicesIds: [ID!]!
 }

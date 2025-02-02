@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Entity
-public abstract class MedicalServices {
+public abstract class MedicalServicesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

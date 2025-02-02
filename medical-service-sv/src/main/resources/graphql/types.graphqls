@@ -19,6 +19,7 @@ enum ServiceType {
 type MedicalPackage {
     id: ID!
     code: String!
+    name: String!
     services: [MedicalService!]!
     price: Float!
 }
