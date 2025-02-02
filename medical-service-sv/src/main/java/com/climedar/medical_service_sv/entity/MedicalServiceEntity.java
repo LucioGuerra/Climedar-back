@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
@@ -23,6 +24,9 @@ public class MedicalServiceEntity extends MedicalServicesEntity {
 
     @Column(nullable = false)
     private Double price;
+
+    @Column(nullable = false)
+    private Duration estimatedDuration;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "service_type")

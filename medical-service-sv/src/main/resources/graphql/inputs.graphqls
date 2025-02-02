@@ -20,12 +20,14 @@ input MedicalServiceInput {
     price: Float!
     serviceType: ServiceType!
     specialityId: ID!
+    estimatedDuration: String!
 }
 
 input UpdateMedicalServiceInput {
     name: String
     description: String
     price: Float
+    estimatedDuration: String
 }
 
 input MedicalSpecificationInput {

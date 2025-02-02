@@ -20,8 +20,9 @@ type MedicalPackage {
     id: ID!
     code: String!
     name: String!
-    services: [MedicalService!]!
+    estimatedDuration: String!
     price: Float!
+    services: [MedicalService!]!
 }
 
 type PageInfo {
