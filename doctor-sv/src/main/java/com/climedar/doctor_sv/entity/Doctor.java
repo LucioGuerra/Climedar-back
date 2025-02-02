@@ -2,6 +2,7 @@ package com.climedar.doctor_sv.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -24,6 +25,7 @@ public class Doctor {
     @Column(name = "person_id", nullable = false, unique = true)
     private Long personId;
 
+    @ToString.Exclude
     @OneToMany(cascade = CascadeType.ALL)
     private List<Shift> shifts;
 

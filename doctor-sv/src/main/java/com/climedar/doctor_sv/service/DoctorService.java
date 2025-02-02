@@ -172,4 +172,25 @@ public class DoctorService {
         return doctorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Doctor not found" +
                 " with id: " + id));
     }
+
+
+    public Map<Long, DoctorModel> getDoctorsModelsFromDoctors(Set<Doctor> doctors) {
+        Set<Long> personIds = doctors.stream()
+                .map(Doctor::getPersonId)
+                .collect(Collectors.toSet());
+
+
+        List<Person> persons = personRepository.findAllById(personIds);
+
+
+        Map<Long, Person> personMap = persons.stream()
+                .collect(Collectors.toMap(Person::getPersonId, Function.identity()));
+
+
+        return doctors.stream()
+                .collect(Collectors.toMap(
+                        Doctor::getId,
+                        doctor -> doctorMapper.toModel(doctor, personMap.get(doctor.getPersonId()))
+                ));
+    }
 }
