@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.LocalTime;
 
 public record UpdateConsultationDTO(
-        Long medicalServiceId,
+        Long medicalServices,
         String description,
         String observation,
         Long shiftId

@@ -20,9 +20,6 @@ public class Consultation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private LocalTime startTime;
-
     @Column(nullable = false, updatable = false)
     private Double finalPrice;
 
@@ -32,7 +29,7 @@ public class Consultation {
     @Column(length = 3000)
     private String observation;
 
-    @Column(name = "shift_id", nullable = false)
+    @Column(name = "shift_id", nullable = false, unique = true)
     private Long shiftId;
 
     @Column(name = "patient_id", nullable = false)

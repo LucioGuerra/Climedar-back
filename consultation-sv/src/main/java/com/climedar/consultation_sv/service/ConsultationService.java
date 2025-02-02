@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -116,18 +117,15 @@ public class ConsultationService {
         return medicalServices.getPrice() * 0.80;
     }
 
+    @Transactional
+    //todo: revisar funcionamiento
     public ConsultationModel updateConsultation(Long id, UpdateConsultationDTO updateConsultationDTO) {
         Consultation consultation = consultationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Consultation not found with id: " + id));
+        consultationMapper.updateEntity(updateConsultationDTO, consultation);
+
         Shift shift = shiftRepository.findById(consultation.getShiftId());
-
-
-
         //Patient patient = patientRepository.findById(consultation.getPatientId());
         MedicalServices medicalServices = medicalServicesRepository.findById(consultation.getMedicalServicesId()).getMedicalServices();
-
-        ConsultationModel consultationModel = consultationMapper.toModel(consultation, shift, medicalServices);
-        consultationMapper.updateEntity(consultationModel, consultation);
-
 
         consultationRepository.save(consultation);
 
