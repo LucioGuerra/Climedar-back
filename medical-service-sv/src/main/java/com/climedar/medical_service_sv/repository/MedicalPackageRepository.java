@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface MedicalPackageRepository extends JpaRepository<MedicalPackageEntity, Long>, JpaSpecificationExecutor<MedicalPackageEntity> {
@@ -17,4 +18,7 @@ public interface MedicalPackageRepository extends JpaRepository<MedicalPackageEn
 
     @Query("SELECT p FROM MedicalPackageEntity p WHERE p.id = :id AND p.deleted = false")
     Optional<MedicalPackageEntity> findByIdAndNotDeleted(Long id);
+
+    @Query("SELECT p FROM MedicalPackageEntity p WHERE p.id IN :ids AND p.deleted = false")
+    List<MedicalPackageEntity> findByIdInAndNotDeleted(Set<Long> ids);
 }

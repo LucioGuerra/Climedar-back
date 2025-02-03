@@ -11,7 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -35,5 +35,30 @@ public class MedicalServicesService {
             throw new EntityNotFoundException("Medical services not found with id: " + id);
         }
         return medicalServicesWrapped;
+    }
+
+    public List<MedicalServicesWrapped> getMedicalServicesByIds(Set<Long> ids) {
+        List<MedicalPackageEntity> packageEntities = medicalPackageRepository.findByIdInAndNotDeleted(ids);
+        List<MedicalServiceEntity> serviceEntities = medicalServiceRepository.findByIdInAndNotDeleted(ids);
+
+        Map<Long, MedicalServicesWrapped> wrappedMap = new HashMap<>();
+
+        for (MedicalPackageEntity packageEntity : packageEntities) {
+            MedicalServicesWrapped wrapped = new MedicalServicesWrapped();
+            wrapped.setMedicalPackage(medicalPackageMapper.toModel(packageEntity));
+            wrappedMap.put(packageEntity.getId(), wrapped);
+        }
+
+        for (MedicalServiceEntity serviceEntity : serviceEntities) {
+            MedicalServicesWrapped wrapped = new MedicalServicesWrapped();
+            wrapped.setMedicalService(medicalServiceMapper.toModel(serviceEntity));
+            wrappedMap.put(serviceEntity.getId(), wrapped);
+        }
+
+        if (wrappedMap.isEmpty()) {
+            throw new EntityNotFoundException("No medical services found for the provided IDs: " + ids);
+        }
+
+        return new ArrayList<>(wrappedMap.values());
     }
 }

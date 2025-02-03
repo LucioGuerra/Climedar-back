@@ -147,4 +147,13 @@ public class ShiftService {
 
         return shiftRepository.findAll(specification).stream().map(Shift::getDate).collect(Collectors.toSet());
     }
+
+    public List<ShiftModel> findAllById(Set<Long> ids) {
+        List<Shift> shifts = shiftRepository.findAllByIdAndNotDeleted(ids);
+        return shifts.stream().map((shift)->{
+            ShiftModel shiftModel = shiftMapper.toModel(shift);
+            shiftModel.setDoctor(doctorService.getDoctorById(shift.getDoctor().getId()));
+            return shiftModel;
+                }).toList();
+    }
 }

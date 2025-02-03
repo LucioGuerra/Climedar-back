@@ -4,6 +4,7 @@ import com.climedar.consultation_sv.entity.Consultation;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalTime;
+import java.util.List;
 
 public class ConsultationSpecification {
 
@@ -11,8 +12,8 @@ public class ConsultationSpecification {
         return (root, query, cb) -> patientId == null? cb.conjunction(): cb.equal(root.get("patientId"), patientId);
     }
 
-    public static Specification<Consultation> ByShiftId(Long shiftId) {
-        return (root, query, cb) -> shiftId == null? cb.conjunction(): cb.equal(root.get("shiftId"), shiftId);
+    public static Specification<Consultation> ByShiftId(List<Long> shiftId) {
+        return (root, query, cb) -> shiftId.isEmpty()? cb.conjunction(): root.get("shiftId").in(shiftId);
     }
 
     public static Specification<Consultation> ByMedicalServicesId(Long medicalServicesId) {

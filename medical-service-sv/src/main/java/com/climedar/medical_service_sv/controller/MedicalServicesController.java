@@ -4,10 +4,10 @@ import com.climedar.medical_service_sv.dto.response.MedicalServicesWrapped;
 import com.climedar.medical_service_sv.service.MedicalServicesService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @RestController
@@ -19,5 +19,10 @@ public class MedicalServicesController {
     @GetMapping("/{id}")
     public ResponseEntity<MedicalServicesWrapped> getMedicalServicesById(@PathVariable Long id) {
         return ResponseEntity.status(200).body(medicalServicesService.getMedicalServicesById(id));
+    }
+
+    @GetMapping("/ids")
+    public ResponseEntity<List<MedicalServicesWrapped>> getMedicalServicesByIds(@RequestParam Set<Long> ids) {
+        return ResponseEntity.status(200).body(medicalServicesService.getMedicalServicesByIds(ids));
     }
 }

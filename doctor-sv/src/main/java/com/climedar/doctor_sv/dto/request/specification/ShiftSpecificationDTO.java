@@ -37,4 +37,12 @@ public class ShiftSpecificationDTO {
         }
         return startTime.isBefore(endTime);
     }
+
+    public ShiftSpecificationDTO() {
+    }
+
+    public ShiftSpecificationDTO(Long doctorId, LocalDate date) {
+        this.doctorId = doctorId;
+        this.date = date;
+    }
 }

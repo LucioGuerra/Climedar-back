@@ -38,14 +38,18 @@ public class ConsultationGraphqlAdapter {
     }
 
     public ConsultationPage getAllConsultations(PageRequestInput pageRequestInput, ConsultationSpecificationDTO consultationSpecificationDTO) {
-        Pageable pageable = PageRequest.of(pageRequestInput.getPage(), pageRequestInput.getSize(), pageRequestInput.getSort());
+        Pageable pageable = PageRequest.of(pageRequestInput.getPage()-1, pageRequestInput.getSize(), pageRequestInput.getSort());
+
+        if (consultationSpecificationDTO == null) {
+            consultationSpecificationDTO = new ConsultationSpecificationDTO();
+        }
 
         Page<ConsultationModel> consultationModelPage = consultationService.getAllConsultations(pageable,
-                consultationSpecificationDTO.patientId(), consultationSpecificationDTO.doctorId(),
-                consultationSpecificationDTO.date(), consultationSpecificationDTO.startTime(),
-                consultationSpecificationDTO.fromTime(), consultationSpecificationDTO.toTime(),
-                consultationSpecificationDTO.medicalServiceId(), consultationSpecificationDTO.description(),
-                consultationSpecificationDTO.observation());
+                consultationSpecificationDTO.getPatientId(), consultationSpecificationDTO.getDoctorId(),
+                consultationSpecificationDTO.getDate(), consultationSpecificationDTO.getStartTime(),
+                consultationSpecificationDTO.getFromTime(), consultationSpecificationDTO.getToTime(),
+                consultationSpecificationDTO.getMedicalServiceId(), consultationSpecificationDTO.getDescription(),
+                consultationSpecificationDTO.getObservation());
 
         ConsultationPage consultationPage = new ConsultationPage();
         consultationPage.setPageInfo(pageInfoMapper.toPageInfo(consultationModelPage));

@@ -2,6 +2,7 @@ package com.climedar.consultation_sv.repository;
 
 import com.climedar.consultation_sv.external.model.doctor.Shift;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +18,7 @@ public interface ShiftRepository {
     Shift findById(@PathVariable Long id);
 
     @GetMapping("/api/public/shifts")
-    Shift getAllShift(@RequestParam Long doctorId, @RequestParam LocalDate date);
+    Page<Shift> getAllShift(@RequestParam Long doctorId, @RequestParam LocalDate date);
 
     @GetMapping("/api/public/shifts/ids")
     List<Shift> findAllById(@RequestParam Set<Long> ids);

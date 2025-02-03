@@ -1,6 +1,7 @@
 package com.climedar.consultation_sv.service;
 
 import com.climedar.consultation_sv.dto.request.CreateConsultationDTO;
+import com.climedar.consultation_sv.dto.request.MedicalServicesWrapped;
 import com.climedar.consultation_sv.dto.request.UpdateConsultationDTO;
 import com.climedar.consultation_sv.entity.Consultation;
 import com.climedar.consultation_sv.external.model.doctor.Shift;
@@ -25,10 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -54,11 +52,14 @@ public class ConsultationService {
                                                        LocalDate date, LocalTime startTime, LocalTime fromTime, LocalTime toTime,
                                                        Long medicalServicesId, String description, String observation) {
 
-        Long shiftId = shiftRepository.getAllShift(doctorId, date).getId();
+        List<Long> shiftId = new ArrayList<>();
+        if (!(doctorId == null && date == null)) {
+            shiftId = shiftRepository.getAllShift(doctorId, date).stream().map(Shift::getId).toList();
+        }
         Specification<Consultation> specification = Specification.where(ConsultationSpecification.ByPatientId(patientId))
                 .and(ConsultationSpecification.ByShiftId(shiftId))
                 .and(ConsultationSpecification.ByMedicalServicesId(medicalServicesId))
-                .and(ConsultationSpecification.ByTime(startTime, fromTime, toTime))
+                .and(ConsultationSpecification.ByTime(startTime, fromTime, toTime)) //todo: Este specification rompe todo por que ya no existe startime
                 .and(ConsultationSpecification.likeDescription(description))
                 .and(ConsultationSpecification.likeObservation(observation))
                 .and(ConsultationSpecification.byDeleted(false));
@@ -66,27 +67,27 @@ public class ConsultationService {
         Page<Consultation> consultations = consultationRepository.findAll(specification, pageable);
 
         Set<Long> shiftIds = new HashSet<>();
-        Set<Long> patientIds = new HashSet<>();
+        //Set<Long> patientIds = new HashSet<>();
         Set<Long> medicalServiceIds = new HashSet<>();
 
         consultations.forEach(consultation -> {
             shiftIds.add(consultation.getShiftId());
-            patientIds.add(consultation.getPatientId());
+            //patientIds.add(consultation.getPatientId());
             medicalServiceIds.add(consultation.getMedicalServicesId());
         });
 
         List<Shift> shifts = shiftRepository.findAllById(shiftIds);
-        List<Patient> patients = patientRepository.findAllById(patientIds);
-        List<MedicalServices> medicalServices = medicalServicesRepository.findAllById(medicalServiceIds);
+        //List<Patient> patients = patientRepository.findAllById(patientIds);
+        List<MedicalServices> medicalServices = medicalServicesRepository.findAllById(medicalServiceIds).stream().map(MedicalServicesWrapped::getMedicalServices).toList();
 
 
         Map<Long, Shift> shiftMap = shifts.stream().collect(Collectors.toMap(Shift::getId, Function.identity()));
-        Map<Long, Patient> patientMap = patients.stream().collect(Collectors.toMap(Patient::getId, Function.identity()));
+        //Map<Long, Patient> patientMap = patients.stream().collect(Collectors.toMap(Patient::getId, Function.identity()));
         Map<Long, MedicalServices> medicalServiceMap = medicalServices.stream().collect(Collectors.toMap(MedicalServices::getId, Function.identity()));
 
         return consultations.map(consultation -> {
             Shift shift = shiftMap.get(consultation.getShiftId());
-            Patient patient = patientMap.get(consultation.getPatientId());
+            //Patient patient = patientMap.get(consultation.getPatientId());
             MedicalServices medicalService = medicalServiceMap.get(consultation.getMedicalServicesId());
             return consultationMapper.toModel(consultation, shift, medicalService);
         });
@@ -110,15 +111,9 @@ public class ConsultationService {
         return consultationMapper.toModel(consultation, shift, medicalServices);//todo: agregar patient
     }
 
-    private Double calculateFinalPrice(MedicalServices medicalServices, Patient patient) {
-        if (patient.getMedicalSecure() == null) {
-            return medicalServices.getPrice();
-        }
-        return medicalServices.getPrice() * 0.80;
-    }
+
 
     @Transactional
-    //todo: revisar funcionamiento
     public ConsultationModel updateConsultation(Long id, UpdateConsultationDTO updateConsultationDTO) {
         Consultation consultation = consultationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Consultation not found with id: " + id));
         consultationMapper.updateEntity(updateConsultationDTO, consultation);
@@ -139,6 +134,11 @@ public class ConsultationService {
         return true;
     }
 
-
+    private Double calculateFinalPrice(MedicalServices medicalServices, Patient patient) {
+        if (patient.getMedicalSecure() == null) {
+            return medicalServices.getPrice();
+        }
+        return medicalServices.getPrice() * 0.80;
+    }
 
 }
