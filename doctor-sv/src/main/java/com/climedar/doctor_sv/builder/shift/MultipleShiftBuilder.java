@@ -59,7 +59,7 @@ public class MultipleShiftBuilder {
         }
 
         LocalTime time = startTime;
-        while (time.isBefore(endTime.minus(timeOfShifts))){
+        while (time.isBefore(endTime.minus(timeOfShifts)) || time.equals(endTime.minus(timeOfShifts))){
             Shift shift = new Shift();
             shift.setDate(date);
             shift.setDoctor(doctor);
