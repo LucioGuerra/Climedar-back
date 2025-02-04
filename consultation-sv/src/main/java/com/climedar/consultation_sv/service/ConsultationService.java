@@ -93,6 +93,7 @@ public class ConsultationService {
         });
     }
 
+    @Transactional
     public ConsultationModel createConsultation(CreateConsultationDTO createConsultationDTO) {
         Shift shift = shiftRepository.findById(createConsultationDTO.shiftId());
         if (shift.getState() == ShiftState.OCCUPIED) {
@@ -107,6 +108,8 @@ public class ConsultationService {
         Consultation consultation = consultationMapper.toEntity(createConsultationDTO, shift, medicalServices);
         consultation.setFinalPrice(calculateFinalPrice(medicalServices, patient));
         consultationRepository.save(consultation);
+
+        shiftRepository.occupyShift(shift.getId());
 
         return consultationMapper.toModel(consultation, shift, medicalServices);//todo: agregar patient
     }
@@ -131,6 +134,7 @@ public class ConsultationService {
         Consultation consultation = consultationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Consultation not found with id: " + id));
         consultation.setDeleted(true);
         consultationRepository.save(consultation);
+        shiftRepository.clearShift(consultation.getShiftId());
         return true;
     }
 

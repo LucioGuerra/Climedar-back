@@ -38,6 +38,9 @@ public class Consultation {
     @Column(name = "medical_service_id", nullable = false)
     private Long MedicalServicesId;
 
+    @Column(nullable = false)
+    private Boolean paid;
+
     private Boolean deleted;
 
     @CreatedDate
@@ -51,5 +54,6 @@ public class Consultation {
 
     public Consultation() {
         this.deleted = false;
+        this.paid = false;
     }
 }

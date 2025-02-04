@@ -135,4 +135,25 @@ public class ShiftService {
             return shiftModel;
                 }).toList();
     }
+
+    public void occupyShift(Long id) {
+        Shift shift = shiftRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + id));
+        if (shift.getState() == ShiftState.OCCUPIED) {
+            throw new ClimedarException("SHIFT_AlREADY_OCCUPIED", "Shift is already occupied");
+        }
+        if (shift.getState() == ShiftState.CANCELED) {
+            throw new ClimedarException("SHIFT_WAS_CANCELED", "Shift is already canceled");
+        }
+        shift.setState(ShiftState.OCCUPIED);
+        shiftRepository.save(shift);
+    }
+
+    public void clearShift(Long id) {
+        Shift shift = shiftRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + id));
+        if (shift.getState() == ShiftState.AVAILABLE) {
+            throw new ClimedarException("SHIFT_AlREADY_OCCUPIED", "Shift is already occupied");
+        }
+        shift.setState(ShiftState.AVAILABLE);
+        shiftRepository.save(shift);
+    }
 }

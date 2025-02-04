@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,5 +36,17 @@ public class ShiftController {
     @GetMapping("/ids")
     public ResponseEntity<List<ShiftModel>> findAllById(@RequestParam Set<Long> ids) {
         return ResponseEntity.status(200).body(shiftService.findAllById(ids));
+    }
+
+    @PostMapping("/{id}/occupy")
+    public ResponseEntity<Void> occupyShift(@PathVariable Long id) {
+        shiftService.occupyShift(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/{id}/clear")
+    public ResponseEntity<Void> clearShift(@PathVariable Long id) {
+        shiftService.clearShift(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
