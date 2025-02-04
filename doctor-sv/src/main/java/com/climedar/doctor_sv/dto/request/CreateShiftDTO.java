@@ -29,7 +29,4 @@ public class CreateShiftDTO {
 
 
     private RecurringShiftDTO recurringShift;
-
-    @NotNull(message = "Shift create type is required")
-    private ShiftCreateType shiftCreateType;
 }

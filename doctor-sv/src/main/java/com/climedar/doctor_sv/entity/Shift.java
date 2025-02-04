@@ -28,8 +28,6 @@ public class Shift {
 
     private LocalTime endTime;
 
-    private Integer patients;
-
     @Column(length = 50)
     private String place;
 

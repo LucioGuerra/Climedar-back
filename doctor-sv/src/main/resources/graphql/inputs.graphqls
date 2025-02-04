@@ -24,18 +24,11 @@ input AddressInput {
 input ShiftInput {
     date: String!
     startTime: String!
-    endTime: String
-    patients: Int
+    endTime: String!
+    timeOfShifts: String!
     place: String
     doctorId: ID!
     recurringShift: RecurringShiftInput
-    shiftCreateType: ShiftCreateType!
-}
-
-enum ShiftCreateType {
-    SINGLE_PATIENT
-    TIME_BASED
-    PATIENT_BASED
 }
 
 input RecurringShiftInput {
@@ -83,7 +76,6 @@ input ShiftSpecification {
     toDate: String
     startTime: String
     endTime: String
-    patients: Int
     shiftState: ShiftState
     doctorId: ID
     place: String
@@ -127,11 +119,10 @@ input UpdateAddressInput {
     postalCode: String
 }
 
-input UpdateShiftInput { #todo: pensar como hacer el builder
+input UpdateShiftInput {
     date: String
     startTime: String
     endTime: String
-    patients: Int
     doctorId: ID
     place: String
 }
