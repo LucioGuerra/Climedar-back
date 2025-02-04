@@ -1,6 +1,8 @@
 package com.climedar.doctor_sv.service;
 
+import com.climedar.doctor_sv.builder.shift.ShiftDirector;
 import com.climedar.doctor_sv.dto.request.CreateShiftDTO;
+import com.climedar.doctor_sv.dto.request.RecurringShiftDTO;
 import com.climedar.doctor_sv.dto.request.specification.ShiftSpecificationDTO;
 import com.climedar.doctor_sv.entity.Doctor;
 import com.climedar.doctor_sv.entity.Shift;
@@ -18,7 +20,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -34,6 +39,7 @@ public class ShiftService {
     private final ShiftRepository shiftRepository;
     private final ShiftMapper shiftMapper;
     private final DoctorService doctorService;
+    private final ShiftDirector shiftDirector;
 
     public ShiftModel getShiftById(Long id) {
         Shift shift = shiftRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + id));
@@ -61,48 +67,21 @@ public class ShiftService {
         });
     }
 
+    @Transactional
     public ShiftModel createShift(CreateShiftDTO shiftDTO) {
         Doctor doctor = doctorService.getDoctorEntityById(shiftDTO.getDoctorId());
+        List<Shift> shift;
 
-        Shift shift = switch (shiftDTO.getShiftCreateType()) {
-            case SINGLE_PATIENT -> Shift.singlePatientShiftBuilder()
-                                .date(shiftDTO.getDate())
-                                .start(shiftDTO.getStartTime())
-                                .place(shiftDTO.getPlace())
-                                .doctor(doctor)
-                                .build();
-
-            case TIME_BASED -> Shift.startEndTimeBuilder()
-                            .date(shiftDTO.getDate())
-                            .time(shiftDTO.getStartTime(), shiftDTO.getEndTime())
-                            .place(shiftDTO.getPlace())
-                            .doctor(doctor)
-                            .build();
-
-            case PATIENT_BASED -> Shift.startTimePatientBuilder()
-                            .date(shiftDTO.getDate())
-                            .time(shiftDTO.getStartTime())
-                            .patients(shiftDTO.getPatients())
-                            .place(shiftDTO.getPlace())
-                            .doctor(doctor)
-                            .build();
-
-            default -> throw new IllegalStateException("Unexpected value: " + shiftDTO.getShiftCreateType());
-        };
-
-        shiftRepository.save(shift);
 
         if (shiftDTO.getRecurringShift() != null) {
-            List<Shift> recurringShifts = Shift.recurringShiftBuilder()
-                    .startDate(shiftDTO.getRecurringShift().getStartDate())
-                    .endDate(shiftDTO.getRecurringShift().getEndDate())
-                    .validDays(shiftDTO.getRecurringShift().getValidDays())
-                    .shiftTemplate(shift)
-                    .build();
-            shiftRepository.saveAll(recurringShifts);
+            shift = shiftDirector.constructRecurringMultipleShifts(shiftDTO, doctor);
+        }
+        else {
+            shift = shiftDirector.constructMultipleShifts(shiftDTO, doctor);
         }
 
-        return shiftMapper.toModel(shift);
+        shiftRepository.saveAll(shift);
+        return shiftMapper.toModel(shift.get(0));
     }
 
     public ShiftModel updateShift(Long id, ShiftModel shiftModel, ShiftSpecificationDTO shiftSpecificationDTO) {

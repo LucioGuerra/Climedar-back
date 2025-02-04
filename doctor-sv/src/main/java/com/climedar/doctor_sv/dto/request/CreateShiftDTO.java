@@ -3,6 +3,7 @@ package com.climedar.doctor_sv.dto.request;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -18,10 +19,8 @@ public class CreateShiftDTO {
     @NotNull(message = "End time is required")
     private LocalTime endTime;
 
-    @NotNull(message = "Patients is required")
-    @Positive(message = "Patients must be positive")
-    @Min(value = 1, message = "Patients must be at least 1")
-    private Integer patients;
+    @NotNull(message = "Time of shifts is required")
+    private Duration timeOfShifts;
 
     private String place;
 
