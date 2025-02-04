@@ -48,7 +48,7 @@ enum DayOfWeek {
 }
 
 input SpecialityInput {
-    id: ID!
+    id: ID
     code: String
     name: String
     description: String
