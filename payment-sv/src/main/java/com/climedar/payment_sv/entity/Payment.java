@@ -1,11 +1,9 @@
 package com.climedar.payment_sv.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,12 +13,17 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "consultation_id", nullable = false, updatable = false, unique = true)
     private Long consultationId;
 
-    private Double amount;
+    @Column(nullable = false, updatable = false)
+    private BigDecimal amount;
 
+    @Column(name = "payment_date", nullable = false, updatable = false)
     private LocalDateTime paymentDate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_method", nullable = false, updatable = false)
     private PaymentMethod paymentMethod;
 
 }

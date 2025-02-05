@@ -5,6 +5,7 @@ public enum PaymentMethod {
     CREDIT_CARD,
     DEBIT_CARD,
     PAYPAL,
-    DNI_COUNT,
-    MP
+    CUENTA_DNI,
+    MERCADO_PAGO,
+    TRANSFER
 }
