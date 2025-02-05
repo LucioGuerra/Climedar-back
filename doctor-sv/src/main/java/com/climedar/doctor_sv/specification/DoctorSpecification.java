@@ -12,7 +12,8 @@ public class DoctorSpecification {
     }
 
     public static Specification<Doctor> specialityIdEqual(Long specialityId){
-        return (root, query, cb) -> specialityId == null? cb.conjunction() : cb.equal(root.get("speciality").get("specialityId"), specialityId);
+        return (root, query, cb) -> specialityId == null? cb.conjunction() :
+                cb.equal(root.get("speciality").get("id"), specialityId);
     }
 
     public static Specification<Doctor> personIdIn(Set<Long> personIds){
