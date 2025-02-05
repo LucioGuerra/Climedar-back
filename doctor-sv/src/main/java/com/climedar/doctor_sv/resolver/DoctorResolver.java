@@ -28,6 +28,12 @@ public class DoctorResolver {
         return graphqlAdapter.getAllDoctors(pageRequest, specification);
     }
 
+    @QueryMapping
+    public DoctorPage getDoctorsByFullName(@Argument PageRequestInput pageRequest,
+                                           @Argument String fullName) {
+        return graphqlAdapter.getDoctorsByFullName(pageRequest, fullName);
+    }
+
     @MutationMapping
     public DoctorModel createDoctor(@Argument DoctorModel doctor) {
         return graphqlAdapter.createDoctor(doctor);

@@ -40,4 +40,8 @@ public interface PersonRepository {
     @PatchMapping("/api/public/persons/{id}")
     Person updatePerson(@PathVariable Long id, Person person);
 
+    @GetMapping("/api/public/persons/fullName")
+    Page<Person> getAllPersonsByFullName(@PageableDefault(size = 10, sort = "surname", direction = Sort.Direction.ASC) Pageable pageable,
+                                         @RequestParam(required = false) String fullName);
+
 }

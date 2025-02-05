@@ -74,6 +74,12 @@ public class PersonService {
         return ResponseEntity.status(HttpStatus.OK).body(personsDTO);
     }
 
+    public ResponseEntity<Page<GetPersonDTO>> getPersonsByFullName(String fullName, Pageable pageable) {
+        Page<Person> persons = personRepository.findAllByFullNameAndNotDeleted(fullName, pageable);
+        Page<GetPersonDTO> personsDTO = persons.map(personMapper::toDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(personsDTO);
+    }
+
     public ResponseEntity<Page<GetPersonDTO>> getAllPersons(Pageable pageable, String name,
                                                             String surname, String dni,
                                                             Gender gender) {

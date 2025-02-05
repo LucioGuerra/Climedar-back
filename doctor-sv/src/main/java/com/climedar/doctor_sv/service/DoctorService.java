@@ -86,6 +86,49 @@ public class DoctorService {
         return new PageImpl<>(finalDoctorModels, pageable, personPage.getTotalElements());
     }
 
+    public Page<DoctorModel> getDoctorsByFullName(String fullName, Pageable pageable) {
+
+        Page<Person> personPage = personRepository.getAllPersonsByFullName(pageable, fullName);
+
+        if (personPage.isEmpty()) {
+            return new PageImpl<>(Collections.emptyList(), pageable, 0);
+        }
+
+        Set<Long> personIds = personPage
+                .getContent()
+                .stream()
+                .map(Person::getPersonId)
+                .collect(Collectors.toSet());
+
+        Specification<Doctor> doctorSpec = Specification
+                .where(DoctorSpecification.deletedEqual(false))
+                .and(DoctorSpecification.personIdIn(personIds));
+
+        List<Doctor> doctorList = doctorRepository.findAll(doctorSpec);
+
+        if (doctorList.isEmpty()) {
+            return new PageImpl<>(Collections.emptyList(), pageable, 0);
+        }
+
+        Map<Long, Doctor> doctorByPersonId = doctorList
+                .stream()
+                .collect(Collectors.toMap(Doctor::getPersonId, Function.identity()));
+
+        List<DoctorModel> finalDoctorModels = new ArrayList<>();
+
+        for (Person person : personPage.getContent()) {
+            Doctor doctor = doctorByPersonId.get(person.getPersonId());
+            if (doctor == null) {
+                continue;
+            }
+            DoctorModel model = doctorMapper.toModel(doctor, person);
+            finalDoctorModels.add(model);
+        }
+
+        return new PageImpl<>(finalDoctorModels, pageable, personPage.getTotalElements());
+    }
+
+
     @Transactional
     public DoctorModel createDoctor(DoctorModel doctorModel) {
         Optional<Person> personOptional = personRepository.findByDni(doctorModel.getDni());

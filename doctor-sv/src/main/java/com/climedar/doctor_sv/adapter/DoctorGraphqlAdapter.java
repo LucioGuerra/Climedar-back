@@ -54,4 +54,13 @@ public class DoctorGraphqlAdapter {
 
     }
 
+    public DoctorPage getDoctorsByFullName(PageRequestInput pageRequestInput, String fullName) {
+        Pageable pageable = PageRequest.of(pageRequestInput.getPage()-1, pageRequestInput.getSize(), pageRequestInput.getSort());
+        Page<DoctorModel> doctors = doctorService.getDoctorsByFullName(fullName, pageable);
+
+        DoctorPage doctorPage = new DoctorPage();
+        doctorPage.setDoctors(doctors.getContent());
+        doctorPage.setPageInfo(pageInfoMapper.toPageInfo(doctors));
+        return doctorPage;
+    }
 }

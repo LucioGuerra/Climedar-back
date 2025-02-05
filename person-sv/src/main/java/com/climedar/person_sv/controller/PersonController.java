@@ -51,6 +51,15 @@ public class PersonController {
         return personService.getAllPersons(pageable, name, surname, dni, gender);
     }
 
+    @GetMapping("/fullName")
+    public ResponseEntity<Page<GetPersonDTO>> getAllPersonsByFullName(
+                                                        @PageableDefault(size = 10, sort = "surname", direction =
+                                                                Sort.Direction.ASC) Pageable pageable,
+                                                        @RequestParam(required = false) String fullName) {
+
+        return personService.getPersonsByFullName(fullName, pageable);
+    }
+
     @PostMapping
     public ResponseEntity<GetPersonDTO> createPerson(@RequestBody CreatePersonDTO createPersonDTO) {
         return personService.createPerson(createPersonDTO);

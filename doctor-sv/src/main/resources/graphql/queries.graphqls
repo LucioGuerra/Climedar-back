@@ -8,4 +8,6 @@ type Query {
 
     getAllSpecialities(pageRequest: PageRequest!, specification: SpecialitySpecification): SpecialityPage!
     getSpecialityById(id: ID!): Speciality!
+
+    getDoctorsByFullName(pageRequest: PageRequest!, fullName: String!): DoctorPage!
 }

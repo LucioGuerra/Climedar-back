@@ -48,6 +48,11 @@ public class FallBackFactory  implements FallbackFactory<PersonRepository> {
             }
 
             @Override
+            public Page<Person> getAllPersonsByFullName(Pageable pageable, String fullName) {
+                return new PageImpl<>(new ArrayList<>());
+            }
+
+            @Override
             public Person createPerson(Person person) {
                 return null;
             }
