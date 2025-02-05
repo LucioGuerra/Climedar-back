@@ -1,13 +1,9 @@
 package com.climedar.doctor_sv.specification;
 
 import com.climedar.doctor_sv.entity.Doctor;
-import com.climedar.doctor_sv.external.model.Gender;
-import com.climedar.doctor_sv.repository.feign.PersonRepository;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class DoctorSpecification {
 
@@ -15,8 +11,8 @@ public class DoctorSpecification {
         return (root, query, cb) -> shiftId == null? cb.conjunction() : cb.and(cb.isNotNull(root.get("shift")), cb.equal(root.get("shift").get("shiftId"), shiftId));
     }
 
-    public static Specification<Doctor> specialtyIdEqual(Long specialtyId){
-        return (root, query, cb) -> specialtyId == null? cb.conjunction() : cb.equal(root.get("specialty").get("specialtyId"), specialtyId);
+    public static Specification<Doctor> specialityIdEqual(Long specialityId){
+        return (root, query, cb) -> specialityId == null? cb.conjunction() : cb.equal(root.get("speciality").get("specialityId"), specialityId);
     }
 
     public static Specification<Doctor> personIdIn(Set<Long> personIds){

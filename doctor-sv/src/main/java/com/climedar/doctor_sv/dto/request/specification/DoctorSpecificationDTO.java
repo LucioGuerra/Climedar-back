@@ -19,6 +19,6 @@ public class DoctorSpecificationDTO {
     private String dni;
 
     private Long shiftId;
-    private Long specialtyId;
+    private Long specialityId;
     private Gender gender;
 }

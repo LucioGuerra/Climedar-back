@@ -45,7 +45,7 @@ public class DoctorGraphqlAdapter {
 
         Page<DoctorModel> doctors = doctorService.getAllDoctors(pageable, specification.getFullName(), specification.getName(),
                 specification.getSurname(), specification.getDni(), specification.getGender(),
-                specification.getShiftId(), specification.getSpecialtyId());
+                specification.getShiftId(), specification.getSpecialityId());
 
         DoctorPage doctorPage = new DoctorPage();
         doctorPage.setDoctors(doctors.getContent());

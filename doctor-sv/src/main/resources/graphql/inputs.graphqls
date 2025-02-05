@@ -88,7 +88,7 @@ input DoctorSpecification {
     dni: String
     gender: Gender
     shiftId: ID
-    specialtyId: ID
+    specialityId: ID
 }
 
 input SpecialitySpecification {
@@ -106,7 +106,7 @@ input UpdateDoctorInput {
     salary: Float
     email: String
     phone: String
-    specialtyId: ID
+    specialityId: ID
     address: AddressInput
 }
 

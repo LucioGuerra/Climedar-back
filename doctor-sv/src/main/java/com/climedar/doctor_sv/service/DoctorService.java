@@ -41,7 +41,7 @@ public class DoctorService {
     public Page<DoctorModel> getAllDoctors(Pageable pageable, String fullName, String name,
                                     String surname, String dni,
                                     Gender gender, Long shiftId,
-                                    Long specialtyId) {
+                                    Long specialityId) {
 
 
         Page<Person> personPage = personRepository.getAllPersons(pageable, fullName, name, surname, dni, gender);
@@ -59,7 +59,7 @@ public class DoctorService {
         Specification<Doctor> doctorSpec = Specification
                 .where(DoctorSpecification.deletedEqual(false))
                 .and(DoctorSpecification.personIdIn(personIds))
-                .and(DoctorSpecification.specialtyIdEqual(specialtyId))
+                .and(DoctorSpecification.specialityIdEqual(specialityId))
                 .and(DoctorSpecification.shiftIdEqual(shiftId));
 
         List<Doctor> doctorList = doctorRepository.findAll(doctorSpec);
@@ -103,7 +103,7 @@ public class DoctorService {
         Specification<Doctor> doctorSpec = Specification
                 .where(DoctorSpecification.deletedEqual(false))
                 .and(DoctorSpecification.personIdIn(personIds))
-                .and(DoctorSpecification.specialtyIdEqual(specialityId));
+                .and(DoctorSpecification.specialityIdEqual(specialityId));
 
         List<Doctor> doctorList = doctorRepository.findAll(doctorSpec);
 
