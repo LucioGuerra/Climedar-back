@@ -6,4 +6,6 @@ import lombok.Data;
 public class MedicalService implements MedicalServices{
     private Long id;
     private Double price;
+    private String name;
+    private String code;
 }

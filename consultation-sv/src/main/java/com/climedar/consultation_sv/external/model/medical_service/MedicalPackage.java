@@ -11,6 +11,7 @@ public class MedicalPackage implements MedicalServices {
     private String code;
     private Double price;
     private List<MedicalService> services;
+    private String type = "package";
 
     @Override
     public Double getPrice() {

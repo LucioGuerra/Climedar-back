@@ -13,6 +13,7 @@ public class MedicalService implements MedicalServices {
     private String description;
     private Duration estimatedDuration;
     private ServiceType serviceType;
+    private String type = "service";
 
     @Override
     public Double getPrice() {
