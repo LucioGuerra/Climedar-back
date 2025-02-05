@@ -24,12 +24,21 @@ public class RevenueService {
     private final PaymentService paymentService;
 
 
-    @EventListener
+    @EventListener(condition = "#event.amount() > 0")
     public void handlerPaymentEvent(PaymentEvent event) {
         Revenue revenue = revenueRepository.findByDateAndRevenueType(event.date().toLocalDate(), RevenueType.DAILY).orElseThrow(() -> new RuntimeException("Daily revenue not found"));
         revenue.setAmount(revenue.getAmount().add(event.amount()));
         revenue.setTotalPayments(revenue.getTotalPayments() + 1);
         revenueRepository.save(revenue);
+    }
+
+    @EventListener(condition = "#event.amount() < 0")
+    public void handlerCancelPaymentEvent(PaymentEvent event) {
+        Revenue dailyRevenue = revenueRepository.findByDateAndRevenueType(event.date().toLocalDate(), RevenueType.DAILY).orElseThrow(() -> new RuntimeException("Daily revenue not found"));
+        Revenue monthlyRevenue = revenueRepository.findByDateAndRevenueType(event.date().toLocalDate(), RevenueType.DAILY).orElseThrow(() -> new RuntimeException("Daily revenue not found"));
+        monthlyRevenue.setAmount(monthlyRevenue.getAmount().add(event.amount()));
+        dailyRevenue.setAmount(dailyRevenue.getAmount().add(event.amount()));
+        revenueRepository.save(monthlyRevenue);
     }
 
     @Scheduled(cron = "0 0 0 * * ?")

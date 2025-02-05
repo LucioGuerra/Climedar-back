@@ -26,4 +26,10 @@ public class Payment {
     @Column(name = "payment_method", nullable = false, updatable = false)
     private PaymentMethod paymentMethod;
 
+    private Boolean canceled;
+
+    public Payment() {
+        this.canceled = false;
+    }
+
 }

@@ -5,6 +5,7 @@ import com.climedar.payment_sv.entity.Payment;
 import com.climedar.payment_sv.event.internal.PaymentEvent;
 import com.climedar.payment_sv.mapper.PaymentMapper;
 import com.climedar.payment_sv.repository.PaymentRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.*;
@@ -34,9 +35,16 @@ public class PaymentService {
                 .filename("invoice_"+payment.getId()+".pdf").build());
 
 
-
-
+        //todo: retornar tambien el recibo
         return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(invoiceService.generateInvoice(payment));
+    }
+
+    public ResponseEntity<Void> cancelPayment(Long paymentId) {
+        Payment payment = paymentRepository.findByIdAndCanceled(paymentId, false)
+                .orElseThrow(() -> new EntityNotFoundException("Payment not found with id: " + paymentId));
+        payment.setCanceled(true);
+        eventPublisher.publishEvent(new PaymentEvent(payment.getAmount().negate(), payment.getPaymentDate()));
+        return ResponseEntity.noContent().build();
     }
 
     public List<Payment> getPaymentsByDate(LocalDate date) {
