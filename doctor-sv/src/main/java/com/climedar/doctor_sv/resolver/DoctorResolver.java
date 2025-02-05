@@ -30,8 +30,9 @@ public class DoctorResolver {
 
     @QueryMapping
     public DoctorPage getDoctorsByFullName(@Argument PageRequestInput pageRequest,
-                                           @Argument String fullName) {
-        return graphqlAdapter.getDoctorsByFullName(pageRequest, fullName);
+                                           @Argument String fullName,
+                                           @Argument Long specialityId) {
+        return graphqlAdapter.getDoctorsByFullName(pageRequest, fullName, specialityId);
     }
 
     @MutationMapping

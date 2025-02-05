@@ -80,11 +80,12 @@ public class PersonService {
         return ResponseEntity.status(HttpStatus.OK).body(personsDTO);
     }
 
-    public ResponseEntity<Page<GetPersonDTO>> getAllPersons(Pageable pageable, String name,
+    public ResponseEntity<Page<GetPersonDTO>> getAllPersons(Pageable pageable, String fullName, String name,
                                                             String surname, String dni,
                                                             Gender gender) {
 
         Specification<Person> specification = Specification.where(PersonSpecification.deletedEqual(false))
+                .and(PersonSpecification.fullNameLike(fullName))
                 .and(PersonSpecification.nameLike(name))
                 .and(PersonSpecification.surnameLike(surname))
                 .and(PersonSpecification.dniLike(dni))

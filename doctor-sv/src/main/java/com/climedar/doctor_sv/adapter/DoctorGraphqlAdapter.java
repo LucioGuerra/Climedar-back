@@ -43,7 +43,7 @@ public class DoctorGraphqlAdapter {
             specification = new DoctorSpecificationDTO();
         }
 
-        Page<DoctorModel> doctors = doctorService.getAllDoctors(pageable, specification.getName(),
+        Page<DoctorModel> doctors = doctorService.getAllDoctors(pageable, specification.getFullName(), specification.getName(),
                 specification.getSurname(), specification.getDni(), specification.getGender(),
                 specification.getShiftId(), specification.getSpecialtyId());
 
@@ -54,9 +54,9 @@ public class DoctorGraphqlAdapter {
 
     }
 
-    public DoctorPage getDoctorsByFullName(PageRequestInput pageRequestInput, String fullName) {
+    public DoctorPage getDoctorsByFullName(PageRequestInput pageRequestInput, String fullName, Long specilityId) {
         Pageable pageable = PageRequest.of(pageRequestInput.getPage()-1, pageRequestInput.getSize(), pageRequestInput.getSort());
-        Page<DoctorModel> doctors = doctorService.getDoctorsByFullName(fullName, pageable);
+        Page<DoctorModel> doctors = doctorService.getDoctorsByFullName(fullName, specilityId, pageable);
 
         DoctorPage doctorPage = new DoctorPage();
         doctorPage.setDoctors(doctors.getContent());

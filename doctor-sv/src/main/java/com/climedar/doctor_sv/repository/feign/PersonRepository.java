@@ -29,6 +29,7 @@ public interface PersonRepository {
 
     @GetMapping("/api/public/persons")
     Page<Person> getAllPersons(Pageable pageable,
+                               @RequestParam(required = false) String fullName,
                                @RequestParam(required = false) String name,
                                @RequestParam(required = false) String surname,
                                @RequestParam(required = false) String dni,

@@ -2,10 +2,12 @@ package com.climedar.doctor_sv.specification;
 
 import com.climedar.doctor_sv.entity.Doctor;
 import com.climedar.doctor_sv.external.model.Gender;
+import com.climedar.doctor_sv.repository.feign.PersonRepository;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class DoctorSpecification {
 
@@ -24,4 +26,5 @@ public class DoctorSpecification {
     public static Specification<Doctor> deletedEqual(Boolean deleted){
         return (root, query, cb) -> deleted == null? cb.conjunction() : cb.equal(root.get("deleted"), deleted);
     }
+
 }

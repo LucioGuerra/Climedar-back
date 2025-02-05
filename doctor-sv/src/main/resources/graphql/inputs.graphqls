@@ -83,6 +83,7 @@ input ShiftSpecification {
 
 input DoctorSpecification {
     name: String
+    fullName: String
     surname: String
     dni: String
     gender: Gender

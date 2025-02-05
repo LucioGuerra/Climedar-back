@@ -10,6 +10,13 @@ public class PersonSpecification {
         return (root, query, cb) -> name == null? cb.conjunction() : cb.like(root.get("name"), "%" + name + "%");
     }
 
+    public static Specification<Person> fullNameLike(String fullName) {
+        return (root, query, cb) -> fullName == null? cb.conjunction() : cb.like(cb.concat(cb.concat(root.get("surname")
+                        , " "),
+                        root.get("name")),
+                "%" + fullName + "%");
+    }
+
     public static Specification<Person> surnameLike(String surname) {
         return (root, query, cb) -> surname == null? cb.conjunction() : cb.like(root.get("surname"), "%" + surname + "%");
     }

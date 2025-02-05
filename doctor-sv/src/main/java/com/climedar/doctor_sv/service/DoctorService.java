@@ -38,13 +38,13 @@ public class DoctorService {
         return doctorMapper.toModel(doctor, personRepository.findById(doctor.getPersonId()));
     }
 
-    public Page<DoctorModel> getAllDoctors(Pageable pageable, String name,
+    public Page<DoctorModel> getAllDoctors(Pageable pageable, String fullName, String name,
                                     String surname, String dni,
                                     Gender gender, Long shiftId,
                                     Long specialtyId) {
 
 
-        Page<Person> personPage = personRepository.getAllPersons(pageable, name, surname, dni, gender);
+        Page<Person> personPage = personRepository.getAllPersons(pageable, fullName, name, surname, dni, gender);
 
         if (personPage.isEmpty()) {
             return new PageImpl<>(Collections.emptyList(), pageable, 0);
@@ -86,7 +86,7 @@ public class DoctorService {
         return new PageImpl<>(finalDoctorModels, pageable, personPage.getTotalElements());
     }
 
-    public Page<DoctorModel> getDoctorsByFullName(String fullName, Pageable pageable) {
+    public Page<DoctorModel> getDoctorsByFullName(String fullName, Long specialityId, Pageable pageable) {
 
         Page<Person> personPage = personRepository.getAllPersonsByFullName(pageable, fullName);
 
@@ -102,7 +102,8 @@ public class DoctorService {
 
         Specification<Doctor> doctorSpec = Specification
                 .where(DoctorSpecification.deletedEqual(false))
-                .and(DoctorSpecification.personIdIn(personIds));
+                .and(DoctorSpecification.personIdIn(personIds))
+                .and(DoctorSpecification.specialtyIdEqual(specialityId));
 
         List<Doctor> doctorList = doctorRepository.findAll(doctorSpec);
 

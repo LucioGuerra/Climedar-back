@@ -9,6 +9,9 @@ public class DoctorSpecificationDTO {
     @Size(min = 1, max = 50, message = "Name must be between 1 and 50 characters")
     private String name;
 
+    @Size(min = 1, max = 50, message = "Full Name must be between 1 and 50 characters")
+    private String fullName;
+
     @Size(min = 1, max = 50, message = "Surname must be between 1 and 50 characters")
     private String surname;
 
