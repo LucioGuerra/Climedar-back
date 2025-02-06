@@ -57,7 +57,7 @@ public class ShiftGraphqlAdapter {
 
     }
 
-    public Set<LocalDate> getDatesWithShifts(LocalDate fromDate, LocalDate toDate) {
-        return shiftService.getDatesWithShifts(fromDate, toDate);
+    public Set<LocalDate> getDatesWithShifts(LocalDate fromDate, LocalDate toDate, Long doctorId) {
+        return shiftService.getDatesWithShifts(fromDate, toDate, doctorId);
     }
 }

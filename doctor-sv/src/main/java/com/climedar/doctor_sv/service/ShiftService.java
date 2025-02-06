@@ -26,6 +26,7 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -121,11 +122,16 @@ public class ShiftService {
     }
 
 
-    public Set<LocalDate> getDatesWithShifts(LocalDate fromDate, LocalDate toDate) {
+    public Set<LocalDate> getDatesWithShifts(LocalDate fromDate, LocalDate toDate, Long doctorId) {
         Specification<Shift> specification = Specification.where(ShiftSpecification.byDeleted(false))
-                .and(ShiftSpecification.byDate(null, fromDate, toDate));
+                .and(ShiftSpecification.byDate(null, fromDate, toDate))
+                .and(ShiftSpecification.byDoctorId(doctorId));
 
-        return shiftRepository.findAll(specification).stream().map(Shift::getDate).collect(Collectors.toSet());
+        return shiftRepository.findAll(specification).stream()
+                .map(Shift::getDate)
+                .sorted()
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+
     }
 
     public List<ShiftModel> findAllById(Set<Long> ids) {
