@@ -2,6 +2,7 @@ package com.climedar.payment_sv.repository;
 
 import com.climedar.payment_sv.entity.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import javax.swing.text.html.Option;
@@ -11,10 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PaymentRepository extends JpaRepository<Payment, Long> {
+public interface PaymentRepository extends JpaRepository<Payment, Long>, JpaSpecificationExecutor<Payment> {
 
 
-    List<Payment> findByPaymentDateBetween(LocalDateTime paymentDateAfter, LocalDateTime paymentDateBefore);
+    List<Payment> findByPaymentDateBetweenAndCanceled(LocalDateTime paymentDateAfter, LocalDateTime paymentDateBefore, Boolean canceled);
 
     Optional<Payment> findByIdAndCanceled(Long id, Boolean canceled);
 }
