@@ -35,7 +35,8 @@ public class ShiftResolver {
     }
 
     @QueryMapping
-    public Set<LocalDate> getDatesWithShifts(@Argument LocalDate fromDate, @Argument LocalDate toDate) {
+    public Set<LocalDate> getDatesWithShifts(@Argument LocalDate fromDate,
+                                             @Argument LocalDate toDate, @Argument String doctorId) {
         return shiftAdapter.getDatesWithShifts(fromDate, toDate);
     }
 

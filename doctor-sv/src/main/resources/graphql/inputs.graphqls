@@ -74,6 +74,8 @@ input ShiftSpecification {
     date: String
     fromDate: String
     toDate: String
+    fromTime: String
+    toTime: String
     startTime: String
     endTime: String
     shiftState: ShiftState

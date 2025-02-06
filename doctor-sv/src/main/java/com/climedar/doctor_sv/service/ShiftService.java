@@ -111,6 +111,7 @@ public class ShiftService {
     private static Specification<Shift> getShiftSpecification(ShiftSpecificationDTO shiftSpecificationDTO) {
         return Specification.where(ShiftSpecification.byDeleted(false))
                 .and(ShiftSpecification.byDate(shiftSpecificationDTO.getDate(), shiftSpecificationDTO.getFromDate(), shiftSpecificationDTO.getToDate()))
+                .and(ShiftSpecification.byTime(shiftSpecificationDTO.getFromTime(), shiftSpecificationDTO.getToTime()))
                 .and(ShiftSpecification.byStartTime(shiftSpecificationDTO.getStartTime()))
                 .and(ShiftSpecification.byEndTime(shiftSpecificationDTO.getEndTime()))
                 .and(ShiftSpecification.byPatients(shiftSpecificationDTO.getPatients()))

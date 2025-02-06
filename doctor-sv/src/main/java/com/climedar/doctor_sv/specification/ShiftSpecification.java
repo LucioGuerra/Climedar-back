@@ -36,6 +36,21 @@ public class ShiftSpecification {
         };
     }
 
+    public static Specification<Shift> byTime(LocalTime fromTime, LocalTime toTime) {
+        return (root, query, cb) -> {
+            Predicate predicate = cb.conjunction();
+
+            if (fromTime != null) {
+                predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("startTime"), fromTime));
+            }
+            if (toTime != null) {
+                predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("endTime"), toTime));
+            }
+
+            return predicate;
+        };
+    }
+
     public static Specification<Shift> byStartTime(LocalTime startTime) {
         return (root, query, cb) -> startTime == null? cb.conjunction(): cb.equal(root.get("startTime"), startTime);
     }

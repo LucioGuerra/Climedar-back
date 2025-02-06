@@ -17,6 +17,8 @@ public class ShiftSpecificationDTO {
     private String place;
     private LocalTime startTime;
     private LocalTime endTime;
+    private LocalTime fromTime;
+    private LocalTime toTime;
 
     @Positive(message = "Patients must be positive")
     private Integer patients;
