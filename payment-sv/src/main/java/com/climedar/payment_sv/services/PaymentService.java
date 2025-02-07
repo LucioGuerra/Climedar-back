@@ -5,6 +5,7 @@ import com.climedar.payment_sv.entity.Payment;
 import com.climedar.payment_sv.event.internal.PaymentEvent;
 import com.climedar.payment_sv.external.model.Consultation;
 import com.climedar.payment_sv.external.model.Patient;
+import com.climedar.payment_sv.external.model.medical_services.MedicalServices;
 import com.climedar.payment_sv.mapper.PaymentMapper;
 import com.climedar.payment_sv.model.PaymentModel;
 import com.climedar.payment_sv.repository.ConsultationRepository;
@@ -32,6 +33,7 @@ public class PaymentService {
     private final InvoiceService invoiceService;
     private final PaymentMapper paymentMapper;
     private final ApplicationEventPublisher eventPublisher;
+    private final JasperReportService jasperReportService;
     private final ConsultationRepository consultationRepository;
 
     public ResponseEntity<byte[]> createPayment(CreatePaymentDTO paymentDTO) {
@@ -83,6 +85,27 @@ public class PaymentService {
         });
     }
 
+    public ResponseEntity<byte[]> getReceiptByPayment(Long paymentId) {
+        Payment payment = paymentRepository.findByIdAndCanceled(paymentId, false)
+                .orElseThrow(() -> new EntityNotFoundException("Payment not found with id: " + paymentId));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition.builder("inline")
+                .filename("receipt_"+payment.getId()+".pdf").build());
+
+        Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
+        Patient patient = consultation.getPatient();
+        MedicalServices medicalServices = consultation.getMedicalServices();
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(jasperReportService.getReceiptPDF(payment,
+                patient, medicalServices));
+    }
+
+    public ResponseEntity<byte[]> getInvoiceByConsultation(Long consultationId) {
+        Payment payment = paymentRepository.findByConsultationId(consultationId)
+                .orElseThrow(() -> new EntityNotFoundException("Payment not found for consultation id: " + consultationId));
+
+        return invoiceService.getInvoiceByPayment(payment.getId());
+    }
 
 
     public List<Payment> getPaymentsByDate(LocalDate date) {

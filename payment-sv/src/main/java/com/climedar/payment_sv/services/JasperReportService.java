@@ -18,7 +18,8 @@ import java.util.Map;
 public class JasperReportService {
 
 
-    public byte[] getInvoicePDF(Invoice invoice, Patient patient, MedicalServices medicalServices) throws JRException {
+    @SneakyThrows
+    public byte[] getInvoicePDF(Invoice invoice, Patient patient, MedicalServices medicalServices) {
         InputStream inputStream = getClass().getResourceAsStream("/jasper_report/invoice_template.jasper");
 
 
@@ -41,7 +42,8 @@ public class JasperReportService {
          return JasperExportManager.exportReportToPdf(jasperPrint);
     }
 
-    public byte[] getReceiptPDF(Payment payment, Patient patient, MedicalServices medicalServices) throws JRException {
+    @SneakyThrows
+    public byte[] getReceiptPDF(Payment payment, Patient patient, MedicalServices medicalServices) {
         InputStream inputStream = getClass().getResourceAsStream("/jasper_report/receipt_template.jasper");
 
         Map<String, Object> parameters = new HashMap<>();

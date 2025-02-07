@@ -18,4 +18,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long>, JpaSpec
     List<Payment> findByPaymentDateBetweenAndCanceled(LocalDateTime paymentDateAfter, LocalDateTime paymentDateBefore, Boolean canceled);
 
     Optional<Payment> findByIdAndCanceled(Long id, Boolean canceled);
+
+    Optional<Payment> findByConsultationId(Long consultationId);
 }
