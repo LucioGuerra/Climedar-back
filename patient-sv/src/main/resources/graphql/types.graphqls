@@ -1,0 +1,41 @@
+type Patient {
+    id: ID!
+    name: String!
+    surname: String!
+    dni: String!
+    gender: Gender!
+    birthdate: String!
+    email: String!
+    phone: String!
+    address: Address!
+}
+
+type Address {
+    street: String!
+    number: String!
+    floor: String
+    apartment: String
+    city: String!
+    province: String!
+    postalCode: String!
+}
+
+type PageInfo {
+    currentPage: Int!
+    totalPages: Int!
+    totalItems: Int!
+    itemsPerPage: Int!
+    hasNext: Boolean!
+    hasPrevious: Boolean!
+}
+
+type PatientPage {
+    pageInfo: PageInfo!
+    patients: [Patient]!
+}
+
+enum Gender {
+    MALE
+    FEMALE
+    OTHER
+}

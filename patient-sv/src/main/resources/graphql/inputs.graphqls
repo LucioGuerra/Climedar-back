@@ -1,0 +1,65 @@
+input PatientInput {
+    name: String!
+    surname: String!
+    dni: String!
+    gender: Gender!
+    birthdate: String!
+    email: String!
+    phone: String!
+    address: AddressInput!
+}
+
+input AddressInput {
+    street: String!
+    number: String!
+    floor: String
+    apartment: String
+    city: String!
+    province: String!
+    postalCode: String!
+}
+
+input PageRequest {
+    page: Int!
+    size: Int!
+    order: Order
+}
+
+input Order {
+    field: String!
+    direction: SortDirection!
+}
+
+enum SortDirection {
+    ASC
+    DESC
+}
+
+input PatientSpecification {
+    name: String
+    fullName: String
+    surname: String
+    dni: String
+    gender: Gender
+}
+
+input UpdatePatientInput {
+    name: String
+    surname: String
+    dni: String
+    gender: Gender
+    birthDate: String
+    email: String
+    phone: String
+    address: AddressInput
+}
+
+input UpdateAddressInput {
+    street: String
+    number: String
+    floor: String
+    apartment: String
+    city: String
+    province: String
+    postalCode: String
+}

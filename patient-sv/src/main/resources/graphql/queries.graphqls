@@ -1,0 +1,7 @@
+type Query {
+    getAllPatients(pageRequest: PageRequest!, specification: PatientSpecification): PatientPage!
+    getPatientById(id: ID!): Patient!
+
+    # hacer una query para obtener el historial medico de un paciente
+
+}
