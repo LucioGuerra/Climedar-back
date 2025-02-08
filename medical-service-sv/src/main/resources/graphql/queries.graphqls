@@ -1,7 +1,7 @@
 type Query {
-    getAllMedicalServices(pageRequest: PageRequest!, specification: MedicalSpecificationInput): MedicalServicePage!
+    getAllMedicalServices(pageRequest: PageRequestInput!, specification: MedicalSpecificationInput): MedicalServicePage!
     getMedicalServiceById(id: ID!): MedicalService!
 
-    getAllMedicalPackages(input: PageRequest!): MedicalPackagePage!
+    getAllMedicalPackages(input: PageRequestInput!): MedicalPackagePage!
     getMedicalPackageById(id: ID!): MedicalPackage!
 }

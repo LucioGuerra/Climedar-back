@@ -1,4 +1,4 @@
-input PageRequest {
+input PageRequestInput {
     page: Int!
     size: Int!
     order: Order

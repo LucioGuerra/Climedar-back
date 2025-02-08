@@ -11,4 +11,12 @@ public class MedicalPackageModel {
     private String name;
     private Set<MedicalServiceModel> services;
     private Double price;
+
+    public MedicalPackageModel(Long id) {
+        this.id = id;
+    }
+
+    public MedicalPackageModel(){
+
+    }
 }

@@ -1,4 +1,4 @@
-type MedicalService {
+type MedicalService @key(fields: "id") {
     id: ID!
     code: String!
     name: String!
@@ -16,7 +16,7 @@ enum ServiceType {
     THERAPY
 }
 
-type MedicalPackage {
+type MedicalPackage @key(fields: "id") {
     id: ID!
     code: String!
     name: String!
