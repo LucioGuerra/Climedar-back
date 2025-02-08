@@ -38,7 +38,7 @@ public class SpecialityResolver {
     }
 
     @MutationMapping
-    public boolean deleteSpeciality(@Argument Long id) {
+    public Boolean deleteSpeciality(@Argument Long id) {
         return specialityGraphqlAdapter.deleteSpeciality(id);
     }
 }

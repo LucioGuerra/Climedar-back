@@ -31,7 +31,7 @@ public class SpecialityGraphqlAdapter {
         return specialityService.updateSpeciality(id, speciality);
     }
 
-    public boolean deleteSpeciality(Long id) {
+    public Boolean deleteSpeciality(Long id) {
         return specialityService.deleteSpeciality(id);
     }
 

@@ -5,9 +5,9 @@ type Mutation {
 
     createShift(shift: ShiftInput!): Shift!
     updateShift(id: ID!, shift: UpdateShiftInput!, specification: ShiftSpecification!): Shift!
-    deleteShift(id: ID!): Shift!
+    deleteShift(id: ID!): Boolean!
 
     createSpeciality(speciality: SpecialityInput!): Speciality!
     updateSpeciality(id: ID!, speciality: UpdateSpecialityInput!): Speciality!
-    deleteSpeciality(id: ID!): Speciality!
+    deleteSpeciality(id: ID!): Boolean!
 }

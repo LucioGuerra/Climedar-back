@@ -54,8 +54,10 @@ public class SpecialityService {
         return specialityMapper.toModel(specialityToUpdate);
     }
 
-    public boolean deleteSpeciality(Long id) {
+    public Boolean deleteSpeciality(Long id) {
         Speciality specialityToDelete = findEntityById(id);
+        specialityToDelete.setDeleted(true);
+        specialityRepository.save(specialityToDelete);
         return true;
     }
 
