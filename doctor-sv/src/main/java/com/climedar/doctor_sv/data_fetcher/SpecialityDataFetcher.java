@@ -1,4 +1,4 @@
-package com.climedar.doctor_sv.resolver;
+package com.climedar.doctor_sv.data_fetcher;
 
 import com.climedar.doctor_sv.adapter.SpecialityGraphqlAdapter;
 import com.climedar.doctor_sv.dto.request.specification.SpecialitySpecificationDTO;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 
 @AllArgsConstructor
 @Controller
-public class SpecialityResolver {
+public class SpecialityDataFetcher {
 
     private final SpecialityGraphqlAdapter specialityGraphqlAdapter;
 

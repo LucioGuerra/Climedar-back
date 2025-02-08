@@ -1,14 +1,12 @@
-package com.climedar.doctor_sv.resolver;
+package com.climedar.doctor_sv.data_fetcher;
 
 import com.climedar.doctor_sv.adapter.ShiftGraphqlAdapter;
 import com.climedar.doctor_sv.dto.request.CreateShiftDTO;
 import com.climedar.doctor_sv.dto.request.specification.ShiftSpecificationDTO;
 import com.climedar.doctor_sv.dto.response.ShiftPage;
 import com.climedar.doctor_sv.model.ShiftModel;
-import com.climedar.doctor_sv.service.ShiftService;
 import com.climedar.library.dto.request.PageRequestInput;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -19,7 +17,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @Controller
-public class ShiftResolver {
+public class ShiftDataFetcher {
 
     private final ShiftGraphqlAdapter shiftAdapter;
 

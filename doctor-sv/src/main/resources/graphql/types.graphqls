@@ -1,4 +1,4 @@
-type Shift{
+type Shift @key(fields: "id") {
     id: ID!
     date: String!
     startTime: String!
@@ -15,7 +15,7 @@ enum ShiftState{
     CANCELLED
 }
 
-type Doctor {
+type Doctor @key(fields: "id") {
     id: ID!
     speciality: Speciality!
     shifts: [Shift]!
@@ -40,7 +40,7 @@ type Address {
     postalCode: String!
 }
 
-type Speciality {
+type Speciality @key(fields: "id") {
     id: ID!
     code: String!
     name: String!
