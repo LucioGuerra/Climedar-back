@@ -1,10 +1,12 @@
 package com.climedar.payment_sv.services;
 
-import com.climedar.payment_sv.entity.Payment;
 import com.climedar.payment_sv.entity.Revenue;
 import com.climedar.payment_sv.entity.RevenueType;
 import com.climedar.payment_sv.event.internal.PaymentEvent;
+import com.climedar.payment_sv.external.model.medical_services.ServicesType;
+import com.climedar.payment_sv.repository.MedicalServicesRepository;
 import com.climedar.payment_sv.repository.RevenueRepository;
+import com.climedar.payment_sv.repository.SpecialityRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -14,19 +16,24 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @AllArgsConstructor
 @Service
 public class RevenueService {
 
     private final RevenueRepository revenueRepository;
-    private final PaymentService paymentService;
+    private final MedicalServicesRepository medicalServicesRepository;
+    private final SpecialityRepository specialityRepository;
 
+    //todo: obtener datos de las ganancias
+    //todo: actualizar los datos cuando se modifiquen las especialidades
 
     @EventListener(condition = "#event.amount() > 0")
     public void handlerPaymentEvent(PaymentEvent event) {
-        Revenue revenue = revenueRepository.findByDateAndRevenueType(event.date().toLocalDate(), RevenueType.DAILY).orElseThrow(() -> new RuntimeException("Daily revenue not found"));
+        Revenue revenue =
+                revenueRepository.findByDateAndRevenueTypeAndSpecialityNameAndMedicalServicesType((event.date().toLocalDate()),
+                RevenueType.DAILY, event.specialityName(), event.servicesType());
         revenue.setAmount(revenue.getAmount().add(event.amount()));
         revenue.setTotalPayments(revenue.getTotalPayments() + 1);
         revenueRepository.save(revenue);
@@ -34,8 +41,10 @@ public class RevenueService {
 
     @EventListener(condition = "#event.amount() < 0")
     public void handlerCancelPaymentEvent(PaymentEvent event) {
-        Revenue dailyRevenue = revenueRepository.findByDateAndRevenueType(event.date().toLocalDate(), RevenueType.DAILY).orElseThrow(() -> new RuntimeException("Daily revenue not found"));
-        Revenue monthlyRevenue = revenueRepository.findByDateAndRevenueType(event.date().toLocalDate(), RevenueType.DAILY).orElseThrow(() -> new RuntimeException("Daily revenue not found"));
+        Revenue dailyRevenue = revenueRepository.findByDateAndRevenueTypeAndSpecialityNameAndMedicalServicesType(event.date().toLocalDate(),
+                RevenueType.DAILY, event.specialityName(), event.servicesType());
+        Revenue monthlyRevenue = revenueRepository.findByDateAndRevenueTypeAndSpecialityNameAndMedicalServicesType(event.date().toLocalDate(),
+                RevenueType.DAILY, event.specialityName(), event.servicesType());
         monthlyRevenue.setAmount(monthlyRevenue.getAmount().add(event.amount()));
         dailyRevenue.setAmount(dailyRevenue.getAmount().add(event.amount()));
         revenueRepository.save(monthlyRevenue);
@@ -43,41 +52,67 @@ public class RevenueService {
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void createDailyAmount(){
-        Revenue revenue = new Revenue();
-        revenue.setDate(LocalDate.now());
-        revenue.setAmount(BigDecimal.ZERO);
-        revenue.setTotalPayments(0L);
-        revenue.setRevenueType(RevenueType.DAILY);
+        Set<String> specialitiesNames = specialityRepository.getAllSpecialitiesName();
+        Set<ServicesType> servicesTypes = medicalServicesRepository.getAllServicesType();
+        for (String specialityName : specialitiesNames){
+            for (ServicesType servicesType : servicesTypes){
+                Revenue revenue = new Revenue();
+                revenue.setDate(LocalDate.now());
+                revenue.setAmount(BigDecimal.ZERO);
+                revenue.setTotalPayments(0L);
+                revenue.setSpecialityName(specialityName);
+                revenue.setMedicalServicesType(servicesType);
+                revenue.setRevenueType(RevenueType.DAILY);
+                revenueRepository.save(revenue);
+            }
+        }
     }
 
     @Scheduled(cron = "0 0 0 1 * ?")
     public void createMonthlyAmount(){
-        Revenue revenue = new Revenue();
-        revenue.setDate(LocalDate.now());
-        revenue.setAmount(BigDecimal.ZERO);
-        revenue.setTotalPayments(0L);
-        revenue.setRevenueType(RevenueType.MONTHLY);
+        Set<String> specialitiesNames = specialityRepository.getAllSpecialitiesName();
+        Set<ServicesType> servicesTypes = medicalServicesRepository.getAllServicesType();
+        for (String specialityName : specialitiesNames){
+            for (ServicesType servicesType : servicesTypes){
+                Revenue revenue = new Revenue();
+                revenue.setDate(LocalDate.now().withDayOfMonth(1));
+                revenue.setAmount(BigDecimal.ZERO);
+                revenue.setTotalPayments(0L);
+                revenue.setSpecialityName(specialityName);
+                revenue.setMedicalServicesType(servicesType);
+                revenue.setRevenueType(RevenueType.MONTHLY);
+                revenueRepository.save(revenue);
+            }
+        }
     }
+
 
     @Scheduled(cron = "0 59 23 * * ?")
     public void AddMonthlyAmount(){
-        List<Payment> payments = paymentService.getPaymentsByDate(LocalDate.now());
-        Revenue revenue = revenueRepository.findByDateAndRevenueType(LocalDate.now().withDayOfMonth(1), RevenueType.MONTHLY).orElseThrow(() -> new RuntimeException("Monthly revenue not found"));
-        for (Payment payment : payments){
-            revenue.setAmount(revenue.getAmount().add(payment.getAmount()));
-            revenue.setTotalPayments(revenue.getTotalPayments() + 1);
+        List<Revenue> monthlyRevenues = revenueRepository.findByDateAndRevenueType(LocalDate.now().withDayOfMonth(1),
+                RevenueType.MONTHLY);
+        List<Revenue> dailyRevenues = revenueRepository.findByDateAndRevenueType(LocalDate.now(), RevenueType.DAILY);
+        for (Revenue monthyRevenue : monthlyRevenues){
+            for (Revenue dailyRevenue : dailyRevenues){
+                if (monthyRevenue.getSpecialityName().equals(dailyRevenue.getSpecialityName()) &&
+                    monthyRevenue.getMedicalServicesType().equals(dailyRevenue.getMedicalServicesType())){
+                    monthyRevenue.setAmount(monthyRevenue.getAmount().add(dailyRevenue.getAmount()));
+                    monthyRevenue.setTotalPayments(monthyRevenue.getTotalPayments() + dailyRevenue.getTotalPayments());
+                }
+            }
         }
-        revenueRepository.save(revenue);
+        revenueRepository.saveAll(monthlyRevenues);
     }
 
     @PostConstruct
     public void createInitialAmount(){
-        Optional<Revenue> dailyRevenue = revenueRepository.findByDateAndRevenueType(LocalDate.now(), RevenueType.DAILY);
-        Optional<Revenue> monthlyRevenue = revenueRepository.findByDateAndRevenueType(LocalDate.now().withDayOfMonth(1), RevenueType.MONTHLY);
-        if (dailyRevenue.isEmpty()){
+        List<Revenue> dailyRevenues = revenueRepository.findByDateAndRevenueType(LocalDate.now(), RevenueType.DAILY);
+        List<Revenue> monthlyRevenues = revenueRepository.findByDateAndRevenueType(LocalDate.now().withDayOfMonth(1),
+                RevenueType.MONTHLY);
+        if (dailyRevenues.isEmpty()){
             createDailyAmount();
         }
-        if (monthlyRevenue.isEmpty()){
+        if (monthlyRevenues.isEmpty()){
             createMonthlyAmount();
         }
     }
