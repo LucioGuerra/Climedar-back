@@ -1,27 +1,30 @@
-interface MedicalServices {
+interface MedicalServicesModel {
     id: ID!
     code: String!
     price: Float!
 }
 
-type MedicalService implements MedicalServices @key(fields: "id"){
+type MedicalServiceModel implements MedicalServicesModel @key(fields: "id"){
     id: ID!
     code: String!
     name: String!
     description: String!
     price: Float!
     serviceType: ServiceType!
-    specialityId: ID!
+    speciality: SpecialityModel!
 }
 
-
-type MedicalPackage implements MedicalServices @key(fields: "id") {
+type MedicalPackageModel implements MedicalServicesModel @key(fields: "id") {
     id: ID!
     code: String!
     name: String!
     estimatedDuration: String!
     price: Float!
-    services: [MedicalService!]!
+    services: [MedicalServiceModel!]!
+}
+
+type SpecialityModel @key(fields: "id") @extends {
+    id: ID! @external
 }
 
 enum ServiceType {
@@ -43,10 +46,10 @@ type PageInfo {
 
 type MedicalServicePage {
     pageInfo: PageInfo!
-    services: [MedicalService!]!
+    services: [MedicalServiceModel!]!
 }
 
 type MedicalPackagePage {
     pageInfo: PageInfo!
-    packages: [MedicalPackage!]!
+    packages: [MedicalPackageModel!]!
 }

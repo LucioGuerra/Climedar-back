@@ -55,7 +55,7 @@ public class ShiftDataFetcher {
         return shiftAdapter.deleteShift(id);
     }
 
-    @DgsEntityFetcher(name = "Shift")
+    @DgsEntityFetcher(name = "ShiftModel")
     public ShiftModel getShift(Map<String, Object> values) {
         Long id = ((Number) values.get("id")).longValue();
         return shiftAdapter.getShiftById(id);

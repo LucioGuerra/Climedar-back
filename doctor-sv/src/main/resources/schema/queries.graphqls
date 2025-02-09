@@ -1,13 +1,13 @@
 type Query {
     getAllDoctors(pageRequest: PageRequest!, specification: DoctorSpecification): DoctorPage!
-    getDoctorById(id: ID!): Doctor!
+    getDoctorById(id: ID!): DoctorModel!
     getDoctorsByFullName(pageRequest: PageRequest!, fullName: String!, specialityId: String!): DoctorPage!
 
     getAllShifts(pageRequest: PageRequest!, specification: ShiftSpecification): ShiftPage!
-    getShiftById(id: ID!): Shift!
+    getShiftById(id: ID!): ShiftModel!
     getDatesWithShifts(fromDate: String!, toDate: String!, doctorId: String!): [String]!
 
     getAllSpecialities(pageRequest: PageRequest!, specification: SpecialitySpecification): SpecialityPage!
-    getSpecialityById(id: ID!): Speciality!
+    getSpecialityById(id: ID!): SpecialityModel!
 
 }

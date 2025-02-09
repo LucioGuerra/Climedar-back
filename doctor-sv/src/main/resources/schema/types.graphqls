@@ -1,4 +1,4 @@
-type Shift @key(fields: "id") {
+type ShiftModel @key(fields: "id") {
     id: ID!
     date: String!
     startTime: String!
@@ -6,7 +6,7 @@ type Shift @key(fields: "id") {
     timeOfShifts: String!
     state: ShiftState!
     place: String
-    doctor: Doctor!
+    doctor: DoctorModel!
 }
 
 enum ShiftState{
@@ -15,10 +15,10 @@ enum ShiftState{
     CANCELLED
 }
 
-type Doctor @key(fields: "id") {
+type DoctorModel @key(fields: "id") {
     id: ID!
-    speciality: Speciality!
-    shifts: [Shift]!
+    speciality: SpecialityModel!
+    shifts: [ShiftModel]!
     name: String!
     surname: String!
     dni: String!
@@ -40,7 +40,7 @@ type Address {
     postalCode: String!
 }
 
-type Speciality @key(fields: "id") {
+type SpecialityModel @key(fields: "id") {
     id: ID!
     code: String!
     name: String!
@@ -58,17 +58,17 @@ type PageInfo {
 
 type DoctorPage {
     pageInfo: PageInfo!
-    doctors: [Doctor]!
+    doctors: [DoctorModel]!
 }
 
 type ShiftPage {
     pageInfo: PageInfo!
-    shifts: [Shift]!
+    shifts: [ShiftModel]!
 }
 
 type SpecialityPage {
     pageInfo: PageInfo!
-    specialities: [Speciality]!
+    specialities: [SpecialityModel]!
 }
 
 enum Gender {

@@ -45,7 +45,7 @@ public class SpecialityDataFetcher {
         return specialityGraphqlAdapter.deleteSpeciality(id);
     }
 
-    @DgsEntityFetcher(name = "Speciality")
+    @DgsEntityFetcher(name = "SpecialityModel")
     public SpecialityModel getSpeciality(Map<String, Object> values) {
         Long id = ((Number) values.get("id")).longValue();
         return specialityGraphqlAdapter.getSpecialityById(id);

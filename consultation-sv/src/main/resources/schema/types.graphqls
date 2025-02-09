@@ -1,25 +1,25 @@
-type Consultation @key(fields: "id") {
+type ConsultationModel @key(fields: "id") {
     id: ID!
     date: String!
     startTime: String!
     estimatedDuration: String!
     description: String!
-    medicalServices: MedicalServices!
+    medicalServices: MedicalServicesModel!
     finalPrice: Float!
     observation: String
-    doctor: Doctor!
-    patient: Patient!
+    doctor: DoctorModel!
+    patient: PatientModel!
 }
 
-type Doctor @key(fields: "id") @extends {
+type DoctorModel @key(fields: "id") @extends {
     id: ID! @external
 }
 
-type Patient @key(fields: "id") @extends{
+type PatientModel @key(fields: "id") @extends{
     id: ID! @external
 }
 
-interface MedicalServices @key(fields: "id") @extends {
+interface MedicalServicesModel @key(fields: "id") @extends {
     id: ID! @external
 }
 
@@ -42,5 +42,5 @@ type PageInfo {
 
 type ConsultationPage {
     pageInfo: PageInfo!
-    consultations: [Consultation]!
+    consultations: [ConsultationModel]!
 }

@@ -1,5 +1,5 @@
 type Mutation {
-    createPatient(patient: PatientInput!): Patient!
-    updatePatient(id: ID!, patient: UpdatePatientInput!): Patient!
+    createPatient(patient: PatientInput!): PatientModel!
+    updatePatient(id: ID!, patient: UpdatePatientInput!): PatientModel!
     deletePatient(id: ID!): Boolean!
 }

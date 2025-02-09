@@ -1,4 +1,4 @@
 type Query{
     getAllConsultations(pageRequest: PageRequest!, specification: ConsultationSpecification): ConsultationPage!
-    getConsultationById(id: ID!): Consultation!
+    getConsultationById(id: ID!): ConsultationModel!
 }

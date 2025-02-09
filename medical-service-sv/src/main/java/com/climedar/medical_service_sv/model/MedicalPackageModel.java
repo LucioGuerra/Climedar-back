@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class MedicalPackageModel {
+public class MedicalPackageModel implements MedicalServicesModel {
     private Long id;
     private String code;
     private String name;

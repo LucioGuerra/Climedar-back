@@ -7,12 +7,9 @@ import com.climedar.doctor_sv.dto.response.DoctorPage;
 import com.climedar.doctor_sv.model.DoctorModel;
 import com.netflix.graphql.dgs.*;
 import lombok.AllArgsConstructor;
-import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.stereotype.Controller;
 
 import java.util.Map;
+
 
 @AllArgsConstructor
 @DgsComponent
@@ -53,9 +50,9 @@ public class DoctorDataFetcher {
         return graphqlAdapter.deleteDoctor(id);
     }
 
-    @DgsEntityFetcher(name = "Doctor")
+    @DgsEntityFetcher(name = "DoctorModel")
     public DoctorModel getDoctor(Map<String, Object> values) {
-        Long id = ((Number) values.get("id")).longValue();
+        Long id = Long.parseLong((String) values.get("id"));
         return graphqlAdapter.getDoctorById(id);
     }
 

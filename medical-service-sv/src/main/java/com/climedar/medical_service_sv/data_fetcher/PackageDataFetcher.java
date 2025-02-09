@@ -48,7 +48,7 @@ public class PackageDataFetcher {
         return graphqlAdapter.removeServiceFromPackage(id, serviceId);
     }
 
-    @DgsEntityFetcher(name = "MedicalPackage")
+    @DgsEntityFetcher(name = "MedicalPackageModel")
     public MedicalPackageModel getMedicalPackage(Map<String, Object> values) {
         Long id = ((Number) values.get("id")).longValue();
         return graphqlAdapter.getPackageById(id);

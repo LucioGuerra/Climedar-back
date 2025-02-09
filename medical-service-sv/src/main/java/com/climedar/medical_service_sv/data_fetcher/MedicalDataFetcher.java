@@ -46,7 +46,7 @@ public class MedicalDataFetcher {
         return graphqlAdapter.deleteMedicalService(id);
     }
 
-    @DgsEntityFetcher(name = "MedicalService")
+    @DgsEntityFetcher(name = "MedicalServiceModel")
     public MedicalServiceModel getMedicalService(Map<String, Object> values) {
         Long id = ((Number) values.get("id")).longValue();
         return graphqlAdapter.getMedicalServiceById(id);

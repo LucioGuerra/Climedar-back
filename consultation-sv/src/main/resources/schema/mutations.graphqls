@@ -1,5 +1,5 @@
 type Mutation{
-    createConsultation(consultation: ConsultationInput!): Consultation!
-    updateConsultation(id: ID!, consultation: UpdateConsultationInput!): Consultation!
+    createConsultation(consultation: ConsultationInput!): ConsultationModel!
+    updateConsultation(id: ID!, consultation: UpdateConsultationInput!): ConsultationModel!
     deleteConsultation(id: ID!): Boolean!
 }

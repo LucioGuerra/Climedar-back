@@ -52,13 +52,13 @@ public class ConsultationDataFetcher {
         return consultationAdapter.deleteConsultation(id);
     }
 
-    @DgsEntityFetcher(name = "Consultation")
+    @DgsEntityFetcher(name = "ConsultationModel")
     public ConsultationModel getConsultation(Map<String, Object> values) {
         Long id = ((Number) values.get("id")).longValue();
         return consultationAdapter.getConsultationById(id);
     }
 
-    @DgsEntityFetcher(name = "Doctor")
+    /*@DgsEntityFetcher(name = "Doctor")
     public Doctor getDoctor(Map<String, Object> values) {
         Long id = ((Number) values.get("id")).longValue();
         return new Doctor(id);
@@ -89,5 +89,5 @@ public class ConsultationDataFetcher {
                 return null;
             }
         };
-    }
+    }*/
 }

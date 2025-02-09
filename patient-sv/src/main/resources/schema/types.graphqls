@@ -1,4 +1,4 @@
-type Patient @key(fields: "id") {
+type PatientModel @key(fields: "id") {
     id: ID!
     name: String!
     surname: String!
@@ -31,7 +31,7 @@ type PageInfo {
 
 type PatientPage {
     pageInfo: PageInfo!
-    patients: [Patient]!
+    patients: [PatientModel]!
 }
 
 enum Gender {
