@@ -2,6 +2,9 @@
   "name": "apollo-federation-gateway",
   "module": "index.js",
   "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
