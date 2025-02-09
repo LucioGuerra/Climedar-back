@@ -1,20 +1,22 @@
-interface MedicalServicesModel {
+interface MedicalServicesModel @key(fields: "code") {
     id: ID!
     code: String!
     price: Float!
+    estimatedDuration: String!
 }
 
-type MedicalServiceModel implements MedicalServicesModel @key(fields: "id"){
+type MedicalServiceModel implements MedicalServicesModel @key(fields: "code"){
     id: ID!
     code: String!
     name: String!
     description: String!
+    estimatedDuration: String!
     price: Float!
     serviceType: ServiceType!
     speciality: SpecialityModel!
 }
 
-type MedicalPackageModel implements MedicalServicesModel @key(fields: "id") {
+type MedicalPackageModel implements MedicalServicesModel @key(fields: "code"){
     id: ID!
     code: String!
     name: String!
@@ -23,7 +25,7 @@ type MedicalPackageModel implements MedicalServicesModel @key(fields: "id") {
     services: [MedicalServiceModel!]!
 }
 
-type SpecialityModel @key(fields: "id") @extends {
+type SpecialityModel @extends {
     id: ID! @external
 }
 

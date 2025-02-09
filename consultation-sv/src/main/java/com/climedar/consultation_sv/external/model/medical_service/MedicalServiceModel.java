@@ -14,6 +14,10 @@ public class MedicalServiceModel implements MedicalServicesModel {
     private Duration estimatedDuration;
     private ServiceType serviceType;
 
+    public MedicalServiceModel(String code) {
+        this.code = code;
+    }
+
     @Override
     public Double getPrice() {
         return price;

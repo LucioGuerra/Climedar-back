@@ -13,5 +13,6 @@ public interface MedicalPackageMapper {
     @Mapping(target = "price", expression = "java(entity.getPrice())")
     @Mapping(target = "services", source = "services")
     @Mapping(target = "name", source = "name")
+    @Mapping(target = "estimatedDuration", expression = "java(entity.getEstimatedDuration())")
     MedicalPackageModel toModel(MedicalPackageEntity entity);
 }

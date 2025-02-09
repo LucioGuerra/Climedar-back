@@ -7,6 +7,8 @@ import com.climedar.consultation_sv.entity.Consultation;
 import com.climedar.consultation_sv.external.model.doctor.Doctor;
 import com.climedar.consultation_sv.external.model.doctor.Shift;
 import com.climedar.consultation_sv.external.model.doctor.ShiftState;
+import com.climedar.consultation_sv.external.model.medical_service.MedicalPackageModel;
+import com.climedar.consultation_sv.external.model.medical_service.MedicalServiceModel;
 import com.climedar.consultation_sv.external.model.medical_service.MedicalServicesModel;
 import com.climedar.consultation_sv.external.model.patient.Patient;
 import com.climedar.consultation_sv.mapper.ConsultationMapper;
@@ -47,33 +49,21 @@ public class ConsultationService {
         Shift shift = shiftRepository.findById(consultation.getShiftId());
         Patient patient = patientRepository.findById(consultation.getPatientId());
         /*return consultationMapper.toModel(consultation);*/
-        MedicalServicesModel medicalServicesModel = medicalServicesRepository.findById(consultation.getMedicalServicesId()).getMedicalServices();
+        //MedicalServicesModel medicalServicesModel = medicalServicesRepository.findById(consultation.getMedicalServicesId()).getMedicalServices();
         ConsultationModel consultationModel = new ConsultationModel();
         consultationModel.setId(consultation.getId());
         consultationModel.setDate(shift.getDate());
         consultationModel.setStartTime(shift.getStartTime());
-        consultationModel.setEstimatedDuration(medicalServicesModel.getEstimatedDuration());
         consultationModel.setDescription(consultation.getDescription());
         consultationModel.setFinalPrice(consultation.getFinalPrice());
         consultationModel.setObservation(consultation.getObservation());
         consultationModel.setDoctor(new Doctor(shift.getDoctor().getId()));
         consultationModel.setPatient(new Patient(consultation.getPatientId()));
-        consultationModel.setMedicalServicesModel(new MedicalServicesModel() {
-            @Override
-            public Long getId() {
-                return consultation.getMedicalServicesId();
-            }
-
-            @Override
-            public Double getPrice() {
-                return 0.0;
-            }
-
-            @Override
-            public Duration getEstimatedDuration() {
-                return null;
-            }
-        });
+        if (consultation.getMedicalServicesCode().startsWith("MP")){
+            consultationModel.setMedicalServicesModel(new MedicalPackageModel(consultation.getMedicalServicesCode()));
+        }else {
+            consultationModel.setMedicalServicesModel(new MedicalServiceModel(consultation.getMedicalServicesCode()));
+        }
         return consultationModel;
     }
 

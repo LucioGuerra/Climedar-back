@@ -6,6 +6,7 @@ import com.climedar.medical_service_sv.dto.request.SpecificationDTO;
 import com.climedar.medical_service_sv.dto.request.UpdateMedicalServiceDTO;
 import com.climedar.medical_service_sv.dto.response.MedicalPackagePage;
 import com.climedar.medical_service_sv.dto.response.MedicalServicePage;
+import com.climedar.medical_service_sv.entity.MedicalPackageEntity;
 import com.climedar.medical_service_sv.mapper.PageInfoMapper;
 import com.climedar.medical_service_sv.model.MedicalPackageModel;
 import com.climedar.medical_service_sv.model.MedicalServiceModel;
@@ -88,4 +89,11 @@ public class GraphqlResolverAdapter {
         return medicalService.deleteMedicalService(id);
     }
 
+    public MedicalPackageModel getPackageByCode(String code) {
+        return packageService.getPackageByCode(code);
+    }
+
+    public MedicalServiceModel getMedicalServiceByCode(String code) {
+        return medicalService.getMedicalServiceByCode(code);
+    }
 }

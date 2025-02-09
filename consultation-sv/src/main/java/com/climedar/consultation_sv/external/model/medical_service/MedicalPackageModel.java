@@ -10,14 +10,19 @@ public class MedicalPackageModel implements MedicalServicesModel {
     private Long id;
     private String code;
     private Double price;
+    private Duration estimatedDuration;
     private List<MedicalServiceModel> services;
+
+
+    public MedicalPackageModel(String code) {
+        this.code = code;
+    }
 
     @Override
     public Double getPrice() {
         double sumPrice = this.services.stream().mapToDouble(MedicalServiceModel::getPrice).sum();
         return sumPrice * 0.85;
     }
-
 
     @Override
     public Duration getEstimatedDuration() {

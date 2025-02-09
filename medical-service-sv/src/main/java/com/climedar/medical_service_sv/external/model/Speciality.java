@@ -8,4 +8,11 @@ public class Speciality {
     private String code;
     private String name;
     private String description;
+
+    public Speciality(){
+    }
+
+    public Speciality(Long id) {
+        this.id = id;
+    }
 }

@@ -50,8 +50,8 @@ public class PackageDataFetcher {
 
     @DgsEntityFetcher(name = "MedicalPackageModel")
     public MedicalPackageModel getMedicalPackage(Map<String, Object> values) {
-        Long id = Long.parseLong((String) values.get("id"));
-        return graphqlAdapter.getPackageById(id);
+        String code = (String) values.get("code");
+        return graphqlAdapter.getPackageByCode(code);
     }
 
 }

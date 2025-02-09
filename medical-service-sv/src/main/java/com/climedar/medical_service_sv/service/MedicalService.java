@@ -50,7 +50,7 @@ public class MedicalService {
 
     public MedicalServiceModel createMedicalService(MedicalServiceModel medicalServiceModel) {
         MedicalServiceEntity medicalServiceEntity = medicalServiceMapper.toEntity(medicalServiceModel);
-        Speciality speciality = specialityRepository.getSpecialityById(medicalServiceModel.getSpecialityId());
+        Speciality speciality = specialityRepository.getSpecialityById(medicalServiceModel.getSpeciality().getId());
         medicalServiceEntity.setCode(generateCode(medicalServiceEntity.getServiceType().toString(), speciality.getName()));
         medicalServiceEntity = medicalServiceRepository.save(medicalServiceEntity);
 
@@ -113,5 +113,10 @@ public class MedicalService {
     public Boolean checkIfMedicalServiceExists(Long id) {
         Optional<MedicalServiceEntity> medicalServiceEntity = medicalServiceRepository.findByIdAndNotDeleted(id);
         return medicalServiceEntity.isPresent();
+    }
+
+    public MedicalServiceModel getMedicalServiceByCode(String code) {
+        MedicalServiceEntity entity = medicalServiceRepository.findByCode(code).orElseThrow(() -> new EntityNotFoundException("Medical service not found with code: " + code));
+        return medicalServiceMapper.toModel(entity);
     }
 }

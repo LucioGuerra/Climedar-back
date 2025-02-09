@@ -123,4 +123,9 @@ public class PackageService {
         Optional<MedicalPackageEntity> medicalPackageEntity = medicalPackageRepository.findByIdAndNotDeleted(id);
         return medicalPackageEntity.isPresent();
     }
+
+    public MedicalPackageModel getPackageByCode(String code) {
+        MedicalPackageEntity entity = medicalPackageRepository.findByCode(code).orElseThrow(() -> new EntityNotFoundException("Package not found with code: " + code));
+        return medicalPackageMapper.toModel(entity);
+    }
 }

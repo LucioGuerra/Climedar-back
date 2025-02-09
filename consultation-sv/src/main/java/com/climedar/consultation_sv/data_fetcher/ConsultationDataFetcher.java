@@ -5,13 +5,18 @@ import com.climedar.consultation_sv.dto.request.ConsultationSpecificationDTO;
 import com.climedar.consultation_sv.dto.request.CreateConsultationDTO;
 import com.climedar.consultation_sv.dto.request.UpdateConsultationDTO;
 import com.climedar.consultation_sv.dto.response.ConsultationPage;
+import com.climedar.consultation_sv.external.model.medical_service.MedicalPackageModel;
+import com.climedar.consultation_sv.external.model.medical_service.MedicalServiceModel;
+import com.climedar.consultation_sv.external.model.medical_service.MedicalServicesModel;
 import com.climedar.consultation_sv.model.ConsultationModel;
 import com.climedar.library.dto.request.PageRequestInput;
 import com.netflix.graphql.dgs.*;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
+@Slf4j
 @AllArgsConstructor
 @DgsComponent
 public class ConsultationDataFetcher {
@@ -49,6 +54,20 @@ public class ConsultationDataFetcher {
         Long id = Long.parseLong((String) values.get("id"));
         return consultationAdapter.getConsultationById(id);
     }
+    @DgsTypeResolver(name = "MedicalServicesModel")
+    public String resolveMedicalServicesType(MedicalServicesModel model) {
+        log.info("resolveMedicalServicesType");
+        if (model instanceof MedicalServiceModel) {
+            log.info("MedicalServiceModel");
+            return "MedicalServiceModel";
+        }
+        if (model instanceof MedicalPackageModel) {
+            log.info("MedicalPackageModel");
+            return "MedicalPackageModel";
+        }
+        throw new IllegalArgumentException("Unknown type: " + model.getClass());
+    }
+
 
     /*@DgsEntityFetcher(name = "Doctor")
     public Doctor getDoctor(Map<String, Object> values) {

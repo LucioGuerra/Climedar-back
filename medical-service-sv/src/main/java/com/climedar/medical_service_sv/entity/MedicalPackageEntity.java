@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,6 +45,12 @@ public class MedicalPackageEntity extends MedicalServicesEntity {
     public Double getPrice() {
         double sumPrice = this.services.stream().mapToDouble(MedicalServiceEntity::getPrice).sum();
         return sumPrice * 0.85;
+    }
+
+    @Override
+    public Duration getEstimatedDuration() {
+        long sumDuration = this.services.stream().mapToLong(service -> service.getEstimatedDuration().toMinutes()).sum();
+        return Duration.ofMinutes(sumDuration);
     }
 
     public void addService(MedicalServiceEntity service){

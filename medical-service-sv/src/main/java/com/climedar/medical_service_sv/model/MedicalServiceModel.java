@@ -1,6 +1,7 @@
 package com.climedar.medical_service_sv.model;
 
 import com.climedar.medical_service_sv.entity.ServiceType;
+import com.climedar.medical_service_sv.external.model.Speciality;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -28,6 +29,6 @@ public class MedicalServiceModel implements MedicalServicesModel {
     @Positive
     private Double price;
 
-    @NotNull(message = "SpecialityID not be null")
-    private Long specialityId;
+    @NotNull(message = "Speciality not be null")
+    private Speciality speciality;
 }

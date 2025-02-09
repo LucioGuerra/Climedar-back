@@ -2,7 +2,6 @@ type ConsultationModel @key(fields: "id") {
     id: ID!
     date: String!
     startTime: String!
-    estimatedDuration: String!
     description: String!
     medicalServicesModel: MedicalServicesModel!
     finalPrice: Float!
@@ -20,7 +19,15 @@ type PatientModel @extends{
 }
 
 interface MedicalServicesModel @extends{
-    id: ID! @external
+    code: String! @external
+}
+
+type MedicalServiceModel implements MedicalServicesModel @extends{
+    code: String! @external
+}
+
+type MedicalPackageModel implements MedicalServicesModel @extends{
+    code: String! @external
 }
 
 enum ServiceType {

@@ -36,7 +36,10 @@ public class Consultation {
     private Long patientId;
 
     @Column(name = "medical_service_id", nullable = false)
-    private Long MedicalServicesId;
+    private Long medicalServicesId;
+
+    @Column(name = "medical_service_code", nullable = false)
+    private String medicalServicesCode;
 
     @Column(nullable = false)
     private Boolean paid;

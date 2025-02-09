@@ -20,4 +20,7 @@ public interface MedicalServiceRepository extends JpaRepository<MedicalServiceEn
 
     @Query("SELECT m FROM MedicalServiceEntity m WHERE m.id IN :ids AND m.deleted = false")
     List<MedicalServiceEntity> findByIdInAndNotDeleted(Set<Long> ids);
+
+    @Query("SELECT m FROM MedicalServiceEntity m WHERE m.code = :code")
+    Optional<MedicalServiceEntity> findByCode(String code);
 }
