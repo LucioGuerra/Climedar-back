@@ -47,7 +47,7 @@ public class SpecialityDataFetcher {
 
     @DgsEntityFetcher(name = "SpecialityModel")
     public SpecialityModel getSpeciality(Map<String, Object> values) {
-        Long id = ((Number) values.get("id")).longValue();
+        Long id = Long.parseLong((String) values.get("id"));
         return specialityGraphqlAdapter.getSpecialityById(id);
     }
 }

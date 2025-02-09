@@ -4,22 +4,22 @@ type ConsultationModel @key(fields: "id") {
     startTime: String!
     estimatedDuration: String!
     description: String!
-    medicalServices: MedicalServicesModel!
+    medicalServicesModel: MedicalServicesModel!
     finalPrice: Float!
     observation: String
     doctor: DoctorModel!
     patient: PatientModel!
 }
 
-type DoctorModel @key(fields: "id") @extends {
+type DoctorModel @extends{
     id: ID! @external
 }
 
-type PatientModel @key(fields: "id") @extends{
+type PatientModel @extends{
     id: ID! @external
 }
 
-interface MedicalServicesModel @key(fields: "id") @extends {
+interface MedicalServicesModel @extends{
     id: ID! @external
 }
 

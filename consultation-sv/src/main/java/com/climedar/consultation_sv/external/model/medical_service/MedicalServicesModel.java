@@ -2,7 +2,7 @@ package com.climedar.consultation_sv.external.model.medical_service;
 
 import java.time.Duration;
 
-public interface MedicalServices {
+public interface MedicalServicesModel {
     Long getId();
 
     Double getPrice();

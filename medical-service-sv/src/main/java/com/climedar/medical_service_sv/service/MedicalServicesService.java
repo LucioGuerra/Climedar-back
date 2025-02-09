@@ -26,12 +26,12 @@ public class MedicalServicesService {
         MedicalServicesWrapped medicalServicesWrapped = new MedicalServicesWrapped();
 
         Optional<MedicalPackageEntity> medicalPackageEntity = medicalPackageRepository.findByIdAndNotDeleted(id);
-        medicalPackageEntity.ifPresent(entity -> medicalServicesWrapped.setMedicalPackage(medicalPackageMapper.toModel(entity)));
+        medicalPackageEntity.ifPresent(entity -> medicalServicesWrapped.setMedicalPackageModel(medicalPackageMapper.toModel(entity)));
 
         Optional<MedicalServiceEntity> medicalService = medicalServiceRepository.findByIdAndNotDeleted(id);
-        medicalService.ifPresent(medicalServiceEntity -> medicalServicesWrapped.setMedicalService(medicalServiceMapper.toModel(medicalServiceEntity)));
+        medicalService.ifPresent(medicalServiceEntity -> medicalServicesWrapped.setMedicalServiceModel(medicalServiceMapper.toModel(medicalServiceEntity)));
 
-        if (medicalServicesWrapped.getMedicalPackage() == null && medicalServicesWrapped.getMedicalService() == null) {
+        if (medicalServicesWrapped.getMedicalPackageModel() == null && medicalServicesWrapped.getMedicalServiceModel() == null) {
             throw new EntityNotFoundException("Medical services not found with id: " + id);
         }
         return medicalServicesWrapped;
@@ -45,13 +45,13 @@ public class MedicalServicesService {
 
         for (MedicalPackageEntity packageEntity : packageEntities) {
             MedicalServicesWrapped wrapped = new MedicalServicesWrapped();
-            wrapped.setMedicalPackage(medicalPackageMapper.toModel(packageEntity));
+            wrapped.setMedicalPackageModel(medicalPackageMapper.toModel(packageEntity));
             wrappedMap.put(packageEntity.getId(), wrapped);
         }
 
         for (MedicalServiceEntity serviceEntity : serviceEntities) {
             MedicalServicesWrapped wrapped = new MedicalServicesWrapped();
-            wrapped.setMedicalService(medicalServiceMapper.toModel(serviceEntity));
+            wrapped.setMedicalServiceModel(medicalServiceMapper.toModel(serviceEntity));
             wrappedMap.put(serviceEntity.getId(), wrapped);
         }
 

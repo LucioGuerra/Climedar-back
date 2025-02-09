@@ -1,9 +1,7 @@
 package com.climedar.consultation_sv.repository;
 
 import com.climedar.consultation_sv.dto.request.MedicalServicesWrapped;
-import com.climedar.consultation_sv.external.model.medical_service.MedicalServices;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;

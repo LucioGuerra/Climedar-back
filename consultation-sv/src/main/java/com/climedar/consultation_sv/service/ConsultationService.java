@@ -4,9 +4,10 @@ import com.climedar.consultation_sv.dto.request.CreateConsultationDTO;
 import com.climedar.consultation_sv.dto.request.MedicalServicesWrapped;
 import com.climedar.consultation_sv.dto.request.UpdateConsultationDTO;
 import com.climedar.consultation_sv.entity.Consultation;
+import com.climedar.consultation_sv.external.model.doctor.Doctor;
 import com.climedar.consultation_sv.external.model.doctor.Shift;
 import com.climedar.consultation_sv.external.model.doctor.ShiftState;
-import com.climedar.consultation_sv.external.model.medical_service.MedicalServices;
+import com.climedar.consultation_sv.external.model.medical_service.MedicalServicesModel;
 import com.climedar.consultation_sv.external.model.patient.Patient;
 import com.climedar.consultation_sv.mapper.ConsultationMapper;
 import com.climedar.consultation_sv.model.ConsultationModel;
@@ -24,6 +25,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -43,9 +45,36 @@ public class ConsultationService {
     public ConsultationModel getConsultationById(Long id) {
         Consultation consultation = consultationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Consultation not found with id: " + id));
         Shift shift = shiftRepository.findById(consultation.getShiftId());
-        //Patient patient = patientRepository.findById(consultation.getPatientId());
-        MedicalServices medicalServices = medicalServicesRepository.findById(consultation.getMedicalServicesId()).getMedicalServices();
-        return consultationMapper.toModel(consultation, shift, medicalServices);
+        Patient patient = patientRepository.findById(consultation.getPatientId());
+        /*return consultationMapper.toModel(consultation);*/
+        MedicalServicesModel medicalServicesModel = medicalServicesRepository.findById(consultation.getMedicalServicesId()).getMedicalServices();
+        ConsultationModel consultationModel = new ConsultationModel();
+        consultationModel.setId(consultation.getId());
+        consultationModel.setDate(shift.getDate());
+        consultationModel.setStartTime(shift.getStartTime());
+        consultationModel.setEstimatedDuration(medicalServicesModel.getEstimatedDuration());
+        consultationModel.setDescription(consultation.getDescription());
+        consultationModel.setFinalPrice(consultation.getFinalPrice());
+        consultationModel.setObservation(consultation.getObservation());
+        consultationModel.setDoctor(new Doctor(shift.getDoctor().getId()));
+        consultationModel.setPatient(new Patient(consultation.getPatientId()));
+        consultationModel.setMedicalServicesModel(new MedicalServicesModel() {
+            @Override
+            public Long getId() {
+                return consultation.getMedicalServicesId();
+            }
+
+            @Override
+            public Double getPrice() {
+                return 0.0;
+            }
+
+            @Override
+            public Duration getEstimatedDuration() {
+                return null;
+            }
+        });
+        return consultationModel;
     }
 
     public Page<ConsultationModel> getAllConsultations(Pageable pageable, Long patientId, Long doctorId,
@@ -78,18 +107,18 @@ public class ConsultationService {
 
         List<Shift> shifts = shiftRepository.findAllById(shiftIds);
         //List<Patient> patients = patientRepository.findAllById(patientIds);
-        List<MedicalServices> medicalServices = medicalServicesRepository.findAllById(medicalServiceIds).stream().map(MedicalServicesWrapped::getMedicalServices).toList();
+        List<MedicalServicesModel> medicalServiceModels = medicalServicesRepository.findAllById(medicalServiceIds).stream().map(MedicalServicesWrapped::getMedicalServices).toList();
 
 
         Map<Long, Shift> shiftMap = shifts.stream().collect(Collectors.toMap(Shift::getId, Function.identity()));
         //Map<Long, Patient> patientMap = patients.stream().collect(Collectors.toMap(Patient::getId, Function.identity()));
-        Map<Long, MedicalServices> medicalServiceMap = medicalServices.stream().collect(Collectors.toMap(MedicalServices::getId, Function.identity()));
+        Map<Long, MedicalServicesModel> medicalServiceMap = medicalServiceModels.stream().collect(Collectors.toMap(MedicalServicesModel::getId, Function.identity()));
 
         return consultations.map(consultation -> {
             Shift shift = shiftMap.get(consultation.getShiftId());
             //Patient patient = patientMap.get(consultation.getPatientId());
-            MedicalServices medicalService = medicalServiceMap.get(consultation.getMedicalServicesId());
-            return consultationMapper.toModel(consultation, shift, medicalService);
+            MedicalServicesModel medicalService = medicalServiceMap.get(consultation.getMedicalServicesId());
+            return consultationMapper.toModel(consultation);
         });
     }
 
@@ -102,16 +131,16 @@ public class ConsultationService {
 
         //Patient patient = patientRepository.findById(createConsultationDTO.patientId());
         Patient patient = new Patient();
-        MedicalServices medicalServices =
+        MedicalServicesModel medicalServicesModel =
                 medicalServicesRepository.findById(createConsultationDTO.medicalServices()).getMedicalServices();
 
-        Consultation consultation = consultationMapper.toEntity(createConsultationDTO, shift, medicalServices);
-        consultation.setFinalPrice(calculateFinalPrice(medicalServices, patient));
+        Consultation consultation = consultationMapper.toEntity(createConsultationDTO, shift, medicalServicesModel);
+        consultation.setFinalPrice(calculateFinalPrice(medicalServicesModel, patient));
         consultationRepository.save(consultation);
 
         shiftRepository.occupyShift(shift.getId());
 
-        return consultationMapper.toModel(consultation, shift, medicalServices);//todo: agregar patient
+        return consultationMapper.toModel(consultation);//todo: agregar patient
     }
 
 
@@ -123,11 +152,11 @@ public class ConsultationService {
 
         Shift shift = shiftRepository.findById(consultation.getShiftId());
         //Patient patient = patientRepository.findById(consultation.getPatientId());
-        MedicalServices medicalServices = medicalServicesRepository.findById(consultation.getMedicalServicesId()).getMedicalServices();
+        MedicalServicesModel medicalServicesModel = medicalServicesRepository.findById(consultation.getMedicalServicesId()).getMedicalServices();
 
         consultationRepository.save(consultation);
 
-        return consultationMapper.toModel(consultation, shift, medicalServices);
+        return consultationMapper.toModel(consultation);
     }
 
     public Boolean deleteConsultation(Long id) {
@@ -138,11 +167,11 @@ public class ConsultationService {
         return true;
     }
 
-    private Double calculateFinalPrice(MedicalServices medicalServices, Patient patient) {
+    private Double calculateFinalPrice(MedicalServicesModel medicalServicesModel, Patient patient) {
         if (patient.getMedicalSecure() == null) {
-            return medicalServices.getPrice();
+            return medicalServicesModel.getPrice();
         }
-        return medicalServices.getPrice() * 0.80;
+        return medicalServicesModel.getPrice() * 0.80;
     }
 
 }

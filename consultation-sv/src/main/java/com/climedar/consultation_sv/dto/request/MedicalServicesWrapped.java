@@ -1,21 +1,20 @@
 package com.climedar.consultation_sv.dto.request;
 
-import com.climedar.consultation_sv.external.model.medical_service.MedicalPackage;
-import com.climedar.consultation_sv.external.model.medical_service.MedicalService;
-import com.climedar.consultation_sv.external.model.medical_service.MedicalServices;
-import lombok.Data;
+import com.climedar.consultation_sv.external.model.medical_service.MedicalPackageModel;
+import com.climedar.consultation_sv.external.model.medical_service.MedicalServiceModel;
+import com.climedar.consultation_sv.external.model.medical_service.MedicalServicesModel;
 import lombok.Setter;
 
 @Setter
 public class MedicalServicesWrapped {
-    private MedicalService medicalService;
-    private MedicalPackage medicalPackage;
+    private MedicalServiceModel medicalServiceModel;
+    private MedicalPackageModel medicalPackageModel;
 
-    public MedicalServices getMedicalServices() {
-        if (medicalService != null) {
-            return medicalService;
+    public MedicalServicesModel getMedicalServices() {
+        if (medicalServiceModel != null) {
+            return this.medicalServiceModel;
         } else {
-            return medicalPackage;
+            return medicalPackageModel;
         }
     }
 }

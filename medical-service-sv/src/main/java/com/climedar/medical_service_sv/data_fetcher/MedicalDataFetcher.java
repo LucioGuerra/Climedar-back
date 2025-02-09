@@ -48,7 +48,7 @@ public class MedicalDataFetcher {
 
     @DgsEntityFetcher(name = "MedicalServiceModel")
     public MedicalServiceModel getMedicalService(Map<String, Object> values) {
-        Long id = ((Number) values.get("id")).longValue();
+        Long id = Long.parseLong((String) values.get("id"));
         return graphqlAdapter.getMedicalServiceById(id);
     }
 }

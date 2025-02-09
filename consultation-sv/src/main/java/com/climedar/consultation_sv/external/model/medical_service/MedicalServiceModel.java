@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.Duration;
 
 @Data
-public class MedicalService implements MedicalServices {
+public class MedicalServiceModel implements MedicalServicesModel {
     private Long id;
     private String code;
     private Double price;

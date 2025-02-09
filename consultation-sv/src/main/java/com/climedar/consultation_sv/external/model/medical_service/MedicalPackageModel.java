@@ -6,15 +6,15 @@ import java.time.Duration;
 import java.util.List;
 
 @Data
-public class MedicalPackage implements MedicalServices {
+public class MedicalPackageModel implements MedicalServicesModel {
     private Long id;
     private String code;
     private Double price;
-    private List<MedicalService> services;
+    private List<MedicalServiceModel> services;
 
     @Override
     public Double getPrice() {
-        double sumPrice = this.services.stream().mapToDouble(MedicalService::getPrice).sum();
+        double sumPrice = this.services.stream().mapToDouble(MedicalServiceModel::getPrice).sum();
         return sumPrice * 0.85;
     }
 

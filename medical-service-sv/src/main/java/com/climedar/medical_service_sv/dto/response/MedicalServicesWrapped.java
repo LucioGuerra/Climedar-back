@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class MedicalServicesWrapped {
-    private MedicalServiceModel medicalService;
-    private MedicalPackageModel medicalPackage;
+    private MedicalServiceModel medicalServiceModel;
+    private MedicalPackageModel medicalPackageModel;
 }

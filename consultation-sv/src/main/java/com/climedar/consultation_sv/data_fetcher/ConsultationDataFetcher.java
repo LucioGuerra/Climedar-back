@@ -5,19 +5,11 @@ import com.climedar.consultation_sv.dto.request.ConsultationSpecificationDTO;
 import com.climedar.consultation_sv.dto.request.CreateConsultationDTO;
 import com.climedar.consultation_sv.dto.request.UpdateConsultationDTO;
 import com.climedar.consultation_sv.dto.response.ConsultationPage;
-import com.climedar.consultation_sv.external.model.doctor.Doctor;
-import com.climedar.consultation_sv.external.model.medical_service.MedicalServices;
-import com.climedar.consultation_sv.external.model.patient.Patient;
 import com.climedar.consultation_sv.model.ConsultationModel;
 import com.climedar.library.dto.request.PageRequestInput;
 import com.netflix.graphql.dgs.*;
 import lombok.AllArgsConstructor;
-import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.stereotype.Controller;
 
-import java.time.Duration;
 import java.util.Map;
 
 @AllArgsConstructor
@@ -54,7 +46,7 @@ public class ConsultationDataFetcher {
 
     @DgsEntityFetcher(name = "ConsultationModel")
     public ConsultationModel getConsultation(Map<String, Object> values) {
-        Long id = ((Number) values.get("id")).longValue();
+        Long id = Long.parseLong((String) values.get("id"));
         return consultationAdapter.getConsultationById(id);
     }
 
@@ -70,10 +62,10 @@ public class ConsultationDataFetcher {
         return new Patient(id);
     }
 
-    @DgsEntityFetcher(name = "MedicalServices")
-    public MedicalServices getMedicalServices(Map<String, Object> values) {
+    @DgsEntityFetcher(name = "MedicalServicesModel")
+    public MedicalServicesModel getMedicalServicesModel(Map<String, Object> values) {
         Long id = ((Number) values.get("id")).longValue();
-        return new MedicalServices() {
+        return new MedicalServicesModel() {
             @Override
             public Long getId() {
                 return id;
