@@ -3,14 +3,14 @@ input ConsultationInput{
     shiftId: ID!
     description: String
     observation: String
-    medicalServicesModel: ID!
+    medicalServicesId: ID!
 }
 
 input UpdateConsultationInput{
     patientId: ID
     description: String
     observation: String
-    medicalServicesModel: ID
+    medicalServicesId: ID
 }
 
 input ConsultationSpecification{

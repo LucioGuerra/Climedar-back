@@ -8,4 +8,6 @@ public interface MedicalServicesModel {
     Double getPrice();
 
     Duration getEstimatedDuration();
+
+    String getCode();
 }
