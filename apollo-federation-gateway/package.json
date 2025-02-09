@@ -1,0 +1,16 @@
+{
+  "name": "apollo-federation-gateway",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@apollo/gateway": "^2.9.3",
+    "apollo-server": "^3.13.0",
+    "graphql": "^16.10.0"
+  }
+}
