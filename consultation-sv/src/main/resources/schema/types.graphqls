@@ -1,0 +1,46 @@
+type Consultation @key(fields: "id") {
+    id: ID!
+    date: String!
+    startTime: String!
+    estimatedDuration: String!
+    description: String!
+    medicalServices: MedicalServices!
+    finalPrice: Float!
+    observation: String
+    doctor: Doctor!
+    patient: Patient!
+}
+
+type Doctor @key(fields: "id") @extends {
+    id: ID! @external
+}
+
+type Patient @key(fields: "id") @extends{
+    id: ID! @external
+}
+
+interface MedicalServices @key(fields: "id") @extends {
+    id: ID! @external
+}
+
+enum ServiceType {
+    GENERAL
+    SPECIALIST
+    SURGERY
+    EXAMS
+    THERAPY
+}
+
+type PageInfo {
+    currentPage: Int!
+    totalPages: Int!
+    totalItems: Int!
+    itemsPerPage: Int!
+    hasNext: Boolean!
+    hasPrevious: Boolean!
+}
+
+type ConsultationPage {
+    pageInfo: PageInfo!
+    consultations: [Consultation]!
+}

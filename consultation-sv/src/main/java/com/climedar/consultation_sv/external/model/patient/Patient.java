@@ -11,5 +11,13 @@ public class Patient {
     private String dni;
     private String phone;
     private MedicalSecure medicalSecure;
+
+
+    public Patient() {
+    }
+
+    public Patient(Long id) {
+        this.id = id;
+    }
 }
 

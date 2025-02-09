@@ -6,6 +6,7 @@ import com.climedar.doctor_sv.dto.request.specification.ShiftSpecificationDTO;
 import com.climedar.doctor_sv.dto.response.ShiftPage;
 import com.climedar.doctor_sv.model.ShiftModel;
 import com.climedar.library.dto.request.PageRequestInput;
+import com.netflix.graphql.dgs.*;
 import lombok.AllArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -13,43 +14,50 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Set;
 
 @AllArgsConstructor
-@Controller
+@DgsComponent
 public class ShiftDataFetcher {
 
     private final ShiftGraphqlAdapter shiftAdapter;
 
 
-    @QueryMapping
-    public ShiftModel getShiftById(@Argument Long id) {
+    @DgsQuery
+    public ShiftModel getShiftById(@InputArgument Long id) {
         return shiftAdapter.getShiftById(id);
     }
 
-    @QueryMapping
-    public ShiftPage getAllShifts(@Argument PageRequestInput pageRequest, @Argument ShiftSpecificationDTO specification) {
+    @DgsQuery
+    public ShiftPage getAllShifts(@InputArgument PageRequestInput pageRequest, @InputArgument ShiftSpecificationDTO specification) {
         return shiftAdapter.getAllShifts(pageRequest, specification);
     }
 
-    @QueryMapping
-    public Set<LocalDate> getDatesWithShifts(@Argument LocalDate fromDate,
-                                             @Argument LocalDate toDate, @Argument Long doctorId) {
+    @DgsQuery
+    public Set<LocalDate> getDatesWithShifts(@InputArgument LocalDate fromDate,
+                                             @InputArgument LocalDate toDate, @InputArgument Long doctorId) {
         return shiftAdapter.getDatesWithShifts(fromDate, toDate, doctorId);
     }
 
-    @MutationMapping
-    public ShiftModel createShift(@Argument CreateShiftDTO shift) {
+    @DgsMutation
+    public ShiftModel createShift(@InputArgument CreateShiftDTO shift) {
         return shiftAdapter.createShift(shift);
     }
 
-    @MutationMapping
-    public ShiftModel updateShift(@Argument Long id, @Argument ShiftModel shift, @Argument ShiftSpecificationDTO specification) {
+    @DgsMutation
+    public ShiftModel updateShift(@InputArgument Long id, @InputArgument ShiftModel shift, @InputArgument ShiftSpecificationDTO specification) {
         return shiftAdapter.updateShift(id, shift, specification);
     }
 
-    @MutationMapping
-    public boolean deleteShift(@Argument Long id) {
+    @DgsMutation
+    public boolean deleteShift(@InputArgument Long id) {
         return shiftAdapter.deleteShift(id);
+    }
+
+    @DgsEntityFetcher(name = "Shift")
+    public ShiftModel getShift(Map<String, Object> values) {
+        Long id = ((Number) values.get("id")).longValue();
+        return shiftAdapter.getShiftById(id);
     }
 }

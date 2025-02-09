@@ -6,15 +6,14 @@ import com.climedar.medical_service_sv.dto.request.SpecificationDTO;
 import com.climedar.medical_service_sv.dto.request.UpdateMedicalServiceDTO;
 import com.climedar.medical_service_sv.dto.response.MedicalServicePage;
 import com.climedar.medical_service_sv.model.MedicalServiceModel;
-import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsMutation;
-import com.netflix.graphql.dgs.DgsQuery;
-import com.netflix.graphql.dgs.InputArgument;
+import com.netflix.graphql.dgs.*;
 import lombok.AllArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
+
+import java.util.Map;
 
 @AllArgsConstructor
 @DgsComponent
@@ -45,5 +44,11 @@ public class MedicalDataFetcher {
     @DgsMutation
     public Boolean deleteMedicalService(@InputArgument Long id) {
         return graphqlAdapter.deleteMedicalService(id);
+    }
+
+    @DgsEntityFetcher(name = "MedicalService")
+    public MedicalServiceModel getMedicalService(Map<String, Object> values) {
+        Long id = ((Number) values.get("id")).longValue();
+        return graphqlAdapter.getMedicalServiceById(id);
     }
 }

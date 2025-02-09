@@ -13,4 +13,8 @@ public class Doctor {
     private String dni;
     private Double salary;
     private String phone;
+
+    public Doctor(Long id) {
+        this.id = id;
+    }
 }

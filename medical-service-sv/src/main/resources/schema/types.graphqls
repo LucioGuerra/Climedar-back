@@ -1,4 +1,10 @@
-type MedicalService @key(fields: "id") {
+interface MedicalServices {
+    id: ID!
+    code: String!
+    price: Float!
+}
+
+type MedicalService implements MedicalServices @key(fields: "id"){
     id: ID!
     code: String!
     name: String!
@@ -8,21 +14,22 @@ type MedicalService @key(fields: "id") {
     specialityId: ID!
 }
 
-enum ServiceType {
-    GENERAL
-    SPECIALIST
-    SURGERY
-    EXAMS
-    THERAPY
-}
 
-type MedicalPackage @key(fields: "id") {
+type MedicalPackage implements MedicalServices @key(fields: "id") {
     id: ID!
     code: String!
     name: String!
     estimatedDuration: String!
     price: Float!
     services: [MedicalService!]!
+}
+
+enum ServiceType {
+    GENERAL
+    SPECIALIST
+    SURGERY
+    EXAMS
+    THERAPY
 }
 
 type PageInfo {

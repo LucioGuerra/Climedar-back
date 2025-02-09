@@ -1,6 +1,7 @@
 type Query {
     getAllDoctors(pageRequest: PageRequest!, specification: DoctorSpecification): DoctorPage!
     getDoctorById(id: ID!): Doctor!
+    getDoctorsByFullName(pageRequest: PageRequest!, fullName: String!, specialityId: String!): DoctorPage!
 
     getAllShifts(pageRequest: PageRequest!, specification: ShiftSpecification): ShiftPage!
     getShiftById(id: ID!): Shift!
@@ -9,5 +10,4 @@ type Query {
     getAllSpecialities(pageRequest: PageRequest!, specification: SpecialitySpecification): SpecialityPage!
     getSpecialityById(id: ID!): Speciality!
 
-    getDoctorsByFullName(pageRequest: PageRequest!, fullName: String!, specilityId: String!): DoctorPage!
 }

@@ -5,40 +5,49 @@ import com.climedar.doctor_sv.dto.request.specification.SpecialitySpecificationD
 import com.climedar.doctor_sv.dto.response.SpecialityPage;
 import com.climedar.doctor_sv.model.SpecialityModel;
 import com.climedar.library.dto.request.PageRequestInput;
+import com.netflix.graphql.dgs.*;
 import lombok.AllArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
+import java.util.Map;
+
 @AllArgsConstructor
-@Controller
+@DgsComponent
 public class SpecialityDataFetcher {
 
     private final SpecialityGraphqlAdapter specialityGraphqlAdapter;
 
-    @QueryMapping
-    public SpecialityModel getSpecialityById(@Argument Long id) {
+    @DgsQuery
+    public SpecialityModel getSpecialityById(@InputArgument Long id) {
         return specialityGraphqlAdapter.getSpecialityById(id);
     }
 
-    @QueryMapping
-    public SpecialityPage getAllSpecialities(@Argument PageRequestInput pageRequest, @Argument SpecialitySpecificationDTO specification) {
+    @DgsQuery
+    public SpecialityPage getAllSpecialities(@InputArgument PageRequestInput pageRequest, @InputArgument SpecialitySpecificationDTO specification) {
         return specialityGraphqlAdapter.getAllSpecialities(pageRequest, specification);
     }
 
-    @MutationMapping
-    public SpecialityModel createSpeciality(@Argument SpecialityModel speciality) {
+    @DgsMutation
+    public SpecialityModel createSpeciality(@InputArgument SpecialityModel speciality) {
         return specialityGraphqlAdapter.createSpeciality(speciality);
     }
 
-    @MutationMapping
-    public SpecialityModel updateSpeciality(@Argument Long id, @Argument SpecialityModel speciality) {
+    @DgsMutation
+    public SpecialityModel updateSpeciality(@InputArgument Long id, @InputArgument SpecialityModel speciality) {
         return specialityGraphqlAdapter.updateSpeciality(id, speciality);
     }
 
-    @MutationMapping
-    public Boolean deleteSpeciality(@Argument Long id) {
+    @DgsMutation
+    public Boolean deleteSpeciality(@InputArgument Long id) {
         return specialityGraphqlAdapter.deleteSpeciality(id);
+    }
+
+    @DgsEntityFetcher(name = "Speciality")
+    public SpecialityModel getSpeciality(Map<String, Object> values) {
+        Long id = ((Number) values.get("id")).longValue();
+        return specialityGraphqlAdapter.getSpecialityById(id);
     }
 }

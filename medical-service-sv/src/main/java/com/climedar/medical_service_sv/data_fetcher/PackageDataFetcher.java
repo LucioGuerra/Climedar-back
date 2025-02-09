@@ -5,15 +5,11 @@ import com.climedar.medical_service_sv.dto.request.CreatePackageDTO;
 import com.climedar.medical_service_sv.dto.request.PageRequestInput;
 import com.climedar.medical_service_sv.dto.response.MedicalPackagePage;
 import com.climedar.medical_service_sv.model.MedicalPackageModel;
-import com.climedar.medical_service_sv.model.MedicalServiceModel;
 import com.netflix.graphql.dgs.*;
 import lombok.AllArgsConstructor;
-import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -53,8 +49,9 @@ public class PackageDataFetcher {
     }
 
     @DgsEntityFetcher(name = "MedicalPackage")
-    public MedicalPackageModel getMedicalPackage(MedicalPackageModel input) {
-        return new MedicalPackageModel(input.getId());
+    public MedicalPackageModel getMedicalPackage(Map<String, Object> values) {
+        Long id = ((Number) values.get("id")).longValue();
+        return graphqlAdapter.getPackageById(id);
     }
 
 }
