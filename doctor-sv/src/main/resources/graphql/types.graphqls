@@ -12,7 +12,7 @@ type Shift{
 enum ShiftState{
     AVAILABLE
     OCCUPIED
-    CANCELLED
+    CANCELED
 }
 
 type Doctor {

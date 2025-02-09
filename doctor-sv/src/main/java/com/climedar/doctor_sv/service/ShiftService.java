@@ -163,4 +163,15 @@ public class ShiftService {
         shift.setState(ShiftState.AVAILABLE);
         shiftRepository.save(shift);
     }
+
+    public ShiftModel cancelShift(Long id) {
+        Shift shift = shiftRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + id));
+        if (shift.getState() == ShiftState.CANCELED) {
+            return shiftMapper.toModel(shift);
+        }
+        shift.setState(ShiftState.CANCELED);
+        shiftRepository.save(shift);
+        //TODO: erase consultation and send notification to the patient
+        return shiftMapper.toModel(shift);
+    }
 }

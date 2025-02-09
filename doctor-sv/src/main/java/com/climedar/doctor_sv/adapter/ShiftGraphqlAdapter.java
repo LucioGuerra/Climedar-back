@@ -38,6 +38,7 @@ public class ShiftGraphqlAdapter {
         return shiftService.deleteShift(id);
     }
 
+
     public ShiftModel updateShift(Long id, ShiftModel shift, ShiftSpecificationDTO shiftSpecificationDTO) {
         return shiftService.updateShift(id, shift, shiftSpecificationDTO);
     }
@@ -59,5 +60,9 @@ public class ShiftGraphqlAdapter {
 
     public Set<LocalDate> getDatesWithShifts(LocalDate fromDate, LocalDate toDate, Long doctorId) {
         return shiftService.getDatesWithShifts(fromDate, toDate, doctorId);
+    }
+
+    public ShiftModel cancelShift(Long id) {
+        return shiftService.cancelShift(id);
     }
 }
