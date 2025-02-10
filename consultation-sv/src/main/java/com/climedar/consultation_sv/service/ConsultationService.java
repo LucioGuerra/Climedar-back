@@ -41,7 +41,7 @@ public class ConsultationService {
     private final MedicalServicesRepository medicalServicesRepository;
 
     public ConsultationModel getConsultationById(Long id) {
-        Consultation consultation = consultationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Consultation not found with id: " + id));
+        Consultation consultation = consultationRepository.findByIdAndNotDeleted(id).orElseThrow(() -> new EntityNotFoundException("Consultation not found with id: " + id));
         Shift shift = shiftRepository.findById(consultation.getShiftId());
         return consultationMapper.toModel(consultation, shift);
     }

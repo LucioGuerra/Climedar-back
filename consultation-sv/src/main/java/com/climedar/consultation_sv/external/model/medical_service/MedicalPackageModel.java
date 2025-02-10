@@ -10,8 +10,9 @@ public class MedicalPackageModel implements MedicalServicesModel {
     private Long id;
     private String code;
     private Double price;
-    private Duration estimatedDuration;
     private List<MedicalServiceModel> services;
+    private String type = "package";
+    private Duration estimatedDuration;
 
 
     public MedicalPackageModel(String code) {
