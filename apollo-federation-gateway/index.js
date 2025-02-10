@@ -7,13 +7,14 @@ import { ApolloServer } from 'apollo-server';
 const eurekaClient = new Eureka({
     instance: {
         app: 'apollo-federation',
-        hostName: 'localhost',
-        ipAddr: '127.0.0.1',
-        statusPageUrl: 'http://localhost:4000',
+        hostName: 'apollo-federation',
+        ipAddr: 'apollo-federation',
+        statusPageUrl: 'http://apollo-federation:4000',
         port: {
             '$': 4000,
             '@enabled': true,
         },
+        preferIpAddress: true,
         vipAddress: 'apollo-federation',
         dataCenterInfo: {
             '@class': 'com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo',
@@ -22,57 +23,79 @@ const eurekaClient = new Eureka({
     },
     eureka: {
         // Cambia estos valores según la configuración de tu Eureka Server
-        host: 'localhost',
+        host: 'eureka-sv',
         port: 8761,
         servicePath: '/eureka/apps/'
     },
 });
 
-eurekaClient.start(error => {
-    if (error) {
-        console.error('Error registrando en Eureka:', error);
-    } else {
-        console.log('Registro en Eureka completado');
-    }
-});
-
-
-
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
     willSendRequest({ request, context }) {
-        // Si en el contexto existe el token, lo agrega a la cabecera Authorization
         if (context.token) {
             request.http.headers.set('Authorization', context.token);
         }
     }
 }
 
+eurekaClient.start(async (error) => {
+    if (error) {
+        console.error('❌ Error registrando en Eureka:', error);
+        process.exit(1);
+    } else {
+        console.log('✅ Registro en Eureka completado');
 
-// Configurar el gateway con los subgráficos
-const gateway = new ApolloGateway({
-    serviceList: [  // Se usa `serviceList` en lugar de `IntrospectAndCompose`
-        { name: 'medical-service-sv', url: 'http://localhost:8081/graphql' },
-        { name: 'consultation-sv', url: 'http://localhost:8086/graphql' },
-        { name: 'doctor-sv', url: 'http://localhost:8083/graphql' },
-        { name: 'patient-sv', url: 'http://localhost:8082/graphql' },
-    ],
-    buildService({ name, url }) {
-        return new AuthenticatedDataSource({ url });
-    },
-});
+        // Lista de servicios a descubrir en Eureka
+        const servicesToDiscover = [
+            { name: 'medical-service-sv', path: '/graphql' },
+            { name: 'consultation-sv', path: '/graphql' },
+            { name: 'doctor-sv', path: '/graphql' },
+            { name: 'patient-sv', path: '/graphql' },
+        ];
 
-const server = new ApolloServer({
-    gateway,
-    subscriptions: false,
-    cors: true, // Permitir CORS para evitar bloqueos
-    context: ({ req }) => {
-        // Extraer el token de la cabecera Authorization
-        const token = req.headers.authorization || '';
-        return { token };
-    },
-});
+        // Función para obtener la URL de los servicios desde Eureka
+        const serviceList = servicesToDiscover.map(service => {
+            const instances = eurekaClient.getInstancesByAppId(service.name.toUpperCase());
 
-server.listen({ port: 4000 }).then(({ url }) => {
-    console.log(`🚀 Gateway listo en ${url}`);
+            if (instances && instances.length > 0) {
+                const instance = instances[0]; // Tomar la primera instancia disponible
+                const host = instance.ipAddr || instance.hostName;
+                const port = instance.port && instance.port['$'];
+                const url = `http://${host}:${port}${service.path}`;
+                console.log(`🔗 Servicio ${service.name} encontrado en ${url}`);
+                return { name: service.name, url };
+            } else {
+                console.error(`⚠️ No se encontró instancia para ${service.name} en Eureka`);
+                return null;
+            }
+        }).filter(s => s !== null); // Filtrar servicios no encontrados
+
+        if (serviceList.length === 0) {
+            console.error('🚨 No se encontraron servicios disponibles en Eureka. Cerrando servidor.');
+            process.exit(1);
+        }
+
+        // Configurar ApolloGateway con introspección automática
+        const gateway = new ApolloGateway({
+            serviceList,
+            buildService({ name, url }) {
+                return new AuthenticatedDataSource({ url });
+            },
+        });
+
+        // Iniciar Apollo Server
+        const server = new ApolloServer({
+            gateway,
+            subscriptions: false,
+            cors: true,
+            context: ({ req }) => {
+                const token = req.headers.authorization || '';
+                return { token };
+            },
+        });
+
+        server.listen({ port: 4000 }).then(({ url }) => {
+            console.log(`🚀 Gateway listo en ${url}`);
+        });
+    }
 });
 
