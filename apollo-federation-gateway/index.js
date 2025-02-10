@@ -1,6 +1,6 @@
 import {Eureka} from 'eureka-js-client';
 
-import {ApolloGateway, RemoteGraphQLDataSource} from '@apollo/gateway';
+import {ApolloGateway, IntrospectAndCompose, RemoteGraphQLDataSource} from '@apollo/gateway';
 import { ApolloServer } from 'apollo-server';
 
 
@@ -76,7 +76,9 @@ eurekaClient.start(async (error) => {
 
         // Configurar ApolloGateway con introspección automática
         const gateway = new ApolloGateway({
-            serviceList,
+            supergraphSdl: new IntrospectAndCompose({
+                subgraphs: serviceList,
+            }),
             buildService({ name, url }) {
                 return new AuthenticatedDataSource({ url });
             },
@@ -86,7 +88,11 @@ eurekaClient.start(async (error) => {
         const server = new ApolloServer({
             gateway,
             subscriptions: false,
-            cors: true,
+            introspection: true,
+            cors: {
+                origin: '*',
+                credentials: true,
+            },
             context: ({ req }) => {
                 const token = req.headers.authorization || '';
                 return { token };
