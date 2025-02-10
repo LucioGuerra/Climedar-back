@@ -54,4 +54,9 @@ public class ShiftResolver {
     public boolean deleteShift(@Argument Long id) {
         return shiftAdapter.deleteShift(id);
     }
+
+    @MutationMapping
+    public ShiftModel cancelShift(@Argument Long id) {
+        return shiftAdapter.cancelShift(id);
+    }
 }
