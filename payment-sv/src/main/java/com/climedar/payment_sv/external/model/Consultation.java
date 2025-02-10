@@ -11,5 +11,5 @@ public class Consultation {
     Long id;
     Patient patient;
     BigDecimal finalPrice;
-    MedicalServices medicalServices;
+    List<MedicalServices> medicalServices;
 }

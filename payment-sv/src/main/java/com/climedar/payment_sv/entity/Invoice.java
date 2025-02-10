@@ -25,9 +25,9 @@ public class Invoice {
     @Column(name = "invoice_date", nullable = false, updatable = false)
     private LocalDate invoiceDate;
 
-    //@ElementCollection
+    @ElementCollection
     @Column(name = "medical_service_id")
-    private Long medicalServicesId; //todo: convertir en una lista
+    private List<Long> medicalServicesId;
 
     @OneToOne
     private Payment payment;
