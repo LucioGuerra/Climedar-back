@@ -1,7 +1,9 @@
 package com.climedar.doctor_sv.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -10,17 +12,17 @@ import java.time.LocalTime;
 @Data
 public class CreateShiftDTO {
     @NotNull(message = "Date is required")
-    @FutureOrPresent(message = "Date must be in the future or present")
-    private LocalDate date;
+    //@FutureOrPresent(message = "Date must be in the future or present")
+    private String date;
 
     @NotNull(message = "Start time is required")
-    private LocalTime startTime;
+    private String startTime;
 
     @NotNull(message = "End time is required")
-    private LocalTime endTime;
+    private String endTime;
 
     @NotNull(message = "Time of shifts is required")
-    private Duration timeOfShifts;
+    private String timeOfShifts;
 
     private String place;
 

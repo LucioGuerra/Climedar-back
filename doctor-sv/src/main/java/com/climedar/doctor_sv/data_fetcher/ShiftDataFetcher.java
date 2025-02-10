@@ -41,7 +41,7 @@ public class ShiftDataFetcher {
     }
 
     @DgsMutation
-    public ShiftModel createShift(@InputArgument CreateShiftDTO shift) {
+    public Integer createShift(@InputArgument CreateShiftDTO shift) {
         return shiftAdapter.createShift(shift);
     }
 

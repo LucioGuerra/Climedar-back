@@ -69,20 +69,23 @@ public class ShiftService {
     }
 
     @Transactional
-    public ShiftModel createShift(CreateShiftDTO shiftDTO) {
+    public Integer createShift(CreateShiftDTO shiftDTO) {
         Doctor doctor = doctorService.getDoctorEntityById(shiftDTO.getDoctorId());
         List<Shift> shift;
+        int createdShifts = 0;
 
 
         if (shiftDTO.getRecurringShift() != null) {
             shift = shiftDirector.constructRecurringMultipleShifts(shiftDTO, doctor);
+            createdShifts = shift.size();
         }
         else {
             shift = shiftDirector.constructMultipleShifts(shiftDTO, doctor);
+            createdShifts++;
         }
 
         shiftRepository.saveAll(shift);
-        return shiftMapper.toModel(shift.get(0));
+        return createdShifts;
     }
 
     public ShiftModel updateShift(Long id, ShiftModel shiftModel, ShiftSpecificationDTO shiftSpecificationDTO) {

@@ -66,7 +66,7 @@ input Order {
 }
 
 enum SortDirection {
-    ASC
+    ASC,
     DESC
 }
 
