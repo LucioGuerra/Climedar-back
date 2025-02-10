@@ -16,8 +16,8 @@ public class ConsultationSpecification {
         return (root, query, cb) -> shiftId.isEmpty()? cb.conjunction(): root.get("shiftId").in(shiftId);
     }
 
-    public static Specification<Consultation> ByMedicalServicesId(Long medicalServicesId) {
-        return (root, query, cb) -> medicalServicesId == null? cb.conjunction(): cb.equal(root.get("medicalServicesId"), medicalServicesId);
+    public static Specification<Consultation> ByMedicalServicesCode(List<String> medicalServicesCodes) {
+        return (root, query, cb) -> medicalServicesCodes == null? cb.conjunction(): root.get("medicalServicesCode").in(medicalServicesCodes);
     }
 
     public static Specification<Consultation> ByTime(LocalTime startTime, LocalTime fromTime, LocalTime toTime) {

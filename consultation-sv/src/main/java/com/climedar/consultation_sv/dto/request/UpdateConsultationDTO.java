@@ -1,10 +1,11 @@
 package com.climedar.consultation_sv.dto.request;
 
-import java.time.Duration;
-import java.time.LocalTime;
+
+import java.util.List;
+import java.util.Set;
 
 public record UpdateConsultationDTO(
-        Long medicalServicesId,
+        Set<Long> medicalServicesId,
         String description,
         String observation,
         Long shiftId

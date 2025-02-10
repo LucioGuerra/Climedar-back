@@ -15,7 +15,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(componentModel = "spring") //todo: poner los demas mappers para mappear los servicios
+import java.util.ArrayList;
+import java.util.List;
+
+@Mapper(componentModel = "spring")
 public interface ConsultationMapper {
 
 
@@ -36,25 +39,22 @@ public interface ConsultationMapper {
     @Mapping(target = "id", ignore = true)
     Consultation toEntity(CreateConsultationDTO createConsultationDTO, Shift shift);
 
-    @Mapping(target = "shiftId", ignore = true)
-    @Mapping(target = "patientId", ignore = true)
-    @Mapping(target = "medicalServicesCode", source = "consultationDTO.medicalServicesId")
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "deleted", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    void updateEntity(UpdateConsultationDTO consultationDTO, @MappingTarget Consultation consultation);
 
     default Doctor getDoctor(Shift shift) {
         return new Doctor(shift.getDoctor().getId());
     }
 
-    default MedicalServicesModel getMedicalServices(Consultation consultation) {
-        if (consultation.getMedicalServicesCode().startsWith("MP")){
-            return new MedicalPackageModel(consultation.getMedicalServicesCode());
-        }else {
-            return new MedicalServiceModel(consultation.getMedicalServicesCode());
+    default List<MedicalServicesModel> getMedicalServices(Consultation consultation) {
+        List<String> medicalServicesCode = consultation.getMedicalServicesCode();
+        List<MedicalServicesModel> medicalServicesModels = new ArrayList<>();
+        for (String code: medicalServicesCode){
+            if (code.startsWith("MP")){
+                medicalServicesModels.add(new MedicalPackageModel(code));
+            }else {
+                medicalServicesModels.add(new MedicalServiceModel(code));
+            }
         }
+        return medicalServicesModels;
     }
 
     default Patient getPatient(Consultation consultation) {

@@ -11,8 +11,6 @@ import java.util.Set;
 
 @FeignClient(name = "medical-service-sv")
 public interface MedicalServicesRepository {
-    @GetMapping("/api/public/medical-services/{id}")
-    MedicalServicesWrapped findById(@PathVariable Long id);
 
     @GetMapping("/api/public/medical-services/ids")
     List<MedicalServicesWrapped> findAllById(@RequestParam Set<Long> ids);
