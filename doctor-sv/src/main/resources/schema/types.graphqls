@@ -12,7 +12,7 @@ type ShiftModel @key(fields: "id") {
 enum ShiftState{
     AVAILABLE
     OCCUPIED
-    CANCELLED
+    CANCELED
 }
 
 type DoctorModel @key(fields: "id") {
