@@ -1,7 +1,6 @@
 import {Eureka} from 'eureka-js-client';
-
 import {ApolloGateway, IntrospectAndCompose, RemoteGraphQLDataSource} from '@apollo/gateway';
-import { ApolloServer } from 'apollo-server';
+import {ApolloServer} from 'apollo-server';
 
 
 const eurekaClient = new Eureka({
@@ -30,7 +29,7 @@ const eurekaClient = new Eureka({
 });
 
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
-    willSendRequest({ request, context }) {
+    willSendRequest({request, context}) {
         if (context.token) {
             request.http.headers.set('Authorization', context.token);
         }
@@ -46,10 +45,10 @@ eurekaClient.start(async (error) => {
 
         // Lista de servicios a descubrir en Eureka
         const servicesToDiscover = [
-            { name: 'medical-service-sv', path: '/graphql' },
-            { name: 'consultation-sv', path: '/graphql' },
-            { name: 'doctor-sv', path: '/graphql' },
-            { name: 'patient-sv', path: '/graphql' },
+            {name: 'medical-service-sv', path: '/graphql'},
+            {name: 'consultation-sv', path: '/graphql'},
+            {name: 'doctor-sv', path: '/graphql'},
+            {name: 'patient-sv', path: '/graphql'},
         ];
 
         // Función para obtener la URL de los servicios desde Eureka
@@ -62,7 +61,7 @@ eurekaClient.start(async (error) => {
                 const port = instance.port && instance.port['$'];
                 const url = `http://${host}:${port}${service.path}`;
                 console.log(`🔗 Servicio ${service.name} encontrado en ${url}`);
-                return { name: service.name, url };
+                return {name: service.name, url};
             } else {
                 console.error(`⚠️ No se encontró instancia para ${service.name} en Eureka`);
                 return null;
@@ -79,8 +78,8 @@ eurekaClient.start(async (error) => {
             supergraphSdl: new IntrospectAndCompose({
                 subgraphs: serviceList,
             }),
-            buildService({ name, url }) {
-                return new AuthenticatedDataSource({ url });
+            buildService({name, url}) {
+                return new AuthenticatedDataSource({url});
             },
         });
 
@@ -89,17 +88,26 @@ eurekaClient.start(async (error) => {
             gateway,
             subscriptions: false,
             introspection: true,
-            cors: {
-                origin: '*',
-                credentials: true,
-            },
-            context: ({ req }) => {
+            context: ({req, res}) => {
+                if (res && res.removeHeader) {
+                    res.removeHeader("Access-Control-Allow-Origin");
+                }
                 const token = req.headers.authorization || '';
-                return { token };
+                return {token};
             },
+            plugins: [{
+                requestDidStart: async () => ({
+                    willSendResponse: async ({response}) => {
+                        // 🔥 Borra manualmente los encabezados antes de enviar la respuesta
+                        if (response.http && response.http.headers) {
+                            response.http.headers.delete("Access-Control-Allow-Origin");
+                        }
+                    }
+                })
+            }]
         });
 
-        server.listen({ port: 4000 }).then(({ url }) => {
+        server.listen({port: 4000}).then(({url}) => {
             console.log(`🚀 Gateway listo en ${url}`);
         });
     }
