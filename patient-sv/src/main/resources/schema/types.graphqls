@@ -8,6 +8,7 @@ type PatientModel @key(fields: "id") {
     email: String!
     phone: String!
     address: Address!
+    medicalSecure: MedicalSecureModel!
 }
 
 type Address {
@@ -18,6 +19,11 @@ type Address {
     city: String!
     province: String!
     postalCode: String!
+}
+
+type MedicalSecureModel @key(fields: "id") {
+    id: ID!
+    name: String!
 }
 
 type PageInfo {
@@ -32,6 +38,11 @@ type PageInfo {
 type PatientPage {
     pageInfo: PageInfo!
     patients: [PatientModel]!
+}
+
+type MedicalSecurePage {
+    pageInfo: PageInfo!
+    medicalSecures: [MedicalSecureModel]!
 }
 
 enum Gender {

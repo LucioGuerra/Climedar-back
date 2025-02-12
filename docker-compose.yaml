@@ -14,8 +14,9 @@ services:
       - hackacode
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
+      interval: 20s
       timeout: 5s
+      retries: 10
 
   api-gateway:
     build: ./api-gateway
@@ -40,13 +41,8 @@ services:
     networks:
       - hackacode
     depends_on:
-      - eureka-sv
-      - consultation-sv
-      - doctor-sv
-      - medical-service-sv
-      - patient-sv
-      - person-sv
-      #- payment-sv
+      person-sv:
+        condition: service_healthy
 
   eureka-sv:
     build: ./eureka-sv
@@ -57,6 +53,11 @@ services:
       - ${EUREKA_DIR}/eureka-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
     networks:
       - hackacode
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8761/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
 
   consultation-sv:
     build: ./consultation-sv
@@ -73,6 +74,11 @@ services:
       - ${CONSULTATION_DIR}/consultation-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
     networks:
       - hackacode
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8086/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
     depends_on:
       mysql:
         condition: service_healthy
@@ -94,6 +100,11 @@ services:
       - ${DOCTOR_DIR}/doctor-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
     networks:
       - hackacode
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8083/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
     depends_on:
       mysql:
         condition: service_healthy
@@ -115,6 +126,11 @@ services:
       - ${MEDICAL_DIR}/medical-service-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
     networks:
       - hackacode
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
     depends_on:
       mysql:
         condition: service_healthy
@@ -136,6 +152,11 @@ services:
       - ${PATIENT_DIR}/patient-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
     networks:
       - hackacode
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8082/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
     depends_on:
       mysql:
         condition: service_healthy
@@ -145,6 +166,8 @@ services:
   #payment-sv:
   #  build: ./payment-sv
   #  container_name: payment-sv
+  #  ports:
+  #    - "8085:8085"
   #  environment:
   #    DB_USER: "root"
   #    DB_PASSWORD: "root"
@@ -155,6 +178,12 @@ services:
   #    - ${PAYMENT_DIR}/payment-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
   #  networks:
   #    - hackacode
+  #  healthcheck:
+  #    test: ["CMD-SHELL", "wget -qO- http://localhost:8085/actuator/health || exit 1"]
+  #    interval: 20s
+  #    timeout: 5s
+  #    retries: 10
+
   #  depends_on:
   #    mysql:
   #      condition: service_healthy
@@ -176,11 +205,22 @@ services:
       - ${PERSON_DIR}/person-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
     networks:
       - hackacode
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8084/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
     depends_on:
-      mysql:
+      consultation-sv:
         condition: service_healthy
-      eureka-sv:
-        condition: service_started
+      doctor-sv:
+        condition: service_healthy
+      medical-service-sv:
+        condition: service_healthy
+      patient-sv:
+        condition: service_healthy
+      #payment-sv:
+      #  condition: service_healthy
 
 networks:
   hackacode:
