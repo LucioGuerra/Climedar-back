@@ -16,9 +16,9 @@ input AddressInput {
     number: String!
     floor: String
     apartment: String
-    city: String!
-    province: String!
-    postalCode: String!
+    city: String
+    province: String
+    postalCode: String
 }
 
 input ShiftInput {
@@ -38,12 +38,12 @@ input RecurringShiftInput {
 }
 
 enum DayOfWeek {
-    MONDAY
-    TUESDAY
-    WEDNESDAY
-    THURSDAY
-    FRIDAY
-    SATURDAY
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY,
     SUNDAY
 }
 

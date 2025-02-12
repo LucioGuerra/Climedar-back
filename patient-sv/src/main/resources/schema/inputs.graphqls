@@ -15,9 +15,9 @@ input AddressInput {
     number: String!
     floor: String
     apartment: String
-    city: String!
-    province: String!
-    postalCode: String!
+    city: String
+    province: String
+    postalCode: String
 }
 
 input MedicalSecureInput {
