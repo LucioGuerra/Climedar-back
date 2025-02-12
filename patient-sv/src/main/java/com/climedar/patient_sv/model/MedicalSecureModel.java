@@ -8,5 +8,5 @@ public class MedicalSecureModel {
     private Long id;
 
     @Valid
-    private String nombre;
+    private String name;
 }

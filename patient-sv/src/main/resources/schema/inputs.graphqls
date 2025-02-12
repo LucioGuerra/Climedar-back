@@ -7,6 +7,7 @@ input PatientInput {
     email: String!
     phone: String!
     address: AddressInput!
+    medicalSecure: MedicalSecureInput!
 }
 
 input AddressInput {
@@ -17,6 +18,11 @@ input AddressInput {
     city: String!
     province: String!
     postalCode: String!
+}
+
+input MedicalSecureInput {
+    id: ID
+    name: String!
 }
 
 input PageRequest {
@@ -41,6 +47,10 @@ input PatientSpecification {
     surname: String
     dni: String
     gender: Gender
+}
+
+input MedicalSecureSpecification {
+    name: String
 }
 
 input UpdatePatientInput {

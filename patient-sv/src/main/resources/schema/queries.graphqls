@@ -3,5 +3,6 @@ type Query {
     getPatientById(id: ID!): PatientModel!
 
     # hacer una query para obtener el historial medico de un paciente
-
+    getAllMedicalSecures(pageRequest: PageRequest!, specification: MedicalSecureSpecification): MedicalSecurePage!
+    getMedicalSecureById(id: ID!): MedicalSecureModel!
 }

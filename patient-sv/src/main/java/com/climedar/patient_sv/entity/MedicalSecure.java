@@ -18,7 +18,7 @@ public class MedicalSecure {
     private Long id;
 
     @Column(nullable = false)
-    private String nombre;
+    private String name;
 
     @Column(nullable = false)
     private Boolean deleted;
