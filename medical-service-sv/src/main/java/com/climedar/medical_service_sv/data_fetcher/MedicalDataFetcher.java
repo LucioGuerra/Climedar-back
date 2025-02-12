@@ -1,6 +1,7 @@
 package com.climedar.medical_service_sv.data_fetcher;
 
 import com.climedar.medical_service_sv.adapter.GraphqlResolverAdapter;
+import com.climedar.medical_service_sv.dto.request.CreateMedicalDTO;
 import com.climedar.medical_service_sv.dto.request.PageRequestInput;
 import com.climedar.medical_service_sv.dto.request.SpecificationDTO;
 import com.climedar.medical_service_sv.dto.request.UpdateMedicalServiceDTO;
@@ -32,7 +33,7 @@ public class MedicalDataFetcher {
     }
 
     @DgsMutation
-    public MedicalServiceModel createMedicalService(@InputArgument MedicalServiceModel input) {
+    public MedicalServiceModel createMedicalService(@InputArgument CreateMedicalDTO input) {
         return graphqlAdapter.createMedicalService(input);
     }
 

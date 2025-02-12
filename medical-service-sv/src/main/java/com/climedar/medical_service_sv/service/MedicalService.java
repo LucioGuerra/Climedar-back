@@ -1,5 +1,6 @@
 package com.climedar.medical_service_sv.service;
 
+import com.climedar.medical_service_sv.dto.request.CreateMedicalDTO;
 import com.climedar.medical_service_sv.dto.request.UpdateMedicalServiceDTO;
 import com.climedar.medical_service_sv.entity.ServiceType;
 import com.climedar.medical_service_sv.external.model.Speciality;
@@ -48,9 +49,9 @@ public class MedicalService {
         return medicalServiceEntities.map(medicalServiceMapper::toModel);
     }
 
-    public MedicalServiceModel createMedicalService(MedicalServiceModel medicalServiceModel) {
+    public MedicalServiceModel createMedicalService(CreateMedicalDTO medicalServiceModel) {
         MedicalServiceEntity medicalServiceEntity = medicalServiceMapper.toEntity(medicalServiceModel);
-        Speciality speciality = specialityRepository.getSpecialityById(medicalServiceModel.getSpeciality().getId());
+        Speciality speciality = specialityRepository.getSpecialityById(medicalServiceModel.specialityId());
         medicalServiceEntity.setCode(generateCode(medicalServiceEntity.getServiceType().toString(), speciality.getName()));
         medicalServiceEntity = medicalServiceRepository.save(medicalServiceEntity);
 
