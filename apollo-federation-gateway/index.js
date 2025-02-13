@@ -2,6 +2,7 @@ import {Eureka} from 'eureka-js-client';
 import {ApolloGateway, IntrospectAndCompose, RemoteGraphQLDataSource} from '@apollo/gateway';
 import {ApolloServer} from 'apollo-server';
 
+const logger = console;
 
 const eurekaClient = new Eureka({
     instance: {
@@ -75,10 +76,12 @@ eurekaClient.start(async (error) => {
 
         // Configurar ApolloGateway con introspección automática
         const gateway = new ApolloGateway({
+            debug: true,
             supergraphSdl: new IntrospectAndCompose({
                 subgraphs: serviceList,
             }),
             buildService({name, url}) {
+                console.log(`🔎 Configurando servicio: ${name} -> ${url}`);
                 return new AuthenticatedDataSource({url});
             },
         });
@@ -93,12 +96,16 @@ eurekaClient.start(async (error) => {
                     res.removeHeader("Access-Control-Allow-Origin");
                 }
                 const token = req.headers.authorization || '';
+                logger.info(`📡 Request con token: ${token}`);
                 return {token};
             },
             plugins: [{
                 requestDidStart: async () => ({
+                    didEncounterErrors: async ({ errors }) => {
+                        logger.error(`❌ Error en la ejecución de GraphQL:`, errors);
+                    },
                     willSendResponse: async ({response}) => {
-                        // 🔥 Borra manualmente los encabezados antes de enviar la respuesta
+                        logger.info(`📨 Respuesta enviada:`, response);
                         if (response.http && response.http.headers) {
                             response.http.headers.delete("Access-Control-Allow-Origin");
                         }
