@@ -4,6 +4,8 @@ package com.climedar.payment_sv.external.model.medical_services;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import java.math.BigDecimal;
+
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = MedicalService.class, name = "service"),
@@ -13,7 +15,7 @@ public interface MedicalServices {
 
     Long getId();
 
-    Double getPrice();
+    BigDecimal getPrice();
 
     String getName();
 

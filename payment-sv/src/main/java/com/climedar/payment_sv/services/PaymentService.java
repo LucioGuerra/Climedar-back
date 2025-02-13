@@ -5,6 +5,8 @@ import com.climedar.payment_sv.entity.Payment;
 import com.climedar.payment_sv.event.internal.PaymentEvent;
 import com.climedar.payment_sv.external.model.Consultation;
 import com.climedar.payment_sv.external.model.Patient;
+import com.climedar.payment_sv.external.model.medical_services.MedicalPackage;
+import com.climedar.payment_sv.external.model.medical_services.MedicalService;
 import com.climedar.payment_sv.external.model.medical_services.MedicalServices;
 import com.climedar.payment_sv.mapper.PaymentMapper;
 import com.climedar.payment_sv.model.PaymentModel;
@@ -38,9 +40,20 @@ public class PaymentService {
 
     public ResponseEntity<byte[]> createPayment(CreatePaymentDTO paymentDTO) {
         Payment payment = paymentMapper.toEntity(paymentDTO);
+        /*Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
         paymentRepository.save(payment);
 
-        eventPublisher.publishEvent(new PaymentEvent(payment.getAmount(), payment.getPaymentDate()));
+        for (MedicalServices medicalService : consultation.getMedicalServices()) {
+            if (medicalService.getClass() == MedicalService.class) {
+                eventPublisher.publishEvent(new PaymentEvent(medicalService.getPrice(), payment.getPaymentDate(),
+                        ((MedicalService) medicalService).getServicesType(), ((MedicalService) medicalService).getSpeciality().getName()));
+            }else {
+                for (MedicalService medicalService1 : ((MedicalPackage) medicalService).getMedicalServices()) {
+                    eventPublisher.publishEvent(new PaymentEvent(medicalService1.getPrice(), payment.getPaymentDate(),
+                            medicalService1.getServicesType(), medicalService1.getSpeciality().getName()));
+                }
+            }
+        }*/
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
@@ -55,8 +68,20 @@ public class PaymentService {
     public ResponseEntity<Void> cancelPayment(Long paymentId) {
         Payment payment = paymentRepository.findByIdAndCanceled(paymentId, false)
                 .orElseThrow(() -> new EntityNotFoundException("Payment not found with id: " + paymentId));
+        Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
         payment.setCanceled(true);
-        eventPublisher.publishEvent(new PaymentEvent(payment.getAmount().negate(), payment.getPaymentDate()));
+
+        for (MedicalServices medicalService : consultation.getMedicalServices()) {
+            if (medicalService.getClass() == MedicalService.class) {
+                eventPublisher.publishEvent(new PaymentEvent(medicalService.getPrice().negate(), payment.getPaymentDate(),
+                        ((MedicalService) medicalService).getServicesType(), ((MedicalService) medicalService).getSpeciality().getName()));
+            }else {
+                for (MedicalService medicalService1 : ((MedicalPackage) medicalService).getMedicalServices()) {
+                    eventPublisher.publishEvent(new PaymentEvent(medicalService1.getPrice().negate(), payment.getPaymentDate(),
+                            medicalService1.getServicesType(), medicalService1.getSpeciality().getName()));
+                }
+            }
+        }
         return ResponseEntity.noContent().build();
     }
 
@@ -85,7 +110,7 @@ public class PaymentService {
         });
     }
 
-    public ResponseEntity<byte[]> getReceiptByPayment(Long paymentId) {
+   /* public ResponseEntity<byte[]> getReceiptByPayment(Long paymentId) {
         Payment payment = paymentRepository.findByIdAndCanceled(paymentId, false)
                 .orElseThrow(() -> new EntityNotFoundException("Payment not found with id: " + paymentId));
         HttpHeaders headers = new HttpHeaders();
@@ -95,7 +120,7 @@ public class PaymentService {
 
         Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
         Patient patient = consultation.getPatient();
-        MedicalServices medicalServices = consultation.getMedicalServices();
+        List<MedicalServices> medicalServices = consultation.getMedicalServices();
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(exportService.getReceiptPDF(payment,
                 patient, medicalServices));
     }
@@ -105,7 +130,7 @@ public class PaymentService {
                 .orElseThrow(() -> new EntityNotFoundException("Payment not found for consultation id: " + consultationId));
 
         return invoiceService.getInvoiceByPayment(payment.getId());
-    }
+    }*/
 
 
     public List<Payment> getPaymentsByDate(LocalDate date) {

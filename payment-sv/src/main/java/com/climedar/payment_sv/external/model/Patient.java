@@ -1,6 +1,7 @@
 package com.climedar.payment_sv.external.model;
 
 import lombok.Data;
+import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 
 @Data
 public class Patient {
@@ -10,6 +11,6 @@ public class Patient {
     private String dni;
     private String email;
     private String phone;
-    private String address;
+    private Address address;
 
 }

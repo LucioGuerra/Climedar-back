@@ -3,6 +3,7 @@ package com.climedar.medical_service_sv.service;
 import com.climedar.medical_service_sv.dto.response.MedicalServicesWrapped;
 import com.climedar.medical_service_sv.entity.MedicalPackageEntity;
 import com.climedar.medical_service_sv.entity.MedicalServiceEntity;
+import com.climedar.medical_service_sv.entity.ServiceType;
 import com.climedar.medical_service_sv.mapper.MedicalPackageMapper;
 import com.climedar.medical_service_sv.mapper.MedicalServiceMapper;
 import com.climedar.medical_service_sv.repository.MedicalPackageRepository;
@@ -60,5 +61,9 @@ public class MedicalServicesService {
         }
 
         return new ArrayList<>(wrappedMap.values());
+    }
+
+    public Set<ServiceType> getAllServicesType() {
+        return new HashSet<>(Arrays.asList(ServiceType.values()));
     }
 }

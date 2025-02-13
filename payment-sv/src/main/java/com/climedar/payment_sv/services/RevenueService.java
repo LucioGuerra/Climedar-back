@@ -9,6 +9,7 @@ import com.climedar.payment_sv.repository.RevenueRepository;
 import com.climedar.payment_sv.repository.SpecialityRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -104,7 +105,7 @@ public class RevenueService {
         revenueRepository.saveAll(monthlyRevenues);
     }
 
-    @PostConstruct
+    @Scheduled(initialDelay = 10000, fixedDelay = Long.MAX_VALUE)
     public void createInitialAmount(){
         List<Revenue> dailyRevenues = revenueRepository.findByDateAndRevenueType(LocalDate.now(), RevenueType.DAILY);
         List<Revenue> monthlyRevenues = revenueRepository.findByDateAndRevenueType(LocalDate.now().withDayOfMonth(1),

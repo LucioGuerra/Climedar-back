@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -37,8 +38,9 @@ public class PersonService {
     public ResponseEntity<GetPersonDTO> createPerson(CreatePersonDTO createPersonDTO) {
         Person person = personMapper.toEntity(createPersonDTO);
 
-        person.setAddress(addressService.createAddress(createPersonDTO.address()));
+        person.setAddress(addressService.createAddress(createPersonDTO.getAddress()));
 
+        person.setBirthdate(LocalDate.now());
         personRepository.save(person);
         return ResponseEntity.status(HttpStatus.CREATED).body(personMapper.toDTO(person));
     }

@@ -5,10 +5,11 @@ import com.climedar.payment_sv.services.PaymentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/api/public/payments")
 public class PaymentController {
 
