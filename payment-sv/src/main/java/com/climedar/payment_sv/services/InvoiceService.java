@@ -11,13 +11,10 @@ import com.climedar.payment_sv.repository.MedicalServicesRepository;
 import com.climedar.payment_sv.repository.PatientRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @AllArgsConstructor
 @Service
@@ -26,7 +23,7 @@ public class InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final PatientRepository patientRepository;
     private final ConsultationRepository consultationRepository;
-    private final JasperReportService jasperReportService;
+    private final ExportService exportService;
     private final MedicalServicesRepository medicalServicesRepository;
 
 
@@ -51,7 +48,7 @@ public class InvoiceService {
         invoice.setPayment(payment);
 
         invoiceRepository.save(invoice);
-        return jasperReportService.getInvoicePDF(invoice, patient, medicalServices);
+        return exportService.getInvoicePDF(invoice, patient, medicalServices);
     }
 
 
@@ -65,6 +62,6 @@ public class InvoiceService {
         headers.setContentDisposition(ContentDisposition.builder("inline")
                 .filename("invoice_" + invoice.getPayment().getId() + ".pdf").build());
 
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(jasperReportService.getInvoicePDF(invoice, patient, medicalServices));
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(exportService.getInvoicePDF(invoice, patient, medicalServices));
     }
 }

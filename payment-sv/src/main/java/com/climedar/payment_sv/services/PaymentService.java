@@ -33,7 +33,7 @@ public class PaymentService {
     private final InvoiceService invoiceService;
     private final PaymentMapper paymentMapper;
     private final ApplicationEventPublisher eventPublisher;
-    private final JasperReportService jasperReportService;
+    private final ExportService exportService;
     private final ConsultationRepository consultationRepository;
 
     public ResponseEntity<byte[]> createPayment(CreatePaymentDTO paymentDTO) {
@@ -96,7 +96,7 @@ public class PaymentService {
         Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
         Patient patient = consultation.getPatient();
         MedicalServices medicalServices = consultation.getMedicalServices();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(jasperReportService.getReceiptPDF(payment,
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(exportService.getReceiptPDF(payment,
                 patient, medicalServices));
     }
 

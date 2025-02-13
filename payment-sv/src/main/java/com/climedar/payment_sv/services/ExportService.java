@@ -3,7 +3,6 @@ package com.climedar.payment_sv.services;
 import com.climedar.payment_sv.entity.Invoice;
 import com.climedar.payment_sv.entity.Payment;
 import com.climedar.payment_sv.external.model.Patient;
-import com.climedar.payment_sv.external.model.medical_services.MedicalService;
 import com.climedar.payment_sv.external.model.medical_services.MedicalServices;
 import lombok.SneakyThrows;
 import net.sf.jasperreports.engine.*;
@@ -11,11 +10,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
-public class JasperReportService {
+public class ExportService {
 
 
     @SneakyThrows
