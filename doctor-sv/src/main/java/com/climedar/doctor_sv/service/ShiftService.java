@@ -115,7 +115,8 @@ public class ShiftService {
     private static Specification<Shift> getShiftSpecification(ShiftSpecificationDTO shiftSpecificationDTO) {
         return Specification.where(ShiftSpecification.byDeleted(false))
                 .and(ShiftSpecification.byDate(shiftSpecificationDTO.getDate(), shiftSpecificationDTO.getFromDate(), shiftSpecificationDTO.getToDate()))
-                .and(ShiftSpecification.byTime(shiftSpecificationDTO.getFromTime(), shiftSpecificationDTO.getToTime()))
+                .and(ShiftSpecification.byTime(shiftSpecificationDTO.getFromTime(),
+                                shiftSpecificationDTO.getToTime()))
                 .and(ShiftSpecification.byStartTime(shiftSpecificationDTO.getStartTime()))
                 .and(ShiftSpecification.byEndTime(shiftSpecificationDTO.getEndTime()))
                 .and(ShiftSpecification.byPatients(shiftSpecificationDTO.getPatients()))
@@ -125,7 +126,7 @@ public class ShiftService {
     }
 
 
-    public Set<LocalDate> getDatesWithShifts(LocalDate fromDate, LocalDate toDate, Long doctorId) {
+    public Set<LocalDate> getDatesWithShifts(String fromDate, String toDate, Long doctorId) {
         Specification<Shift> specification = Specification.where(ShiftSpecification.byDeleted(false))
                 .and(ShiftSpecification.byDate(null, fromDate, toDate))
                 .and(ShiftSpecification.byDoctorId(doctorId));

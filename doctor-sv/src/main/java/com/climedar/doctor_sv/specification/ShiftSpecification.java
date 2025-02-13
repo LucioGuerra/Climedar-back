@@ -18,45 +18,49 @@ import java.time.LocalTime;
 
 public class ShiftSpecification {
 
-    public static Specification<Shift> byDate(LocalDate date, LocalDate fromDate, LocalDate toDate) {
+    public static Specification<Shift> byDate(String date, String fromDate, String toDate) {
         return (root, query, cb) -> {
             Predicate predicate = cb.conjunction();
 
-            if (date != null) {
-                predicate = cb.and(predicate, cb.equal(root.get("date"), date));
+            if (date != null && !date.isEmpty()) {
+                predicate = cb.and(predicate, cb.equal(root.get("date"), LocalDate.parse(date)));
             }
-            if (fromDate != null) {
-                predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("date"), fromDate));
+            if (fromDate != null && !fromDate.isEmpty()) {
+                predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("date"), LocalDate.parse(fromDate)));
             }
-            if (toDate != null) {
-                predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("date"), toDate));
+            if (toDate != null && !toDate.isEmpty()) {
+                predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("date"), LocalDate.parse(toDate)));
             }
 
             return predicate;
         };
     }
 
-    public static Specification<Shift> byTime(LocalTime fromTime, LocalTime toTime) {
+    public static Specification<Shift> byTime(String fromTime, String toTime) {
         return (root, query, cb) -> {
             Predicate predicate = cb.conjunction();
 
-            if (fromTime != null) {
-                predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("startTime"), fromTime));
+            if (fromTime != null && !fromTime.isEmpty()) {
+                predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("startTime"),
+                        LocalTime.parse(fromTime)));
             }
-            if (toTime != null) {
-                predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("endTime"), toTime));
+            if (toTime != null && !toTime.isEmpty()) {
+                predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("endTime"), LocalTime.parse(toTime)));
             }
 
             return predicate;
         };
     }
 
-    public static Specification<Shift> byStartTime(LocalTime startTime) {
-        return (root, query, cb) -> startTime == null? cb.conjunction(): cb.equal(root.get("startTime"), startTime);
+    public static Specification<Shift> byStartTime(String startTime) {
+        return (root, query, cb) -> startTime == null || startTime.isEmpty() ? cb.conjunction(): cb.equal(root.get(
+                "startTime"),
+                LocalTime.parse(startTime));
     }
 
-    public static Specification<Shift> byEndTime(LocalTime endTime) {
-        return (root, query, cb) -> endTime == null? cb.conjunction(): cb.equal(root.get("endTime"), endTime);
+    public static Specification<Shift> byEndTime(String endTime) {
+        return (root, query, cb) -> endTime == null || endTime.isEmpty() ? cb.conjunction(): cb.equal(root.get("endTime"),
+                LocalTime.parse(endTime));
     }
 
     public static Specification<Shift> byPatients(Integer patients) {

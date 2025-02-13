@@ -37,7 +37,7 @@ public class ShiftDataFetcher {
     @DgsQuery
     public Set<LocalDate> getDatesWithShifts(@InputArgument String fromDate,
                                              @InputArgument String toDate, @InputArgument Long doctorId) {
-        return shiftAdapter.getDatesWithShifts(LocalDate.parse(fromDate), LocalDate.parse(toDate), doctorId);
+        return shiftAdapter.getDatesWithShifts(fromDate, toDate, doctorId);
     }
 
     @DgsMutation

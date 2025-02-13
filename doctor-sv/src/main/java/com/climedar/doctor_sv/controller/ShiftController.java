@@ -28,7 +28,7 @@ public class ShiftController {
 
     @GetMapping
     public ResponseEntity<Page<ShiftModel>> getAllShifts(@RequestParam(required = false) Long doctorId,
-                                                         @RequestParam(required = false) LocalDate date,
+                                                         @RequestParam(required = false) String date,
                                                          @PageableDefault(size = 50) Pageable pageable) {
         return ResponseEntity.status(200).body(shiftService.getAllShifts(pageable, new ShiftSpecificationDTO(doctorId, date)));
     }
