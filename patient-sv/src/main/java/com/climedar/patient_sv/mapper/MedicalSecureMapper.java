@@ -9,9 +9,10 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface MedicalSecureMapper {
 
-    MedicalSecure toEntity(MedicalSecureModel doctorModel);
+    MedicalSecure toEntity(MedicalSecureModel medicalSecureModel);
 
-    MedicalSecureModel toModel(MedicalSecure patient);
+    MedicalSecureModel toModel(MedicalSecure medicalSecure);
 
-    void updateEntity(@MappingTarget MedicalSecure patient, MedicalSecureModel patientModel);
+    @Mapping(target = "id", ignore = true)
+    void updateEntity(@MappingTarget MedicalSecure medicalSecure, MedicalSecureModel medicalSecureModel);
 }
