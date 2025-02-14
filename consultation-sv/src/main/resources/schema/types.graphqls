@@ -3,7 +3,7 @@ type ConsultationModel @key(fields: "id") {
     date: String!
     startTime: String!
     description: String!
-    medicalServicesModel: MedicalServicesModel!
+    medicalServicesModel: [MedicalServicesModel]!
     finalPrice: Float!
     observation: String
     doctor: DoctorModel!

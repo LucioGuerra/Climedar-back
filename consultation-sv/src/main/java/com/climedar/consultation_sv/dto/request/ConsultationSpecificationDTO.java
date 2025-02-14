@@ -4,11 +4,12 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 public class ConsultationSpecificationDTO{
     private Long patientId;
-    private Long medicalServiceId;
+    private List<String> medicalServiceCodes;
     private Long doctorId;
     private String description;
     private String observation;

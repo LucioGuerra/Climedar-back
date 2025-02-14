@@ -29,6 +29,15 @@ public class Address {
     @Column(length = 5)
     private String apartment;
 
+    @Column(length = 50)
+    private String city;
+
+    @Column(length = 50)
+    private String province;
+
+    @Column(length = 10)
+    private String postalCode;
+
     private boolean deleted;
 
     public Address() {

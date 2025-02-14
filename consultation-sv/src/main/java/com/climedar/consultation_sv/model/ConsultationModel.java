@@ -8,6 +8,7 @@ import lombok.Data;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 public class ConsultationModel {
@@ -20,5 +21,5 @@ public class ConsultationModel {
     private String observation;
     private Doctor doctor;
     private Patient patient;
-    private MedicalServicesModel medicalServicesModel;
+    private List<MedicalServicesModel> medicalServicesModel;
 }

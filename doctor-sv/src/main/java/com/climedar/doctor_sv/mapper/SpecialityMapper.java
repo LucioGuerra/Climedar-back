@@ -14,5 +14,6 @@ public interface SpecialityMapper {
     @Mapping(target = "id", ignore = true)
     Speciality toEntity(SpecialityModel specialityModel);
 
+    @Mapping(target = "id", ignore = true)
     void updateEntity(@MappingTarget Speciality speciality, SpecialityModel specialityModel);
 }

@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 
 @Data
 public class Person {
@@ -28,7 +30,7 @@ public class Person {
     private String phone;
 
     @PastOrPresent(message = "Birthdate must be in the past or present")
-    private String birthdate;
+    private LocalDate birthdate;
 
     @Valid
     private Address address;
@@ -41,7 +43,7 @@ public class Person {
     }
 
     public Person(String name, String surname, String dni, String email,
-                  String phone, String birthdate, Address address, Gender gender) {
+                  String phone, LocalDate birthdate, Address address, Gender gender) {
         this.name = name;
         this.surname = surname;
         this.dni = dni;

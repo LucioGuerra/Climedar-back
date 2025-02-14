@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+    <title>Factura</title>
+    <style>
+
+        @page  {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: "Roboto Light", sans-serif;
+            font-size: 15px;
+            color: black;
+        }
+
+
+        p{
+            margin: 0;
+            padding: 0;
+        }
+
+        h1{
+            margin: 0;
+            padding: 0;
+        }
+
+        h3{
+            margin: 0;
+            padding: 0;
+        }
+
+        .invoice-box{
+            width: 100%;
+            height: 100%;
+            margin: 20px;
+            border: 3px solid black;
+            background-color: #fff;
+            box-sizing: border-box;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header{
+            width: 100%;
+            height: 200px;
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+
+        }
+
+        .header img{
+            width: 200px;
+            height: auto;
+        }
+
+        .header .invoice-data{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            margin-right: 20px;
+
+        }
+
+        .header .climedar-data{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            margin-left: 20px;
+        }
+
+        .header .climedar-cuit{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            margin-right: 20px;
+        }
+
+
+        .patient-data{
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            width: 100%;
+            height: 75px;
+        }
+
+        .patient-data .patient-address{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            margin-left: 20px;
+            width: 100%;
+            height: 100px;
+        }
+
+        .patient-data .patient-dni{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            margin-right: 20px;
+            width: 100%;
+            height: 100px;
+
+        }
+
+
+        .payment-data{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            margin-left: 40px;
+            width: 100%;
+            height: 50px;
+        }
+
+        .services-data{
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 700px;
+        }
+
+        .services-data p{
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+
+        .services-data .services-table{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 800px;
+            padding-top: 15px;
+        }
+
+        table{
+            border-collapse: collapse;
+            width: 95%;
+        }
+
+        thead{
+            font-weight: bold;
+            border-bottom: black 1px solid;
+        }
+
+        .services-table th,
+        .services-table td {
+            padding: 5px;
+            text-align: left;
+        }
+
+        .services-table th {
+            padding-bottom: 10px;
+        }
+
+
+        .col-first {
+            width: 25%;
+        }
+
+        .col-second {
+            width: 62%;
+        }
+
+        .col-last {
+            width: 20%;
+        }
+
+        thead .col-last {
+            text-align: center;
+        }
+
+        tbody .col-last {
+            text-align: center;
+        }
+
+        .total{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-end;
+            margin-right: 20px;
+            width: 100%;
+            height: 50px;
+        }
+
+        .total h1{
+            margin-left: 20px;
+        }
+
+
+        .divider{
+            width: 100%;
+            height: 1px;
+            background-color: black;
+        }
+
+    </style>
+</head>
+<body>
+<div class="invoice-box">
+    <div class="header">
+        <img src="E:\Hackacode\Climedar-back\payment-sv\src\main\resources\templates\climedar-negro.png"/>
+
+        <div class="invoice-data">
+            <h1>Factura</h1>
+            <p th:text="|Nro factura: 0001-${invoiceNumber}|">Nro factura: 0001-99999999</p>
+            <p th:text="|Fecha: ${date}|">Fecha: 10-10-2025</p>
+        </div>
+
+        <div class="climedar-data">
+            <p><b>Climedar</b></p>
+            <p>LA PLATA</p>
+            <p>IVA RESPONSABLE INSCRIPTO</p>
+        </div>
+
+        <div class="climedar-cuit">
+            <p>CUIT: 99-99999999-9</p>
+            <p>IIBB: 999999999</p>
+        </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="patient-data">
+        <div class="patient-address">
+            <p th:text="|Paciente: ${patientName}|">Patient: John Doe</p>
+            <p th:text="|Direccion: ${patientAddress}|">Direccion: 123 Main st</p>
+            <p th:text="|Localidad: ${patientProvince}|">Localidad: La Plata</p>
+        </div>
+        <div class="patient-dni">
+            <p th:text="|DNI: ${patientDni}|">DNI: 12345678</p>
+            <p th:text="|Telefono: ${patientPhone}|">Telefono: 1234 214299</p>
+            <p th:text="|Email: ${patientEmail}|">Email: ejemplo@ejemplo.com</p>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="payment-data">
+        <h3 th:text="|METODO DE PAGO: ${paymentMethod}|">METODO DE PAGO: Efectivo</h3>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="services-data">
+        <p>Servicios: </p>
+
+        <div class="services-table">
+            <table>
+                <thead>
+                <tr>
+                    <th class="col-first">Codigo</th>
+                    <th class="col-second">Nombre</th>
+                    <th class="col-last">Precio</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="service : ${services}">
+                    <td class="col-first" th:text="|${service.code}|">MS-THER-CAR-00001</td>
+                    <td class="col-second" th:text="|${service.name}|">Consulta Ginecologica</td>
+                    <td class="col-last" th:text="|'$' ${service.price}|">$ 5000000</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="total">
+        <h1 th:text="|TOTAL: '$'${finalPrice}|">TOTAL: $5000000</h1>
+    </div>
+</div>
+</body>
+</html>

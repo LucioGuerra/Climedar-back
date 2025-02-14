@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -35,11 +36,9 @@ public class Consultation {
     @Column(name = "patient_id", nullable = false)
     private Long patientId;
 
-    @Column(name = "medical_service_id", nullable = false)
-    private Long medicalServicesId;
-
+    @ElementCollection
     @Column(name = "medical_service_code", nullable = false)
-    private String medicalServicesCode;
+    private List<String> medicalServicesCode;
 
     @Column(nullable = false)
     private Boolean paid;

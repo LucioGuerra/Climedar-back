@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Quita DOCTYPE y schemaLocation para evitar problemas de resolución
+   Ni iReport ni Jaspersoft Studio son necesarios
+-->
+<jasperReport name="PruebaMinimal"
+              pageWidth="595"
+              pageHeight="842"
+              columnWidth="555"
+              leftMargin="20"
+              rightMargin="20"
+              topMargin="20"
+              bottomMargin="20">
+    <detail>
+        <band height="50">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="20"/>
+                <textElement/>
+                <text><![CDATA[Hola Mundo Minimal]]></text>
+            </staticText>
+        </band>
+    </detail>
+</jasperReport>

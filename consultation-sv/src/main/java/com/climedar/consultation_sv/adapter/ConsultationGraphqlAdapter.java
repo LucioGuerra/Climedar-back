@@ -48,7 +48,7 @@ public class ConsultationGraphqlAdapter {
                 consultationSpecificationDTO.getPatientId(), consultationSpecificationDTO.getDoctorId(),
                 consultationSpecificationDTO.getDate(), consultationSpecificationDTO.getStartTime(),
                 consultationSpecificationDTO.getFromTime(), consultationSpecificationDTO.getToTime(),
-                consultationSpecificationDTO.getMedicalServiceId(), consultationSpecificationDTO.getDescription(),
+                consultationSpecificationDTO.getMedicalServiceCodes(), consultationSpecificationDTO.getDescription(),
                 consultationSpecificationDTO.getObservation());
 
         ConsultationPage consultationPage = new ConsultationPage();
