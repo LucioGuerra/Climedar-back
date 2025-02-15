@@ -14,12 +14,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Set;
+
 @AllArgsConstructor
 @Component
 public class ConsultationGraphqlAdapter {
 
     private final ConsultationService consultationService;
     private final PageInfoMapper pageInfoMapper;
+
+    public Float getConsultationPrice(Set<Long> servicesIds, Long patientId) {
+        return consultationService.getConsultationPrice(servicesIds, patientId);
+    }
 
     public ConsultationModel getConsultationById(Long id) {
         return consultationService.getConsultationById(id);

@@ -40,6 +40,13 @@ public class ConsultationService {
     private final PatientRepository patientRepository;
     private final MedicalServicesRepository medicalServicesRepository;
 
+    public Float getConsultationPrice(Set<Long> servicesIds, Long patientId) {
+        Patient patient = patientRepository.findById(patientId);
+        List<MedicalServicesWrapped> medicalServicesWrappeds = medicalServicesRepository.findAllById(servicesIds);
+        List<MedicalServicesModel> medicalServicesModels = medicalServicesWrappeds.stream().map(MedicalServicesWrapped::getMedicalServices).toList();
+        return calculateFinalPrice(medicalServicesModels, patient).floatValue();
+    }
+
     public ConsultationModel getConsultationById(Long id) {
         Consultation consultation = consultationRepository.findByIdAndNotDeleted(id).orElseThrow(() -> new EntityNotFoundException("Consultation not found with id: " + id));
         Shift shift = shiftRepository.findById(consultation.getShiftId());
@@ -150,7 +157,7 @@ public class ConsultationService {
     }
 
     private Double calculateFinalPrice(List<MedicalServicesModel> medicalServicesModel, Patient patient) {
-        if (patient.getMedicalSecure() == null) {
+        if (patient == null || patient.getMedicalSecure() == null) {
             return medicalServicesModel.stream().mapToDouble(MedicalServicesModel::getPrice).sum();
         }
         return medicalServicesModel.stream().mapToDouble(MedicalServicesModel::getPrice).sum() * 0.80;
