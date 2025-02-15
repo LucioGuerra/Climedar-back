@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
+import org.thymeleaf.context.Context;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -77,9 +78,6 @@ public class InvoiceService {
                 new MedicalService( "MS-THER-CAR-00001", new BigDecimal("600000000000"), "Kamon")
         ));
         invoiceData.put("paymentMethod", "CREDIT_CARD");
-
-
-
 
         return exportService.getInvoicePDF(invoiceData);
     }

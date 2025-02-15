@@ -1,23 +1,145 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-   Quita DOCTYPE y schemaLocation para evitar problemas de resolución
-   Ni iReport ni Jaspersoft Studio son necesarios
--->
-<jasperReport name="PruebaMinimal"
-              pageWidth="595"
-              pageHeight="842"
-              columnWidth="555"
-              leftMargin="20"
-              rightMargin="20"
-              topMargin="20"
-              bottomMargin="20">
-    <detail>
-        <band height="50">
+<!-- Archivo JRXML generado a partir de la plantilla HTML -->
+<jasperReport
+        xmlns="http://jasperreports.sourceforge.net/jasperreports"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+        name="Factura" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="12345678-1234-1234-1234-123456789012">
+
+    <!-- Parámetros generales -->
+    <parameter name="invoiceNumber" class="java.lang.String"/>
+    <parameter name="date" class="java.util.Date"/>
+    <parameter name="patientName" class="java.lang.String"/>
+    <parameter name="patientAddress" class="java.lang.String"/>
+    <parameter name="patientProvince" class="java.lang.String"/>
+    <parameter name="patientDni" class="java.lang.String"/>
+    <parameter name="patientPhone" class="java.lang.String"/>
+    <parameter name="patientEmail" class="java.lang.String"/>
+    <parameter name="paymentMethod" class="java.lang.String"/>
+    <parameter name="finalPrice" class="java.math.BigDecimal"/>
+
+    <!-- Fuente de datos para la tabla de servicios -->
+    <field name="code" class="java.lang.String"/>
+    <field name="name" class="java.lang.String"/>
+    <field name="price" class="java.math.BigDecimal"/>
+
+    <!-- Título: contiene el logo y datos de factura y Climedar -->
+    <title>
+        <band height="150">
+            <!-- Logo (ajusta la ruta y dimensiones según corresponda) -->
+            <image scaleImage="RetainShape">
+                <reportElement x="20" y="0" width="150" height="70"/>
+                <imageExpression><![CDATA["climedar-negro.png"]]></imageExpression>
+            </image>
+
+            <!-- Datos de la factura -->
             <staticText>
-                <reportElement x="0" y="0" width="555" height="20"/>
-                <textElement/>
-                <text><![CDATA[Hola Mundo Minimal]]></text>
+                <reportElement x="400" y="0" width="150" height="20"/>
+                <text><![CDATA[Factura]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="400" y="25" width="150" height="20"/>
+                <textFieldExpression><![CDATA["Nro factura: 0001-" + $P{invoiceNumber}]]></textFieldExpression>
+            </textField>
+            <textField pattern="dd-MM-yyyy">
+                <reportElement x="400" y="50" width="150" height="20"/>
+                <textFieldExpression><![CDATA[$P{date}]]></textFieldExpression>
+            </textField>
+
+            <!-- Datos de Climedar -->
+            <staticText>
+                <reportElement x="20" y="80" width="200" height="15"/>
+                <text><![CDATA[Climedar]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="20" y="95" width="200" height="15"/>
+                <text><![CDATA[LA PLATA]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="20" y="110" width="200" height="15"/>
+                <text><![CDATA[IVA RESPONSABLE INSCRIPTO]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="220" y="80" width="150" height="15"/>
+                <text><![CDATA[CUIT: 99-99999999-9]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="220" y="95" width="150" height="15"/>
+                <text><![CDATA[IIBB: 999999999]]></text>
             </staticText>
         </band>
+    </title>
+
+    <!-- Encabezado de página: Datos del paciente -->
+    <pageHeader>
+        <band height="80">
+            <!-- Datos del paciente (alineados a la izquierda) -->
+            <textField>
+                <reportElement x="20" y="0" width="250" height="15"/>
+                <textFieldExpression><![CDATA["Paciente: " + $P{patientName}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="20" y="20" width="250" height="15"/>
+                <textFieldExpression><![CDATA["Dirección: " + $P{patientAddress}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="20" y="40" width="250" height="15"/>
+                <textFieldExpression><![CDATA["Localidad: " + $P{patientProvince}]]></textFieldExpression>
+            </textField>
+            <!-- Datos del paciente (alineados a la derecha) -->
+            <textField>
+                <reportElement x="300" y="0" width="250" height="15"/>
+                <textFieldExpression><![CDATA["DNI: " + $P{patientDni}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="300" y="20" width="250" height="15"/>
+                <textFieldExpression><![CDATA["Teléfono: " + $P{patientPhone}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="300" y="40" width="250" height="15"/>
+                <textFieldExpression><![CDATA["Email: " + $P{patientEmail}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageHeader>
+
+    <!-- Banda de detalles: Muestra la tabla de servicios -->
+    <detail>
+        <band height="20">
+            <!-- Columna Código -->
+            <textField>
+                <reportElement x="20" y="0" width="100" height="20" mode="Opaque">
+                    <printWhenExpression><![CDATA[$V{REPORT_COUNT} == 1]]></printWhenExpression>
+                </reportElement>
+                <!-- Se puede usar en el primer registro para mostrar el encabezado si se desea -->
+                <textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+            </textField>
+            <!-- Columna Nombre -->
+            <textField>
+                <reportElement x="130" y="0" width="250" height="20"/>
+                <textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+            </textField>
+            <!-- Columna Precio -->
+            <textField pattern="$ #,##0.00">
+                <reportElement x="390" y="0" width="100" height="20"/>
+                <textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+            </textField>
+        </band>
     </detail>
+
+    <!-- Resumen: muestra el método de pago y total -->
+    <summary>
+        <band height="80">
+            <!-- Método de pago -->
+            <textField>
+                <reportElement x="20" y="0" width="300" height="20"/>
+                <textFieldExpression><![CDATA["METODO DE PAGO: " + $P{paymentMethod}]]></textFieldExpression>
+            </textField>
+            <!-- Total -->
+            <textField pattern="$ #,##0.00">
+                <reportElement x="300" y="40" width="190" height="30"/>
+                <textFieldExpression><![CDATA["TOTAL: " + $P{finalPrice}]]></textFieldExpression>
+            </textField>
+        </band>
+    </summary>
+
 </jasperReport>
