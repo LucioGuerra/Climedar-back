@@ -4,6 +4,7 @@ type Mutation{
     deleteMedicalService(id: ID!): Boolean!
 
     createMedicalPackage(input: MedicalPackageInput): MedicalPackageModel!
+    updateMedicalPackage(id: ID!, input: UpdateMedicalPackageInput!): MedicalPackageModel!
     addServiceToMedicalPackage(id: ID!, serviceId: ID!): MedicalPackageModel!
     removeServiceFromMedicalPackage(id: ID!, serviceId: ID!): MedicalPackageModel!
     deleteMedicalPackage(id: ID!): Boolean!

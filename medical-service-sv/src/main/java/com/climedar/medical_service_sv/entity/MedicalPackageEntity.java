@@ -24,6 +24,9 @@ public class MedicalPackageEntity extends MedicalServicesEntity {
     @Column(nullable = false)
     private String name;
 
+    @Column(name = "speciality_id", nullable = false, updatable = false)
+    private Long specialityId;
+
     @ManyToMany
     private Set<MedicalServiceEntity> services;
 

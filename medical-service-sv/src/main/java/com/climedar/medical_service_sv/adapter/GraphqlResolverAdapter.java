@@ -53,6 +53,10 @@ public class GraphqlResolverAdapter {
         return packageService.removeServiceFromPackage(id, serviceId);
     }
 
+    public MedicalPackageModel updatePackage(Long id, UpdatePackageDTO input) {
+        return packageService.updatePackage(id, input);
+    }
+
 
     public MedicalServicePage getAllMedicalServices(PageRequestInput input, SpecificationDTO specificationDTO) {
         Pageable pageable = PageRequest.of(input.getPage()-1, input.getSize(), input.getSort());

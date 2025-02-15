@@ -6,6 +6,7 @@ import java.util.Set;
 
 public record CreatePackageDTO(
         String name,
-        Set<Long> servicesIds
+        Set<Long> servicesIds,
+        Long specialityId
 ) {
 }
