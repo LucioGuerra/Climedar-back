@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -83,6 +84,8 @@ public class MedicalService {
                 .ifPresent(medicalServiceEntity::setPrice);
         Optional.ofNullable(medicalServiceModel.description())
                 .ifPresent(medicalServiceEntity::setDescription);
+        Optional.ofNullable(medicalServiceModel.estimatedDuration())
+                .ifPresent(duration -> medicalServiceEntity.setEstimatedDuration(Duration.parse(duration)));
     }
 
     public MedicalServiceEntity getMedicalServiceEntityById(Long id) {
