@@ -1,5 +1,6 @@
 package com.climedar.medical_service_sv.model;
 
+import com.climedar.medical_service_sv.external.model.Speciality;
 import lombok.Data;
 
 import java.time.Duration;
@@ -13,6 +14,7 @@ public class MedicalPackageModel implements MedicalServicesModel {
     private Duration estimatedDuration;
     private Set<MedicalServiceModel> services;
     private Double price;
+    private Speciality speciality;
 
     public MedicalPackageModel(Long id) {
         this.id = id;
