@@ -99,6 +99,9 @@ public class ConsultationService {
         Shift shift;
         if (createConsultationDTO.shiftId() != null) {
             shift = shiftRepository.findById(createConsultationDTO.shiftId());
+            if (shift.getState() == ShiftState.OCCUPIED) {
+                throw new ClimedarException("SHIFT_IS_OCCUPIED", "Shift is already occupied");
+            }
         } else {
             Duration duration = Duration.ZERO;
             for (MedicalServicesModel medicalServicesModel : medicalServicesModels) {
@@ -106,15 +109,14 @@ public class ConsultationService {
             }
             shift = shiftRepository.createShift(createConsultationDTO.doctorId(), duration);
         }
-        if (shift.getState() == ShiftState.OCCUPIED) {
-            throw new ClimedarException("SHIFT_IS_OCCUPIED", "Shift is already occupied");
-        }
+
 
         Patient patient = patientRepository.findById(createConsultationDTO.patientId());
 
         List<String> medicalServicesCodes = medicalServicesModels.stream().map(MedicalServicesModel::getCode).toList();
 
-        Consultation consultation = consultationMapper.toEntity(createConsultationDTO, shift);
+        Consultation consultation = consultationMapper.toEntity(createConsultationDTO);
+        consultation.setShiftId(shift.getId());
         consultation.setMedicalServicesCode(medicalServicesCodes);
         consultation.setFinalPrice(calculateFinalPrice(medicalServicesModels, patient));
         consultationRepository.save(consultation);

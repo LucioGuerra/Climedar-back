@@ -31,7 +31,6 @@ public class OvertimeShiftBuilder {
         this.shift.setDate(LocalDate.now());
         this.shift.setStartTime(LocalTime.now());
         this.shift.setEndTime(LocalTime.now().plus(timeOfShifts));
-        this.shift.setState(ShiftState.OCCUPIED);
         this.shift.setDoctor(doctor);
 
         return this.shift;
