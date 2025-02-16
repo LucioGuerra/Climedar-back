@@ -67,27 +67,23 @@ public class ShiftService {
     }
 
     @Transactional
-    public Integer createShift(CreateShiftDTO shiftDTO) {
+    public List<ShiftModel> createShift(CreateShiftDTO shiftDTO) {
         Doctor doctor = doctorService.getDoctorEntityById(shiftDTO.getDoctorId());
-        List<Shift> shift = new ArrayList<>();
-        int createdShifts = 0;
+        List<Shift> shifts = new ArrayList<>();
 
 
         if (shiftDTO.getShiftBuilder().equals(ShiftBuilder.RECURRING)) {
-            shift = shiftDirector.constructRecurringMultipleShifts(shiftDTO, doctor);
-            createdShifts = shift.size();
+            shifts = shiftDirector.constructRecurringMultipleShifts(shiftDTO, doctor);
         }
         if (shiftDTO.getShiftBuilder().equals(ShiftBuilder.REGULAR)) {
-            shift = shiftDirector.constructMultipleShifts(shiftDTO, doctor);
-            createdShifts++;
+            shifts = shiftDirector.constructMultipleShifts(shiftDTO, doctor);
         }
         if (shiftDTO.getShiftBuilder().equals(ShiftBuilder.OVERTIME)) {
-            shift = List.of(shiftDirector.constructOvertimeShift(shiftDTO, doctor));
-            createdShifts++;
+            shifts = List.of(shiftDirector.constructOvertimeShift(shiftDTO, doctor));
         }
 
-        shiftRepository.saveAll(shift);
-        return createdShifts;
+        shiftRepository.saveAll(shifts);
+        return shifts.stream().map(shiftMapper::toModel).toList();
     }
 
 

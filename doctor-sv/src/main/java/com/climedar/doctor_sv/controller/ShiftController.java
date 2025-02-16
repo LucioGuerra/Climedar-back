@@ -42,9 +42,9 @@ public class ShiftController {
     }
 
     @PostMapping
-    public ResponseEntity<Integer> createShift(@RequestParam Long doctorId, @RequestParam Duration timeOfShifts) {
+    public ResponseEntity<ShiftModel> createShift(@RequestParam Long doctorId, @RequestParam Duration timeOfShifts) {
         return ResponseEntity.status(201).body(shiftService.createShift(new CreateShiftDTO(doctorId, timeOfShifts,
-                ShiftBuilder.OVERTIME)));
+                ShiftBuilder.OVERTIME)).get(0));
     }
 
     @PostMapping("/{id}/occupy")

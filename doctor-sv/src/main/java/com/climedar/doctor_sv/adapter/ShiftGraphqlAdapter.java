@@ -27,7 +27,7 @@ public class ShiftGraphqlAdapter {
     private final PageInfoMapper pageInfoMapper;
 
     public Integer createShift(CreateShiftDTO shift) {
-        return shiftService.createShift(shift);
+        return shiftService.createShift(shift).size();
     }
 
     public ShiftModel getShiftById(Long id) {
