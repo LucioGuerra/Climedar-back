@@ -29,6 +29,7 @@ public class CreateShiftDTO {
     @NotNull(message = "Doctor id is required")
     private Long doctorId;
 
-
     private RecurringShiftDTO recurringShift;
+
+    private ShiftBuilder shiftBuilder;
 }

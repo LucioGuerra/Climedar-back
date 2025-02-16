@@ -51,4 +51,11 @@ public class ShiftDirector {
                 .doctor(doctor)
                 .build();
     }
+
+    public Shift constructOvertimeShift(CreateShiftDTO shiftDTO, Doctor doctor) {
+        return Shift.overtimeShiftBuilder()
+                .doctor(doctor)
+                .duration(shiftDTO.getTimeOfShifts())
+                .build();
+    }
 }

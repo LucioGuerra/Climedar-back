@@ -3,6 +3,7 @@ package com.climedar.doctor_sv.service;
 import com.climedar.doctor_sv.builder.shift.ShiftDirector;
 import com.climedar.doctor_sv.dto.request.CreateShiftDTO;
 import com.climedar.doctor_sv.dto.request.RecurringShiftDTO;
+import com.climedar.doctor_sv.dto.request.ShiftBuilder;
 import com.climedar.doctor_sv.dto.request.specification.ShiftSpecificationDTO;
 import com.climedar.doctor_sv.entity.Doctor;
 import com.climedar.doctor_sv.entity.Shift;
@@ -26,10 +27,7 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -71,16 +69,20 @@ public class ShiftService {
     @Transactional
     public Integer createShift(CreateShiftDTO shiftDTO) {
         Doctor doctor = doctorService.getDoctorEntityById(shiftDTO.getDoctorId());
-        List<Shift> shift;
+        List<Shift> shift = new ArrayList<>();
         int createdShifts = 0;
 
 
-        if (shiftDTO.getRecurringShift() != null) {
+        if (shiftDTO.getShiftBuilder().equals(ShiftBuilder.RECURRING)) {
             shift = shiftDirector.constructRecurringMultipleShifts(shiftDTO, doctor);
             createdShifts = shift.size();
         }
-        else {
+        if (shiftDTO.getShiftBuilder().equals(ShiftBuilder.REGULAR)) {
             shift = shiftDirector.constructMultipleShifts(shiftDTO, doctor);
+            createdShifts++;
+        }
+        if (shiftDTO.getShiftBuilder().equals(ShiftBuilder.OVERTIME)) {
+            shift = List.of(shiftDirector.constructOvertimeShift(shiftDTO, doctor));
             createdShifts++;
         }
 
@@ -88,6 +90,8 @@ public class ShiftService {
         return createdShifts;
     }
 
+
+    @Transactional
     public ShiftModel updateShift(Long id, ShiftModel shiftModel, ShiftSpecificationDTO shiftSpecificationDTO) {
 
         Specification<Shift> specification = getShiftSpecification(shiftSpecificationDTO);
@@ -105,6 +109,7 @@ public class ShiftService {
         return shiftMapper.toModel(shifts.get(0));
     }
 
+    @Transactional
     public Boolean deleteShift(Long id) {
         Shift shift = shiftRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + id));
         shift.setDeleted(true);
