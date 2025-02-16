@@ -39,6 +39,8 @@ public interface ConsultationMapper {
     @Mapping(target = "id", ignore = true)
     Consultation toEntity(CreateConsultationDTO createConsultationDTO, Shift shift);
 
+    Consultation toOvertimeEntity(CreateConsultationDTO createConsultationDTO, Shift shift);
+
 
     default Doctor getDoctor(Shift shift) {
         return new Doctor(shift.getDoctor().getId());

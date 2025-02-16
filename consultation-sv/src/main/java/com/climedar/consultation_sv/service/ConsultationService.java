@@ -1,6 +1,7 @@
 package com.climedar.consultation_sv.service;
 
 import com.climedar.consultation_sv.dto.request.CreateConsultationDTO;
+import com.climedar.consultation_sv.dto.request.CreateOvertimeConsultationDTO;
 import com.climedar.consultation_sv.dto.request.MedicalServicesWrapped;
 import com.climedar.consultation_sv.dto.request.UpdateConsultationDTO;
 import com.climedar.consultation_sv.entity.Consultation;
@@ -102,6 +103,26 @@ public class ConsultationService {
         List<String> medicalServicesCodes = medicalServicesModels.stream().map(MedicalServicesModel::getCode).toList();
 
         Consultation consultation = consultationMapper.toEntity(createConsultationDTO, shift);
+        consultation.setMedicalServicesCode(medicalServicesCodes);
+        consultation.setFinalPrice(calculateFinalPrice(medicalServicesModels, patient));
+        consultationRepository.save(consultation);
+
+        shiftRepository.occupyShift(shift.getId());
+        return consultationMapper.toModel(consultation, shift);
+    }
+
+    @Transactional
+    public ConsultationModel createOvertimeConsultation(CreateOvertimeConsultationDTO createConsultationDTO) {
+
+        Shift shift = shiftRepository.createOvertimeShift(createConsultationDTO.shift());
+        Patient patient = patientRepository.findById(createConsultationDTO.patientId());
+        List<MedicalServicesWrapped> medicalServicesWrappeds =
+                medicalServicesRepository.findAllById(createConsultationDTO.medicalServicesId());
+
+        List<MedicalServicesModel> medicalServicesModels = medicalServicesWrappeds.stream().map(MedicalServicesWrapped::getMedicalServices).toList();
+        List<String> medicalServicesCodes = medicalServicesModels.stream().map(MedicalServicesModel::getCode).toList();
+
+        Consultation consultation = consultationMapper.toOvertimerEntity(createConsultationDTO, shift);
         consultation.setMedicalServicesCode(medicalServicesCodes);
         consultation.setFinalPrice(calculateFinalPrice(medicalServicesModels, patient));
         consultationRepository.save(consultation);
