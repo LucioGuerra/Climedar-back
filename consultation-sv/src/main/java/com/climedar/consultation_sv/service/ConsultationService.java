@@ -111,6 +111,15 @@ public class ConsultationService {
         }
 
 
+        for (MedicalServicesModel medicalServicesModel : medicalServicesModels) {
+            if (!shift.getDoctor().getSpeciality().getId().equals(medicalServicesModel.getSpeciality().getId())) {
+                throw new ClimedarException("DOCTOR_DOESNT_PROVIDE_THESE_SERVICES", "Doctor speciality and medical " +
+                        "service " +
+                        "speciality " +
+                        "doesn't match");
+            }
+        }
+
         Patient patient = patientRepository.findById(createConsultationDTO.patientId());
 
         List<String> medicalServicesCodes = medicalServicesModels.stream().map(MedicalServicesModel::getCode).toList();
