@@ -1,5 +1,6 @@
 package com.climedar.doctor_sv.controller;
 
+import com.climedar.doctor_sv.dto.request.CreateShiftDTO;
 import com.climedar.doctor_sv.dto.request.specification.ShiftSpecificationDTO;
 import com.climedar.doctor_sv.model.ShiftModel;
 import com.climedar.doctor_sv.service.ShiftService;
@@ -33,6 +34,12 @@ public class ShiftController {
         return ResponseEntity.status(200).body(shiftService.getAllShifts(pageable, new ShiftSpecificationDTO(doctorId, date)));
     }
 
+    @PostMapping
+    public ResponseEntity<Integer> createShift(@RequestBody CreateShiftDTO createShiftDTO) {
+        return ResponseEntity.status(201).body(shiftService.createShift(createShiftDTO));
+    }
+
+
     @GetMapping("/ids")
     public ResponseEntity<List<ShiftModel>> findAllById(@RequestParam Set<Long> ids) {
         return ResponseEntity.status(200).body(shiftService.findAllById(ids));
@@ -49,4 +56,5 @@ public class ShiftController {
         shiftService.clearShift(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 }

@@ -15,10 +15,8 @@ public class CreateShiftDTO {
     //@FutureOrPresent(message = "Date must be in the future or present")
     private String date;
 
-    @NotNull(message = "Start time is required")
     private String startTime;
 
-    @NotNull(message = "End time is required")
     private String endTime;
 
     @NotNull(message = "Time of shifts is required")

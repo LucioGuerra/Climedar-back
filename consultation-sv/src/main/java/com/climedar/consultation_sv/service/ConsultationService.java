@@ -90,7 +90,12 @@ public class ConsultationService {
 
     @Transactional
     public ConsultationModel createConsultation(CreateConsultationDTO createConsultationDTO) {
-        Shift shift = shiftRepository.findById(createConsultationDTO.shiftId());
+        Shift shift;
+        if (createConsultationDTO.shiftId() != null) {
+            shift = shiftRepository.findById(createConsultationDTO.shiftId());
+        } else {
+            shift = shiftRepository.createShift(createConsultationDTO.shift());
+        }
         if (shift.getState() == ShiftState.OCCUPIED) {
             throw new ClimedarException("SHIFT_IS_OCCUPIED", "Shift is already occupied");
         }
