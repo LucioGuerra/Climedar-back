@@ -6,6 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +29,6 @@ public interface ShiftRepository {
     @PostMapping("/api/public/shifts/{id}/clear")
     void clearShift(@PathVariable Long id);
 
-    @PostMapping("/api/public/shifts/overtime")
-    Shift createOvertimeShift(@RequestBody CreateOvertimeShiftDTO createOvertimeShiftDTO);
+    @PostMapping("/api/public/shifts")
+    Shift createShift(@RequestParam Long doctorId, @RequestParam Duration timeOfShifts);
 }

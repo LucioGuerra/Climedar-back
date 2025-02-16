@@ -1,10 +1,9 @@
 package com.climedar.consultation_sv.dto.request;
 
+import java.time.Duration;
+
 public record CreateOvertimeShiftDTO(
         Long doctorId,
-        String date,
-        String startTime,
-        String endTime,
-        String place
+        Duration timeOfShifts
 ) {
 }

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -34,15 +35,14 @@ public class ShiftController {
         return ResponseEntity.status(200).body(shiftService.getAllShifts(pageable, new ShiftSpecificationDTO(doctorId, date)));
     }
 
-    @PostMapping
-    public ResponseEntity<Integer> createShift(@RequestBody CreateShiftDTO createShiftDTO) {
-        return ResponseEntity.status(201).body(shiftService.createShift(createShiftDTO));
-    }
-
-
     @GetMapping("/ids")
     public ResponseEntity<List<ShiftModel>> findAllById(@RequestParam Set<Long> ids) {
         return ResponseEntity.status(200).body(shiftService.findAllById(ids));
+    }
+
+    @PostMapping
+    public ResponseEntity<Integer> createShift(@RequestParam Long doctorId, @RequestParam Duration timeOfShifts) {
+        return ResponseEntity.status(201).body(shiftService.createShift(new CreateShiftDTO(doctorId, timeOfShifts)));
     }
 
     @PostMapping("/{id}/occupy")

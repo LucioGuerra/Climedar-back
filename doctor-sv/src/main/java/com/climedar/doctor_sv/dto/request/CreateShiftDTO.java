@@ -30,4 +30,10 @@ public class CreateShiftDTO {
     private RecurringShiftDTO recurringShift;
 
     private ShiftBuilder shiftBuilder;
+
+
+    public CreateShiftDTO(Long doctorId, Duration timeOfShifts) {
+        this.doctorId = doctorId;
+        this.timeOfShifts = timeOfShifts.toString();
+    }
 }
