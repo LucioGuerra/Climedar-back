@@ -1,9 +1,10 @@
 input ConsultationInput{
     patientId: ID!
-    shiftId: ID!
+    shiftId: ID
     description: String
     observation: String
     medicalServicesId: [ID]!
+    doctorId: ID
 }
 
 input UpdateConsultationInput{

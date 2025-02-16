@@ -1,6 +1,7 @@
 package com.climedar.doctor_sv.controller;
 
 import com.climedar.doctor_sv.dto.request.CreateShiftDTO;
+import com.climedar.doctor_sv.dto.request.ShiftBuilder;
 import com.climedar.doctor_sv.dto.request.specification.ShiftSpecificationDTO;
 import com.climedar.doctor_sv.model.ShiftModel;
 import com.climedar.doctor_sv.service.ShiftService;
@@ -42,7 +43,8 @@ public class ShiftController {
 
     @PostMapping
     public ResponseEntity<Integer> createShift(@RequestParam Long doctorId, @RequestParam Duration timeOfShifts) {
-        return ResponseEntity.status(201).body(shiftService.createShift(new CreateShiftDTO(doctorId, timeOfShifts)));
+        return ResponseEntity.status(201).body(shiftService.createShift(new CreateShiftDTO(doctorId, timeOfShifts,
+                ShiftBuilder.OVERTIME)));
     }
 
     @PostMapping("/{id}/occupy")
