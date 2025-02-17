@@ -31,6 +31,9 @@ public class CreateShiftDTO {
 
     private ShiftBuilder shiftBuilder;
 
+    public CreateShiftDTO() {
+    }
+
 
     public CreateShiftDTO(Long doctorId, Duration timeOfShifts, ShiftBuilder shiftBuilder) {
         this.doctorId = doctorId;
