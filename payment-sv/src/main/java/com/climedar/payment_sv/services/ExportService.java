@@ -36,9 +36,8 @@ public class ExportService {
         ITextRenderer renderer = new ITextRenderer();
 
 
-        String cssPath =
-                new ClassPathResource("/static/css/invoice_style.css").getURL().toExternalForm();
-        renderer.setDocumentFromString(html, cssPath);
+        String baseUrl = new ClassPathResource("/static/").getURL().toExternalForm();
+        renderer.setDocumentFromString(html, baseUrl);
         renderer.layout();
         renderer.createPDF(baos, false);
         renderer.finishPDF();
