@@ -29,6 +29,13 @@ input ShiftInput {
     place: String
     doctorId: ID!
     recurringShift: RecurringShiftInput
+    shiftBuilder: ShiftBuilderInput
+}
+
+enum ShiftBuilderInput {
+    REGULAR,
+    RECURRING,
+    OVERTIME
 }
 
 input RecurringShiftInput {
