@@ -3,6 +3,7 @@ package com.climedar.doctor_sv.mapper;
 import com.climedar.doctor_sv.entity.Doctor;
 import com.climedar.doctor_sv.external.model.Person;
 import com.climedar.doctor_sv.model.DoctorModel;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -20,5 +21,6 @@ public interface DoctorMapper {
 
     @Mapping(target = "personId", ignore = true)
     @Mapping(target = "speciality", source = "doctorModel.speciality")
+    @BeanMapping(nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.IGNORE)
     void updateEntity(@MappingTarget Doctor doctor, DoctorModel doctorModel);
 }
