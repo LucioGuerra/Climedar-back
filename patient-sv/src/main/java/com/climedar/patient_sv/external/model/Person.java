@@ -30,7 +30,7 @@ public class Person {
     private String phone;
 
     @PastOrPresent(message = "Birthdate must be in the past or present")
-    private LocalDate birthdate;
+    private String birthdate;
 
     @Valid
     private Address address;
@@ -43,7 +43,7 @@ public class Person {
     }
 
     public Person(String name, String surname, String dni, String email,
-                  String phone, LocalDate birthdate, Address address, Gender gender) {
+                  String phone, String birthdate, Address address, Gender gender) {
         this.name = name;
         this.surname = surname;
         this.dni = dni;

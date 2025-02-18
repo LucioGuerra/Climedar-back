@@ -11,14 +11,14 @@ import java.time.LocalTime;
 @Data
 public class ShiftSpecificationDTO {
     private Long doctorId;
-    private LocalDate date;
-    private LocalDate fromDate;
-    private LocalDate toDate;
+    private String date;
+    private String fromDate;
+    private String toDate;
     private String place;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private LocalTime fromTime;
-    private LocalTime toTime;
+    private String startTime;
+    private String endTime;
+    private String fromTime;
+    private String toTime;
 
     @Positive(message = "Patients must be positive")
     private Integer patients;
@@ -29,7 +29,7 @@ public class ShiftSpecificationDTO {
         if (fromDate == null || toDate == null) {
             return true;
         }
-        return fromDate.isBefore(toDate);
+        return LocalDate.parse(fromDate).isBefore(LocalDate.parse(toDate));
     }
 
     @AssertTrue(message = "Start time must be before end time")
@@ -37,13 +37,13 @@ public class ShiftSpecificationDTO {
         if (startTime == null || endTime == null) {
             return true;
         }
-        return startTime.isBefore(endTime);
+        return LocalTime.parse(startTime).isBefore(LocalTime.parse(endTime));
     }
 
     public ShiftSpecificationDTO() {
     }
 
-    public ShiftSpecificationDTO(Long doctorId, LocalDate date) {
+    public ShiftSpecificationDTO(Long doctorId, String date) {
         this.doctorId = doctorId;
         this.date = date;
     }

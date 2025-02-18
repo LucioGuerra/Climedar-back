@@ -1,3 +1,7 @@
+@page  {
+    size: A4;
+    margin: 5mm;
+}
 
 body {
     padding: 0;
@@ -7,148 +11,142 @@ body {
     color: black;
 }
 
-
-p{
+p {
     margin: 0;
     padding: 0;
 }
 
-h1{
+h1 {
     margin: 0;
     padding: 0;
 }
 
-h3{
+h3 {
     margin: 0;
     padding: 0;
 }
 
-.invoice-box{
-    width: 210mm;
-    min-height: 297mm;
-    margin: 20px;
+/* Contenedor principal */
+.invoice-box {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    padding: 20px;
+    margin: 20px auto;
     border: 3px solid black;
     background-color: #fff;
     box-sizing: border-box;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
-.header{
+/* Encabezado */
+.header {
     width: 100%;
-    height: 200px;
-
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-
+    height: 180px;
 }
 
-.header img{
+.header-1row,
+.header-2row {
+    width: 100%;
+    overflow: hidden;
+}
+
+.header-2row {
+    display: table;
+    height: 80px;
+    margin-top: 35px;
+}
+
+.header-2row > div {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+/* Primera fila: imagen e información de factura */
+.header-1row img {
+    float: left;
     width: 200px;
     height: auto;
-}
-
-.header .invoice-data{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-    margin-right: 20px;
-
-}
-
-.header .climedar-data{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    margin-left: 20px;
-}
-
-.header .climedar-cuit{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-    margin-right: 20px;
-}
-
-
-.patient-data{
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    margin-bottom: 20px;
-    width: 100%;
-    height: 75px;
-}
-
-.patient-data .patient-address{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    margin-left: 20px;
-    width: 100%;
-    height: 100px;
-}
-
-.patient-data .patient-dni{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-    margin-right: 20px;
-    width: 100%;
-    height: 100px;
-
-}
-
-
-.payment-data{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    margin-left: 40px;
-    width: 100%;
-    height: 50px;
-}
-
-.services-data{
-    display: flex;
-    flex-direction: column;
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 700px;
 }
 
-.services-data p{
+.header-1row .invoice-data {
+    float: right;
+    text-align: right;
+}
+
+/* Segunda fila: datos Climedar */
+.header-2row .climedar-data {
     margin-top: 20px;
-    margin-left: 20px;
+    float: left;
+    text-align: left;
+    width: 30%;
 }
 
-.services-data .services-table{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    height: 800px;
+.header-2row .climedar-cuit {
+    float: right;
+    text-align: right;
+    margin-top: 20px;
+    width: 30%;
+}
+
+.divider {
+    width: 100%;
+    height: 1px;
+    background-color: black;
+    clear: both;
+}
+
+/* Datos del paciente */
+.patient-data {
+    width: 100%;
+    overflow: hidden;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.patient-address {
+    float: left;
+    width: 20%;
+}
+
+.patient-dni {
+    float: right;
+    width: 20%;
+    text-align: right;
+}
+
+/* Datos de pago */
+.payment-data {
+    width: 100%;
+    height: 50px;
+    line-height: 50px; /* Para centrar verticalmente */
+}
+
+/* Servicios */
+.services-data {
+    margin: 20px 0 0 0 ;
+    padding: 0;
+    width: 100%;
+    height: 620px;
+}
+
+.services-data p {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+}
+
+.services-table {
     padding-top: 15px;
+    text-align: center;
 }
 
-table{
+.services-table table {
     border-collapse: collapse;
     width: 95%;
-}
-
-thead{
-    font-weight: bold;
-    border-bottom: black 1px solid;
+    margin: 0 auto;
 }
 
 .services-table th,
@@ -159,46 +157,33 @@ thead{
 
 .services-table th {
     padding-bottom: 10px;
+    font-weight: bold;
+    border-bottom: 1px solid black;
 }
 
-
-.col-first {
+.services-table .col-first {
     width: 25%;
 }
 
-.col-second {
+.services-table .col-second {
     width: 62%;
 }
 
-.col-last {
+.services-table .col-last {
     width: 20%;
-}
-
-thead .col-last {
     text-align: center;
 }
 
-tbody .col-last {
-    text-align: center;
+/* Total */
+.total {
+    text-align: right;
+    line-height: 50px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
 }
 
-.total{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    margin-right: 20px;
-    width: 100%;
-    height: 50px;
-}
-
-.total h1{
+.total h1 {
+    display: inline-block;
     margin-left: 20px;
-}
-
-
-.divider{
-    width: 100%;
-    height: 1px;
-    background-color: black;
 }

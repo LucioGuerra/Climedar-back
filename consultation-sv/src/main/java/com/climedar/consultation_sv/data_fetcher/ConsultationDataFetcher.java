@@ -14,7 +14,9 @@ import com.netflix.graphql.dgs.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @AllArgsConstructor
@@ -22,6 +24,11 @@ import java.util.Map;
 public class ConsultationDataFetcher {
 
     private final ConsultationGraphqlAdapter consultationAdapter;
+
+    @DgsQuery
+    public Float getConsultationPrice(@InputArgument Set<Long> servicesIds, @InputArgument Long patientId) {
+        return consultationAdapter.getConsultationPrice(servicesIds, patientId);
+    }
 
     @DgsQuery
     public ConsultationPage getAllConsultations(@InputArgument PageRequestInput pageRequest,

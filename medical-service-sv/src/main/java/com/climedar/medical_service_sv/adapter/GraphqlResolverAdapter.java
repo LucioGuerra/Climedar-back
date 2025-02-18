@@ -1,12 +1,8 @@
 package com.climedar.medical_service_sv.adapter;
 
-import com.climedar.medical_service_sv.dto.request.CreatePackageDTO;
-import com.climedar.medical_service_sv.dto.request.PageRequestInput;
-import com.climedar.medical_service_sv.dto.request.SpecificationDTO;
-import com.climedar.medical_service_sv.dto.request.UpdateMedicalServiceDTO;
+import com.climedar.medical_service_sv.dto.request.*;
 import com.climedar.medical_service_sv.dto.response.MedicalPackagePage;
 import com.climedar.medical_service_sv.dto.response.MedicalServicePage;
-import com.climedar.medical_service_sv.entity.MedicalPackageEntity;
 import com.climedar.medical_service_sv.mapper.PageInfoMapper;
 import com.climedar.medical_service_sv.model.MedicalPackageModel;
 import com.climedar.medical_service_sv.model.MedicalServiceModel;
@@ -57,6 +53,10 @@ public class GraphqlResolverAdapter {
         return packageService.removeServiceFromPackage(id, serviceId);
     }
 
+    public MedicalPackageModel updatePackage(Long id, UpdatePackageDTO input) {
+        return packageService.updatePackage(id, input);
+    }
+
 
     public MedicalServicePage getAllMedicalServices(PageRequestInput input, SpecificationDTO specificationDTO) {
         Pageable pageable = PageRequest.of(input.getPage()-1, input.getSize(), input.getSort());
@@ -77,7 +77,7 @@ public class GraphqlResolverAdapter {
         return medicalService.getMedicalServiceById(id);
     }
 
-    public MedicalServiceModel createMedicalService(MedicalServiceModel input) {
+    public MedicalServiceModel createMedicalService(CreateMedicalDTO input) {
         return medicalService.createMedicalService(input);
     }
 

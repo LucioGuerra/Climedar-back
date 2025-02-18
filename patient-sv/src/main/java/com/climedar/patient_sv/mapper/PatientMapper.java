@@ -13,9 +13,10 @@ public interface PatientMapper {
     Patient toEntity(PatientModel doctorModel);
 
     @Mapping(target = "personId", expression = "java(person.getPersonId())")
+    @Mapping(target = "medicalSecure" , source = "patient.medicalSecure")
     @Mapping(target = "deleted", ignore = true)
     PatientModel toModel(Patient patient, Person person);
 
     @Mapping(target = "personId", ignore = true)
-    void updateEntity(@MappingTarget Patient patient, PatientModel doctorModel);
+    void updateEntity(@MappingTarget Patient patient, PatientModel patientModel);
 }

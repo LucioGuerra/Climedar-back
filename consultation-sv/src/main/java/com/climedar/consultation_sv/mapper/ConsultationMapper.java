@@ -37,7 +37,8 @@ public interface ConsultationMapper {
     @Mapping(target = "medicalServicesCode", ignore = true)
     @Mapping(target = "finalPrice", ignore = true)
     @Mapping(target = "id", ignore = true)
-    Consultation toEntity(CreateConsultationDTO createConsultationDTO, Shift shift);
+    Consultation toEntity(CreateConsultationDTO createConsultationDTO);
+
 
 
     default Doctor getDoctor(Shift shift) {

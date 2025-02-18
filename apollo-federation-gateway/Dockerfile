@@ -1,4 +1,4 @@
-FROM node:14
+FROM oven/bun:latest
 
 WORKDIR /app
 

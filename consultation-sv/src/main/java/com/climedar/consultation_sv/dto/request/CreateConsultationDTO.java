@@ -8,6 +8,7 @@ public record CreateConsultationDTO(
         Set<Long> medicalServicesId,
         String description,
         String observation,
-        Long shiftId
+        Long shiftId,
+        Long doctorId
 ) {
 }

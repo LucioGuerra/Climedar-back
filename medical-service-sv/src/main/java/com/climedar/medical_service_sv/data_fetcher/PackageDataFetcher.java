@@ -3,6 +3,7 @@ package com.climedar.medical_service_sv.data_fetcher;
 import com.climedar.medical_service_sv.adapter.GraphqlResolverAdapter;
 import com.climedar.medical_service_sv.dto.request.CreatePackageDTO;
 import com.climedar.medical_service_sv.dto.request.PageRequestInput;
+import com.climedar.medical_service_sv.dto.request.UpdatePackageDTO;
 import com.climedar.medical_service_sv.dto.response.MedicalPackagePage;
 import com.climedar.medical_service_sv.model.MedicalPackageModel;
 import com.netflix.graphql.dgs.*;
@@ -46,6 +47,11 @@ public class PackageDataFetcher {
     @DgsMutation
     public MedicalPackageModel removeServiceFromMedicalPackage(@InputArgument Long id, @InputArgument Long serviceId) {
         return graphqlAdapter.removeServiceFromPackage(id, serviceId);
+    }
+
+    @DgsMutation
+    public MedicalPackageModel updateMedicalPackage(@InputArgument Long id, @InputArgument UpdatePackageDTO input) {
+        return graphqlAdapter.updatePackage(id, input);
     }
 
     @DgsEntityFetcher(name = "MedicalPackageModel")

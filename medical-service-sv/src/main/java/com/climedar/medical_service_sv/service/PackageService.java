@@ -2,11 +2,14 @@ package com.climedar.medical_service_sv.service;
 
 import com.climedar.library.exception.ClimedarException;
 import com.climedar.medical_service_sv.dto.request.CreatePackageDTO;
+import com.climedar.medical_service_sv.dto.request.UpdatePackageDTO;
 import com.climedar.medical_service_sv.entity.MedicalPackageEntity;
 import com.climedar.medical_service_sv.entity.MedicalServiceEntity;
+import com.climedar.medical_service_sv.external.model.Speciality;
 import com.climedar.medical_service_sv.mapper.MedicalPackageMapper;
 import com.climedar.medical_service_sv.model.MedicalPackageModel;
 import com.climedar.medical_service_sv.repository.MedicalPackageRepository;
+import com.climedar.medical_service_sv.repository.SpecialityRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -29,6 +32,7 @@ public class PackageService {
     private final MedicalPackageRepository medicalPackageRepository;
     private final MedicalPackageMapper medicalPackageMapper;
     private final MedicalService medicalService;
+    private final SpecialityRepository specialityRepository;
 
     public MedicalPackageModel getPackageById(Long id) {
         MedicalPackageEntity medicalPackageEntity = medicalPackageRepository.findById(id).orElseThrow(() -> new RuntimeException("Package not found with id: " + id));
@@ -46,11 +50,18 @@ public class PackageService {
     public MedicalPackageModel createPackage(CreatePackageDTO createPackageDTO) {
         MedicalPackageEntity medicalPackageEntity = new MedicalPackageEntity();
         medicalPackageEntity.setName(createPackageDTO.name());
+        medicalPackageEntity.setSpecialityId(createPackageDTO.specialityId());
+        Speciality speciality = specialityRepository.getSpecialityById(createPackageDTO.specialityId());
+
         for (Long serviceId : createPackageDTO.servicesIds()) {
             MedicalServiceEntity medicalServiceEntity = medicalService.getMedicalServiceEntityById(serviceId);
+            if (medicalServiceEntity.getSpecialityId().equals(createPackageDTO.specialityId())) {
+                throw new ClimedarException("SERVICE_SPECIALITY_MISMATCH", "Service speciality does not match package speciality");
+            }
             medicalPackageEntity.addService(medicalServiceEntity);
         }
-        medicalPackageEntity.setCode(this.generateCode(medicalPackageEntity.getServices()));
+
+        medicalPackageEntity.setCode(this.generateCode(speciality));
         medicalPackageEntity = medicalPackageRepository.save(medicalPackageEntity);
         return medicalPackageMapper.toModel(medicalPackageEntity);
     }
@@ -62,6 +73,29 @@ public class PackageService {
         medicalPackageEntity.setDeleted(true);
         medicalPackageRepository.save(medicalPackageEntity);
         return true;
+    }
+
+    //todo: Poder agregare una funcion fallback para agregar los que son de la especialidad
+    @Transactional
+    public MedicalPackageModel updatePackage(Long id, UpdatePackageDTO packageDTO) {
+        MedicalPackageEntity medicalPackageEntity = medicalPackageRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Package not found with id: " + id));
+        if (packageDTO.name() != null) {
+            medicalPackageEntity.setName(packageDTO.name());
+        }
+        if (!packageDTO.servicesIds().isEmpty()) {
+            medicalPackageEntity.getServices().clear();
+            for (Long serviceId : packageDTO.servicesIds()) {
+                MedicalServiceEntity medicalServiceEntity = medicalService.getMedicalServiceEntityById(serviceId);
+                if (medicalServiceEntity.getSpecialityId().equals(medicalPackageEntity.getSpecialityId())) {
+                    throw new ClimedarException("SERVICE_SPECIALITY_MISMATCH", "Service speciality does not match package speciality");
+                }
+                medicalPackageEntity.addService(medicalServiceEntity);
+            }
+        }
+
+        medicalPackageRepository.save(medicalPackageEntity);
+
+        return medicalPackageMapper.toModel(medicalPackageEntity);
     }
 
     @Transactional
@@ -101,22 +135,21 @@ public class PackageService {
         }
     }
 
-    private String generateCode(Set<MedicalServiceEntity> services) {
+    private String generateCode(Speciality specialityModel) {
         String date = new SimpleDateFormat("yyyy").format(new Date());
 
-        StringBuilder initialServices = new StringBuilder();
-        for (MedicalServiceEntity service : services) {
-            String initial = service.getServiceType().toString().substring(0, 2).toUpperCase();
-            initialServices.append(initial).append("-");
-        }
 
-        if (!initialServices.isEmpty()) {
-            initialServices.setLength(initialServices.length() - 1);
+        String specialityName = specialityModel.getName().toUpperCase();
+        String speciality;
+        if(specialityName.length() >= 3){
+            speciality = specialityName.substring(0, 3);
+        }else {
+            speciality = String.format("%-3s", specialityModel).replace(' ', 'X');
         }
 
         Long count = medicalPackageRepository.count();
         String number = String.format("%05d", count);
-        return String.format("MP-%s-%s-%s", date, initialServices, number);
+        return String.format("MP-%s-%s-%s", date, speciality, number);
     }
 
     public Boolean checkIfPackageExists(Long id) {

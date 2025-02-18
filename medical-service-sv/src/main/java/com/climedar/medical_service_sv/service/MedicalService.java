@@ -1,5 +1,6 @@
 package com.climedar.medical_service_sv.service;
 
+import com.climedar.medical_service_sv.dto.request.CreateMedicalDTO;
 import com.climedar.medical_service_sv.dto.request.UpdateMedicalServiceDTO;
 import com.climedar.medical_service_sv.entity.ServiceType;
 import com.climedar.medical_service_sv.external.model.Speciality;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -48,9 +50,9 @@ public class MedicalService {
         return medicalServiceEntities.map(medicalServiceMapper::toModel);
     }
 
-    public MedicalServiceModel createMedicalService(MedicalServiceModel medicalServiceModel) {
+    public MedicalServiceModel createMedicalService(CreateMedicalDTO medicalServiceModel) {
         MedicalServiceEntity medicalServiceEntity = medicalServiceMapper.toEntity(medicalServiceModel);
-        Speciality speciality = specialityRepository.getSpecialityById(medicalServiceModel.getSpeciality().getId());
+        Speciality speciality = specialityRepository.getSpecialityById(medicalServiceModel.specialityId());
         medicalServiceEntity.setCode(generateCode(medicalServiceEntity.getServiceType().toString(), speciality.getName()));
         medicalServiceEntity = medicalServiceRepository.save(medicalServiceEntity);
 
@@ -82,6 +84,8 @@ public class MedicalService {
                 .ifPresent(medicalServiceEntity::setPrice);
         Optional.ofNullable(medicalServiceModel.description())
                 .ifPresent(medicalServiceEntity::setDescription);
+        Optional.ofNullable(medicalServiceModel.estimatedDuration())
+                .ifPresent(duration -> medicalServiceEntity.setEstimatedDuration(Duration.parse(duration)));
     }
 
     public MedicalServiceEntity getMedicalServiceEntityById(Long id) {

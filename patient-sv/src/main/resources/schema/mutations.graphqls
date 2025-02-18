@@ -2,4 +2,8 @@ type Mutation {
     createPatient(patient: PatientInput!): PatientModel!
     updatePatient(id: ID!, patient: UpdatePatientInput!): PatientModel!
     deletePatient(id: ID!): Boolean!
+
+    createMedicalSecure(medicalSecure: MedicalSecureInput!): MedicalSecureModel!
+    updateMedicalSecure(id: ID!, medicalSecure: MedicalSecureInput!): MedicalSecureModel!
+    deleteMedicalSecure(id: ID!): Boolean!
 }

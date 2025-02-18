@@ -6,7 +6,9 @@ import com.climedar.doctor_sv.entity.Shift;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -17,17 +19,17 @@ public class ShiftDirector {
     public List<Shift> constructRecurringMultipleShifts(CreateShiftDTO shiftDTO, Doctor doctor) {
         List<Shift> shifts = new ArrayList<>();
 
-        LocalDate endDate = shiftDTO.getRecurringShift().getEndDate();
-        LocalDate currentDate = shiftDTO.getRecurringShift().getStartDate();
+        LocalDate endDate = LocalDate.parse(shiftDTO.getRecurringShift().getEndDate());
+        LocalDate currentDate = LocalDate.parse(shiftDTO.getRecurringShift().getStartDate());
         Set<DayOfWeek> validDays = shiftDTO.getRecurringShift().getValidDays();
 
         while (currentDate.isBefore(endDate)) {
             if (validDays.contains(currentDate.getDayOfWeek())) {
                 List<Shift> recurringShifts = Shift.multipleShiftBuilder()
                         .date(currentDate)
-                        .startTime(shiftDTO.getStartTime())
-                        .endTime(shiftDTO.getEndTime())
-                        .timeOfShifts(shiftDTO.getTimeOfShifts())
+                        .startTime(LocalTime.parse(shiftDTO.getStartTime()))
+                        .endTime(LocalTime.parse(shiftDTO.getEndTime()))
+                        .timeOfShifts(Duration.parse(shiftDTO.getTimeOfShifts()))
                         .place(shiftDTO.getPlace())
                         .doctor(doctor)
                         .build();
@@ -41,12 +43,19 @@ public class ShiftDirector {
 
     public List<Shift> constructMultipleShifts(CreateShiftDTO shiftDTO, Doctor doctor) {
         return Shift.multipleShiftBuilder()
-                .date(shiftDTO.getDate())
-                .startTime(shiftDTO.getStartTime())
-                .endTime(shiftDTO.getEndTime())
-                .timeOfShifts(shiftDTO.getTimeOfShifts())
+                .date(LocalDate.parse(shiftDTO.getDate()))
+                .startTime(LocalTime.parse(shiftDTO.getStartTime()))
+                .endTime(LocalTime.parse(shiftDTO.getEndTime()))
+                .timeOfShifts(Duration.parse(shiftDTO.getTimeOfShifts()))
                 .place(shiftDTO.getPlace())
                 .doctor(doctor)
+                .build();
+    }
+
+    public Shift constructOvertimeShift(CreateShiftDTO shiftDTO, Doctor doctor) {
+        return Shift.overtimeShiftBuilder()
+                .doctor(doctor)
+                .duration(shiftDTO.getTimeOfShifts())
                 .build();
     }
 }

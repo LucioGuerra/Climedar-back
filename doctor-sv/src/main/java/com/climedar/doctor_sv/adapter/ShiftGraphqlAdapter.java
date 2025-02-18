@@ -26,8 +26,8 @@ public class ShiftGraphqlAdapter {
     private final ShiftService shiftService;
     private final PageInfoMapper pageInfoMapper;
 
-    public ShiftModel createShift(CreateShiftDTO shift) {
-        return shiftService.createShift(shift);
+    public Integer createShift(CreateShiftDTO shift) {
+        return shiftService.createShift(shift).size();
     }
 
     public ShiftModel getShiftById(Long id) {
@@ -58,7 +58,7 @@ public class ShiftGraphqlAdapter {
 
     }
 
-    public Set<LocalDate> getDatesWithShifts(LocalDate fromDate, LocalDate toDate, Long doctorId) {
+    public Set<LocalDate> getDatesWithShifts(String fromDate, String toDate, Long doctorId) {
         return shiftService.getDatesWithShifts(fromDate, toDate, doctorId);
     }
 

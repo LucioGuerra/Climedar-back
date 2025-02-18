@@ -8,6 +8,11 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -23,6 +28,7 @@ public class SpringConfig {
                         .requestMatchers("/graphiql/**").permitAll()
                         .requestMatchers("/graphql/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                         .anyRequest().permitAll()
                 )
                 .cors(withDefaults())
@@ -39,5 +45,19 @@ public class SpringConfig {
                 return null;
             }
         };
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOrigins(List.of("http://localhost:4200")); // Puedes cambiar a "*" si quieres permitir todos los orígenes
+        corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        corsConfig.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        corsConfig.setAllowCredentials(true);  // Permite cookies y credenciales (si es necesario)
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfig);
+
+        return new CorsFilter(source);
     }
 }

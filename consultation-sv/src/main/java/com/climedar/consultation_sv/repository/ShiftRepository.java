@@ -1,13 +1,12 @@
 package com.climedar.consultation_sv.repository;
 
+import com.climedar.consultation_sv.dto.request.CreateOvertimeShiftDTO;
 import com.climedar.consultation_sv.external.model.doctor.Shift;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -29,4 +28,7 @@ public interface ShiftRepository {
 
     @PostMapping("/api/public/shifts/{id}/clear")
     void clearShift(@PathVariable Long id);
+
+    @PostMapping("/api/public/shifts")
+    Shift createShift(@RequestParam Long doctorId, @RequestParam Duration timeOfShifts);
 }

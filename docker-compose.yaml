@@ -1,0 +1,227 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: hackacode-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - ./mysql/data:/var/lib/mysql
+    networks:
+      - hackacode
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    environment:
+        - ISSUER_URI=${ISSUER_URI}
+        - EUREKA_URL=eureka-sv:8761
+    ports:
+      - "443:443"
+    volumes:
+      - ${GATEWAY_DIR}/api-gateway-0.0.1-SNAPSHOT.jar:/app/app.jar
+    networks:
+      - hackacode
+    depends_on:
+      - apollo-federation
+
+  apollo-federation:
+    build: ./apollo-federation-gateway
+    container_name: apollo-federation
+    ports:
+      - "4000:4000"
+    networks:
+      - hackacode
+    depends_on:
+      person-sv:
+        condition: service_healthy
+
+  eureka-sv:
+    build: ./eureka-sv
+    container_name: eureka-sv
+    ports:
+      - "8761:8761"
+    volumes:
+      - ${EUREKA_DIR}/eureka-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
+    networks:
+      - hackacode
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8761/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+
+  consultation-sv:
+    build: ./consultation-sv
+    container_name: consultation-sv
+    ports:
+      - "8086:8086"
+    environment:
+      DB_USER: "root"
+      DB_PASSWORD: "root"
+      DB_URL: "hackacode-db:3306"             # Nombre del servicio MySQL
+      DB_NAME: "consultation_db"  # Nombre de la base de datos para este servicio
+      EUREKA_URL: "eureka-sv:8761"
+    volumes:
+      - ${CONSULTATION_DIR}/consultation-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
+    networks:
+      - hackacode
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8086/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-sv:
+        condition: service_started
+
+  doctor-sv:
+    build: ./doctor-sv
+    container_name: doctor-sv
+    ports:
+      - "8083:8083"
+    environment:
+      DB_USER: "root"
+      DB_PASSWORD: "root"
+      DB_URL: "hackacode-db:3306"
+      DB_NAME: "doctor_db"
+      EUREKA_URL: "eureka-sv:8761"
+    volumes:
+      - ${DOCTOR_DIR}/doctor-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
+    networks:
+      - hackacode
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8083/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-sv:
+        condition: service_started
+
+  medical-service-sv:
+    build: ./medical-service-sv
+    container_name: medical-service-sv
+    ports:
+      - "8081:8081"
+    environment:
+      DB_USER: "root"
+      DB_PASSWORD: "root"
+      DB_URL: "hackacode-db:3306"
+      DB_NAME: "medical_service_db"
+      EUREKA_URL: "eureka-sv:8761"
+    volumes:
+      - ${MEDICAL_DIR}/medical-service-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
+    networks:
+      - hackacode
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-sv:
+        condition: service_started
+
+  patient-sv:
+    build: ./patient-sv
+    container_name: patient-sv
+    ports:
+      - "8082:8082"
+    environment:
+      DB_USER: "root"
+      DB_PASSWORD: "root"
+      DB_URL: "hackacode-db:3306"
+      DB_NAME: "patient_db"
+      EUREKA_URL: "eureka-sv:8761"
+    volumes:
+      - ${PATIENT_DIR}/patient-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
+    networks:
+      - hackacode
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8082/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-sv:
+        condition: service_started
+
+  #payment-sv:
+  #  build: ./payment-sv
+  #  container_name: payment-sv
+  #  ports:
+  #    - "8085:8085"
+  #  environment:
+  #    DB_USER: "root"
+  #    DB_PASSWORD: "root"
+  #    DB_URL: "hackacode-db:3306"
+  #    DB_NAME: "payment_db"
+  #    EUREKA_URL: "eureka-sv:8761"
+  #  volumes:
+  #    - ${PAYMENT_DIR}/payment-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
+  #  networks:
+  #    - hackacode
+  #  healthcheck:
+  #    test: ["CMD-SHELL", "wget -qO- http://localhost:8085/actuator/health || exit 1"]
+  #    interval: 20s
+  #    timeout: 5s
+  #    retries: 10
+
+  #  depends_on:
+  #    mysql:
+  #      condition: service_healthy
+  #    eureka-sv:
+  #      condition: service_started
+
+  person-sv:
+    build: ./person-sv
+    container_name: person-sv
+    ports:
+      - "8084:8084"
+    environment:
+      DB_USER: "root"
+      DB_PASSWORD: "root"
+      DB_URL: "hackacode-db:3306"
+      DB_NAME: "person_db"
+      EUREKA_URL: "eureka-sv:8761"
+    volumes:
+      - ${PERSON_DIR}/person-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
+    networks:
+      - hackacode
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8084/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      consultation-sv:
+        condition: service_healthy
+      doctor-sv:
+        condition: service_healthy
+      medical-service-sv:
+        condition: service_healthy
+      patient-sv:
+        condition: service_healthy
+      #payment-sv:
+      #  condition: service_healthy
+
+networks:
+  hackacode:
+    driver: bridge

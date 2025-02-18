@@ -36,7 +36,7 @@ public class InvoiceService {
 
 
     public byte[] generateInvoice(Payment payment) {
-        /*Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
+        Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
         Patient patient = consultation.getPatient();
         List<MedicalServices> medicalServices = consultation.getMedicalServices();
 
@@ -52,9 +52,9 @@ public class InvoiceService {
         }
         invoice.setMedicalServicesId(medicalServicesId);
 
-        invoiceRepository.save(invoice);*/
+        invoiceRepository.save(invoice);
 
-        /*Map<String, Object> invoiceData = new HashMap<>();
+        Map<String, Object> invoiceData = new HashMap<>();
         invoiceData.put("invoiceNumber", String.format("%10d", invoice.getId()));
         invoiceData.put("invoiceDate", invoice.getInvoiceDate());
         invoiceData.put("patientName", patient.getName());
@@ -63,22 +63,7 @@ public class InvoiceService {
         invoiceData.put("patientEmail", patient.getEmail());
         invoiceData.put("finalPrice", consultation.getFinalPrice());
         invoiceData.put("services", medicalServices);
-        invoiceData.put("paymentMethod", payment.getPaymentMethod());*/
-        Map<String, Object> invoiceData = new HashMap<>();
-        invoiceData.put("invoiceNumber", String.format("%10d", 123456));
-        invoiceData.put("invoiceDate", LocalDate.now());
-        invoiceData.put("patientName", "Juan Pérez");
-        invoiceData.put("patientAddress", "Av. Siempre Viva 742");
-        invoiceData.put("patientPhone", "+54 11 1234-5678");
-        invoiceData.put("patientEmail", "juan.perez@example.com");
-        invoiceData.put("finalPrice", new BigDecimal("3500.75"));
-        invoiceData.put("services", List.of(
-                new MedicalService("MS-THER-CAR-00000", new BigDecimal("600000000000"), "jajas"),
-
-                new MedicalService( "MS-THER-CAR-00001", new BigDecimal("600000000000"), "Kamon")
-        ));
-        invoiceData.put("paymentMethod", "CREDIT_CARD");
-
+        invoiceData.put("paymentMethod", payment.getPaymentMethod());
         return exportService.getInvoicePDF(invoiceData);
     }
 

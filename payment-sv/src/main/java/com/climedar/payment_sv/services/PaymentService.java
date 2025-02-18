@@ -40,7 +40,7 @@ public class PaymentService {
 
     public ResponseEntity<byte[]> createPayment(CreatePaymentDTO paymentDTO) {
         Payment payment = paymentMapper.toEntity(paymentDTO);
-        /*Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
+        Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
         paymentRepository.save(payment);
 
         for (MedicalServices medicalService : consultation.getMedicalServices()) {
@@ -53,7 +53,7 @@ public class PaymentService {
                             medicalService1.getServicesType(), medicalService1.getSpeciality().getName()));
                 }
             }
-        }*/
+        }
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);

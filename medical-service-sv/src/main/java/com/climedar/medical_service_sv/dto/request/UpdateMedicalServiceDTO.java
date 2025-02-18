@@ -6,6 +6,6 @@ public record UpdateMedicalServiceDTO(
         String name,
         String description,
         Double price,
-        Duration estimatedDuration
+        String estimatedDuration
 ) {
 }

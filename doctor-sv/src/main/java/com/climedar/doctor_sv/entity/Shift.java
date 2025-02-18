@@ -1,6 +1,7 @@
 package com.climedar.doctor_sv.entity;
 
 import com.climedar.doctor_sv.builder.shift.MultipleShiftBuilder;
+import com.climedar.doctor_sv.builder.shift.OvertimeShiftBuilder;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -57,5 +58,9 @@ public class Shift {
 
     public static MultipleShiftBuilder multipleShiftBuilder(){
         return new MultipleShiftBuilder();
+    }
+
+    public static OvertimeShiftBuilder overtimeShiftBuilder(){
+        return new OvertimeShiftBuilder();
     }
 }

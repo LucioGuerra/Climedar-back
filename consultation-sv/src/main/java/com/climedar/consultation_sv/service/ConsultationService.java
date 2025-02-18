@@ -1,6 +1,7 @@
 package com.climedar.consultation_sv.service;
 
 import com.climedar.consultation_sv.dto.request.CreateConsultationDTO;
+import com.climedar.consultation_sv.dto.request.CreateOvertimeConsultationDTO;
 import com.climedar.consultation_sv.dto.request.MedicalServicesWrapped;
 import com.climedar.consultation_sv.dto.request.UpdateConsultationDTO;
 import com.climedar.consultation_sv.entity.Consultation;
@@ -24,6 +25,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -39,6 +41,13 @@ public class ConsultationService {
     private final ShiftRepository shiftRepository;
     private final PatientRepository patientRepository;
     private final MedicalServicesRepository medicalServicesRepository;
+
+    public Float getConsultationPrice(Set<Long> servicesIds, Long patientId) {
+        Patient patient = patientRepository.findById(patientId);
+        List<MedicalServicesWrapped> medicalServicesWrappeds = medicalServicesRepository.findAllById(servicesIds);
+        List<MedicalServicesModel> medicalServicesModels = medicalServicesWrappeds.stream().map(MedicalServicesWrapped::getMedicalServices).toList();
+        return calculateFinalPrice(medicalServicesModels, patient).floatValue();
+    }
 
     public ConsultationModel getConsultationById(Long id) {
         Consultation consultation = consultationRepository.findByIdAndNotDeleted(id).orElseThrow(() -> new EntityNotFoundException("Consultation not found with id: " + id));
@@ -82,19 +91,41 @@ public class ConsultationService {
 
     @Transactional
     public ConsultationModel createConsultation(CreateConsultationDTO createConsultationDTO) {
-        Shift shift = shiftRepository.findById(createConsultationDTO.shiftId());
-        if (shift.getState() == ShiftState.OCCUPIED) {
-            throw new ClimedarException("SHIFT_IS_OCCUPIED", "Shift is already occupied");
+
+        List<MedicalServicesWrapped> medicalServicesWrappeds =
+                medicalServicesRepository.findAllById(createConsultationDTO.medicalServicesId());
+        List<MedicalServicesModel> medicalServicesModels = medicalServicesWrappeds.stream().map(MedicalServicesWrapped::getMedicalServices).toList();
+
+        Shift shift;
+        if (createConsultationDTO.shiftId() != null) {
+            shift = shiftRepository.findById(createConsultationDTO.shiftId());
+            if (shift.getState() == ShiftState.OCCUPIED) {
+                throw new ClimedarException("SHIFT_IS_OCCUPIED", "Shift is already occupied");
+            }
+        } else {
+            Duration duration = Duration.ZERO;
+            for (MedicalServicesModel medicalServicesModel : medicalServicesModels) {
+                duration = duration.plus(medicalServicesModel.getEstimatedDuration());
+            }
+            shift = shiftRepository.createShift(createConsultationDTO.doctorId(), duration);
+        }
+
+
+        for (MedicalServicesModel medicalServicesModel : medicalServicesModels) {
+            if (!shift.getDoctor().getSpeciality().getId().equals(medicalServicesModel.getSpeciality().getId())) {
+                throw new ClimedarException("DOCTOR_DOESNT_PROVIDE_THESE_SERVICES", "Doctor speciality and medical " +
+                        "service " +
+                        "speciality " +
+                        "doesn't match");
+            }
         }
 
         Patient patient = patientRepository.findById(createConsultationDTO.patientId());
-        List<MedicalServicesWrapped> medicalServicesWrappeds =
-                medicalServicesRepository.findAllById(createConsultationDTO.medicalServicesId());
 
-        List<MedicalServicesModel> medicalServicesModels = medicalServicesWrappeds.stream().map(MedicalServicesWrapped::getMedicalServices).toList();
         List<String> medicalServicesCodes = medicalServicesModels.stream().map(MedicalServicesModel::getCode).toList();
 
-        Consultation consultation = consultationMapper.toEntity(createConsultationDTO, shift);
+        Consultation consultation = consultationMapper.toEntity(createConsultationDTO);
+        consultation.setShiftId(shift.getId());
         consultation.setMedicalServicesCode(medicalServicesCodes);
         consultation.setFinalPrice(calculateFinalPrice(medicalServicesModels, patient));
         consultationRepository.save(consultation);
@@ -102,7 +133,6 @@ public class ConsultationService {
         shiftRepository.occupyShift(shift.getId());
         return consultationMapper.toModel(consultation, shift);
     }
-
 
 
     @Transactional
@@ -150,7 +180,7 @@ public class ConsultationService {
     }
 
     private Double calculateFinalPrice(List<MedicalServicesModel> medicalServicesModel, Patient patient) {
-        if (patient.getMedicalSecure() == null) {
+        if (patient == null || patient.getMedicalSecure() == null) {
             return medicalServicesModel.stream().mapToDouble(MedicalServicesModel::getPrice).sum();
         }
         return medicalServicesModel.stream().mapToDouble(MedicalServicesModel::getPrice).sum() * 0.80;

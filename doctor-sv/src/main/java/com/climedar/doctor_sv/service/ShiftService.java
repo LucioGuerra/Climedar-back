@@ -3,6 +3,7 @@ package com.climedar.doctor_sv.service;
 import com.climedar.doctor_sv.builder.shift.ShiftDirector;
 import com.climedar.doctor_sv.dto.request.CreateShiftDTO;
 import com.climedar.doctor_sv.dto.request.RecurringShiftDTO;
+import com.climedar.doctor_sv.dto.request.ShiftBuilder;
 import com.climedar.doctor_sv.dto.request.specification.ShiftSpecificationDTO;
 import com.climedar.doctor_sv.entity.Doctor;
 import com.climedar.doctor_sv.entity.Shift;
@@ -26,10 +27,7 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -69,22 +67,27 @@ public class ShiftService {
     }
 
     @Transactional
-    public ShiftModel createShift(CreateShiftDTO shiftDTO) {
+    public List<ShiftModel> createShift(CreateShiftDTO shiftDTO) {
         Doctor doctor = doctorService.getDoctorEntityById(shiftDTO.getDoctorId());
-        List<Shift> shift;
+        List<Shift> shifts = new ArrayList<>();
 
 
-        if (shiftDTO.getRecurringShift() != null) {
-            shift = shiftDirector.constructRecurringMultipleShifts(shiftDTO, doctor);
+        if (shiftDTO.getShiftBuilder().equals(ShiftBuilder.RECURRING)) {
+            shifts = shiftDirector.constructRecurringMultipleShifts(shiftDTO, doctor);
         }
-        else {
-            shift = shiftDirector.constructMultipleShifts(shiftDTO, doctor);
+        if (shiftDTO.getShiftBuilder().equals(ShiftBuilder.REGULAR)) {
+            shifts = shiftDirector.constructMultipleShifts(shiftDTO, doctor);
+        }
+        if (shiftDTO.getShiftBuilder().equals(ShiftBuilder.OVERTIME)) {
+            shifts = List.of(shiftDirector.constructOvertimeShift(shiftDTO, doctor));
         }
 
-        shiftRepository.saveAll(shift);
-        return shiftMapper.toModel(shift.get(0));
+        shiftRepository.saveAll(shifts);
+        return shifts.stream().map(shiftMapper::toModel).toList();
     }
 
+
+    @Transactional
     public ShiftModel updateShift(Long id, ShiftModel shiftModel, ShiftSpecificationDTO shiftSpecificationDTO) {
 
         Specification<Shift> specification = getShiftSpecification(shiftSpecificationDTO);
@@ -102,6 +105,7 @@ public class ShiftService {
         return shiftMapper.toModel(shifts.get(0));
     }
 
+    @Transactional
     public Boolean deleteShift(Long id) {
         Shift shift = shiftRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + id));
         shift.setDeleted(true);
@@ -112,7 +116,8 @@ public class ShiftService {
     private static Specification<Shift> getShiftSpecification(ShiftSpecificationDTO shiftSpecificationDTO) {
         return Specification.where(ShiftSpecification.byDeleted(false))
                 .and(ShiftSpecification.byDate(shiftSpecificationDTO.getDate(), shiftSpecificationDTO.getFromDate(), shiftSpecificationDTO.getToDate()))
-                .and(ShiftSpecification.byTime(shiftSpecificationDTO.getFromTime(), shiftSpecificationDTO.getToTime()))
+                .and(ShiftSpecification.byTime(shiftSpecificationDTO.getFromTime(),
+                                shiftSpecificationDTO.getToTime()))
                 .and(ShiftSpecification.byStartTime(shiftSpecificationDTO.getStartTime()))
                 .and(ShiftSpecification.byEndTime(shiftSpecificationDTO.getEndTime()))
                 .and(ShiftSpecification.byPatients(shiftSpecificationDTO.getPatients()))
@@ -122,7 +127,7 @@ public class ShiftService {
     }
 
 
-    public Set<LocalDate> getDatesWithShifts(LocalDate fromDate, LocalDate toDate, Long doctorId) {
+    public Set<LocalDate> getDatesWithShifts(String fromDate, String toDate, Long doctorId) {
         Specification<Shift> specification = Specification.where(ShiftSpecification.byDeleted(false))
                 .and(ShiftSpecification.byDate(null, fromDate, toDate))
                 .and(ShiftSpecification.byDoctorId(doctorId));

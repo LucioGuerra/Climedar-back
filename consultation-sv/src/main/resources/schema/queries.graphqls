@@ -1,4 +1,5 @@
 type Query{
     getAllConsultations(pageRequest: PageRequest!, specification: ConsultationSpecification): ConsultationPage!
     getConsultationById(id: ID!): ConsultationModel!
+    getConsultationPrice(servicesIds: [ID!]!, patientId: ID): Float!
 }

@@ -16,9 +16,9 @@ input AddressInput {
     number: String!
     floor: String
     apartment: String
-    city: String!
-    province: String!
-    postalCode: String!
+    city: String
+    province: String
+    postalCode: String
 }
 
 input ShiftInput {
@@ -29,6 +29,13 @@ input ShiftInput {
     place: String
     doctorId: ID!
     recurringShift: RecurringShiftInput
+    shiftBuilder: ShiftBuilderInput
+}
+
+enum ShiftBuilderInput {
+    REGULAR,
+    RECURRING,
+    OVERTIME
 }
 
 input RecurringShiftInput {
@@ -38,12 +45,12 @@ input RecurringShiftInput {
 }
 
 enum DayOfWeek {
-    MONDAY
-    TUESDAY
-    WEDNESDAY
-    THURSDAY
-    FRIDAY
-    SATURDAY
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY,
     SUNDAY
 }
 
@@ -66,7 +73,7 @@ input Order {
 }
 
 enum SortDirection {
-    ASC
+    ASC,
     DESC
 }
 

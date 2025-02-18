@@ -3,7 +3,7 @@ type Mutation {
     updateDoctor(id: ID!, doctor: UpdateDoctorInput!): DoctorModel!
     deleteDoctor(id: ID!): Boolean!
 
-    createShift(shift: ShiftInput!): ShiftModel!
+    createShift(shift: ShiftInput!): Int!
     updateShift(id: ID!, shift: UpdateShiftInput!, specification: ShiftSpecification!): ShiftModel!
     deleteShift(id: ID!): Boolean!
 

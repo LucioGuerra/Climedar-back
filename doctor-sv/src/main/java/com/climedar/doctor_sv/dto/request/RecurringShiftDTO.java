@@ -14,11 +14,11 @@ public class RecurringShiftDTO {
 
     @NotNull(message = "Start date is required")
     @FutureOrPresent(message = "Start date must be in the future or present")
-    private LocalDate startDate;
+    private String startDate;
 
     @NotNull(message = "End date is required")
     @Future(message = "End date must be in the future")
-    private LocalDate EndDate;
+    private String EndDate;
 
     @NotNull(message = "valid days is required")
     private Set<DayOfWeek> validDays;

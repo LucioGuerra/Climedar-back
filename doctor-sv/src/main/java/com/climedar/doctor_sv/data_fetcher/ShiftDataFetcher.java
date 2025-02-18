@@ -35,13 +35,13 @@ public class ShiftDataFetcher {
     }
 
     @DgsQuery
-    public Set<LocalDate> getDatesWithShifts(@InputArgument LocalDate fromDate,
-                                             @InputArgument LocalDate toDate, @InputArgument Long doctorId) {
+    public Set<LocalDate> getDatesWithShifts(@InputArgument String fromDate,
+                                             @InputArgument String toDate, @InputArgument Long doctorId) {
         return shiftAdapter.getDatesWithShifts(fromDate, toDate, doctorId);
     }
 
     @DgsMutation
-    public ShiftModel createShift(@InputArgument CreateShiftDTO shift) {
+    public Integer createShift(@InputArgument CreateShiftDTO shift) {
         return shiftAdapter.createShift(shift);
     }
 
