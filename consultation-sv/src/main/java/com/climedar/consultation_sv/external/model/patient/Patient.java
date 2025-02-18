@@ -11,6 +11,7 @@ public class Patient {
     private String dni;
     private String phone;
     private MedicalSecure medicalSecure;
+    private Address address;
 
 
     public Patient() {

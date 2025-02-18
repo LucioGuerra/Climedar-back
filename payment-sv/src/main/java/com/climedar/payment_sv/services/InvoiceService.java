@@ -38,7 +38,7 @@ public class InvoiceService {
     public byte[] generateInvoice(Payment payment) {
         Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
         Patient patient = consultation.getPatient();
-        List<MedicalServices> medicalServices = consultation.getMedicalServices();
+        List<MedicalServices> medicalServices = consultation.getMedicalServicesModel();
 
         Invoice invoice = new Invoice();
         invoice.setPatientId(patient.getId());

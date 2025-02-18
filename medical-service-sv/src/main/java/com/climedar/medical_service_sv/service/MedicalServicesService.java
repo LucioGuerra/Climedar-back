@@ -23,6 +23,10 @@ public class MedicalServicesService {
     private final MedicalServiceMapper medicalServiceMapper;
     private final MedicalPackageMapper medicalPackageMapper;
 
+    public Set<ServiceType> getAllServicesType() {
+        return new HashSet<>(Arrays.asList(ServiceType.values()));
+    }
+
     public MedicalServicesWrapped getMedicalServicesById(Long id) {
         MedicalServicesWrapped medicalServicesWrapped = new MedicalServicesWrapped();
 
@@ -42,6 +46,31 @@ public class MedicalServicesService {
         List<MedicalPackageEntity> packageEntities = medicalPackageRepository.findByIdInAndNotDeleted(ids);
         List<MedicalServiceEntity> serviceEntities = medicalServiceRepository.findByIdInAndNotDeleted(ids);
 
+        List<MedicalServicesWrapped> wrappedList = getWrappedMap(packageEntities, serviceEntities);
+
+        if (wrappedList.isEmpty()) {
+            throw new EntityNotFoundException("No medical services found for the provided codes: " + ids);
+        }
+
+        return wrappedList;
+    }
+
+
+    public List<MedicalServicesWrapped> getMedicalServicesByCode(Set<String> codes) {
+        List<MedicalPackageEntity> packageEntities = medicalPackageRepository.findByCodeInAndNotDeleted(codes);
+        List<MedicalServiceEntity> serviceEntities = medicalServiceRepository.findByCodeInAndNotDeleted(codes);
+
+
+        List<MedicalServicesWrapped> wrappedList = getWrappedMap(packageEntities, serviceEntities);
+
+        if (wrappedList.isEmpty()) {
+            throw new EntityNotFoundException("No medical services found for the provided codes: " + codes);
+        }
+
+        return wrappedList;
+    }
+
+    private List<MedicalServicesWrapped> getWrappedMap(List<MedicalPackageEntity> packageEntities, List<MedicalServiceEntity> serviceEntities) {
         Map<Long, MedicalServicesWrapped> wrappedMap = new HashMap<>();
 
         for (MedicalPackageEntity packageEntity : packageEntities) {
@@ -56,14 +85,7 @@ public class MedicalServicesService {
             wrappedMap.put(serviceEntity.getId(), wrapped);
         }
 
-        if (wrappedMap.isEmpty()) {
-            throw new EntityNotFoundException("No medical services found for the provided IDs: " + ids);
-        }
 
         return new ArrayList<>(wrappedMap.values());
-    }
-
-    public Set<ServiceType> getAllServicesType() {
-        return new HashSet<>(Arrays.asList(ServiceType.values()));
     }
 }

@@ -14,4 +14,7 @@ public interface MedicalServicesRepository {
 
     @GetMapping("/api/public/medical-services/ids")
     List<MedicalServicesWrapped> findAllById(@RequestParam Set<Long> ids);
+
+    @GetMapping("/api/public/medical-services/codes")
+    List<MedicalServicesWrapped> findAllByCode(@RequestParam Set<String> codes);
 }

@@ -24,4 +24,7 @@ public interface MedicalPackageRepository extends JpaRepository<MedicalPackageEn
 
     @Query("SELECT p FROM MedicalPackageEntity p WHERE p.code = :code")
     Optional<MedicalPackageEntity> findByCode(String code);
+
+    @Query("SELECT p FROM MedicalPackageEntity p WHERE p.code IN :codes AND p.deleted = false")
+    List<MedicalPackageEntity> findByCodeInAndNotDeleted(Set<String> codes);
 }

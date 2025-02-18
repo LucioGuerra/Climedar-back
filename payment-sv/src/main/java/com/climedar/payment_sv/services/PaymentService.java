@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,12 +39,13 @@ public class PaymentService {
     private final ExportService exportService;
     private final ConsultationRepository consultationRepository;
 
+    @Transactional
     public ResponseEntity<byte[]> createPayment(CreatePaymentDTO paymentDTO) {
         Payment payment = paymentMapper.toEntity(paymentDTO);
         Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
         paymentRepository.save(payment);
 
-        for (MedicalServices medicalService : consultation.getMedicalServices()) {
+        for (MedicalServices medicalService : consultation.getMedicalServicesModel()) {
             if (medicalService.getClass() == MedicalService.class) {
                 eventPublisher.publishEvent(new PaymentEvent(medicalService.getPrice(), payment.getPaymentDate(),
                         ((MedicalService) medicalService).getServicesType(), ((MedicalService) medicalService).getSpeciality().getName()));
@@ -71,7 +73,7 @@ public class PaymentService {
         Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
         payment.setCanceled(true);
 
-        for (MedicalServices medicalService : consultation.getMedicalServices()) {
+        for (MedicalServices medicalService : consultation.getMedicalServicesModel()) {
             if (medicalService.getClass() == MedicalService.class) {
                 eventPublisher.publishEvent(new PaymentEvent(medicalService.getPrice().negate(), payment.getPaymentDate(),
                         ((MedicalService) medicalService).getServicesType(), ((MedicalService) medicalService).getSpeciality().getName()));

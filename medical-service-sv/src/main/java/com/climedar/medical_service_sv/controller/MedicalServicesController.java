@@ -31,4 +31,9 @@ public class MedicalServicesController {
     public ResponseEntity<Set<ServiceType>> getAllServicesType() {
         return ResponseEntity.status(200).body(medicalServicesService.getAllServicesType());
     }
+
+    @GetMapping("/codes")
+    public ResponseEntity<List<MedicalServicesWrapped>> getMedicalServicesByCode(@RequestParam Set<String> codes) {
+        return ResponseEntity.status(200).body(medicalServicesService.getMedicalServicesByCode(codes));
+    }
 }

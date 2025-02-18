@@ -188,10 +188,6 @@ public class DoctorService {
             return personRepository.updatePerson(existingPerson.getPersonId(), updatedPerson);
         }
 
-        if (!personDataMatcher(existingPerson, doctorModel)) {
-            throw new ClimedarException("PERSON_DATA_MISMATCH", "Person data mismatch");
-        }
-
         return existingPerson;
     }
 

@@ -1,5 +1,6 @@
 package com.climedar.consultation_sv.controller;
 
+import com.climedar.consultation_sv.adapter.ConsultationRestAdapter;
 import com.climedar.consultation_sv.model.ConsultationModel;
 import com.climedar.consultation_sv.service.ConsultationService;
 import lombok.AllArgsConstructor;
@@ -14,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/public/consultations")
 public class ConsultationController {
 
-    private final ConsultationService consultationService;
+    private final ConsultationRestAdapter consultationRestAdapter;
 
     @GetMapping("/{id}")
     public ResponseEntity<ConsultationModel> getConsultation(@PathVariable Long id){
-        return ResponseEntity.ok(consultationService.getConsultationById(id));
+        return ResponseEntity.ok(consultationRestAdapter.getConsultationById(id));
     }
 
 }

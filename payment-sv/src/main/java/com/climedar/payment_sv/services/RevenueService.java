@@ -29,6 +29,7 @@ public class RevenueService {
 
     //todo: obtener datos de las ganancias
     //todo: actualizar los datos cuando se modifiquen las especialidades
+/*
 
     @EventListener(condition = "#event.amount() > 0")
     public void handlerPaymentEvent(PaymentEvent event) {
@@ -39,6 +40,7 @@ public class RevenueService {
         revenue.setTotalPayments(revenue.getTotalPayments() + 1);
         revenueRepository.save(revenue);
     }
+*/
 
     @EventListener(condition = "#event.amount() < 0")
     public void handlerCancelPaymentEvent(PaymentEvent event) {

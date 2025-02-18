@@ -22,7 +22,7 @@ input AddressInput {
 
 input MedicalSecureInput {
     id: ID
-    name: String!
+    name: String
 }
 
 input PageRequest {
