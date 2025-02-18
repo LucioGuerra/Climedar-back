@@ -48,36 +48,53 @@
         /* Encabezado */
         .header {
             width: 100%;
-            height: 200px;
-            overflow: hidden; /* Para contener los elementos flotados */
+            height: 180px;
+        }
+
+        .header-1row,
+        .header-2row {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header-2row {
+            display: table;
+            height: 80px;
+            margin-top: 35px;
+        }
+
+        .header-2row > div {
+            display: table-cell;
+            vertical-align: middle;
         }
 
         /* Primera fila: imagen e información de factura */
-        .header > img {
+        .header-1row img {
             float: left;
             width: 200px;
             height: auto;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
         }
 
-        .header > .invoice-data {
+        .header-1row .invoice-data {
             float: right;
-            margin: 20px;
             text-align: right;
         }
 
         /* Segunda fila: datos Climedar */
-        .header > .climedar-data {
-            clear: both;  /* Fuerza el inicio de una nueva línea */
+        .header-2row .climedar-data {
+            margin-top: 20px;
             float: left;
-            margin: 20px;
             text-align: left;
+            width: 30%;
         }
 
-        .header > .climedar-cuit {
+        .header-2row .climedar-cuit {
             float: right;
-            margin: 20px;
             text-align: right;
+            margin-top: 20px;
+            width: 30%;
         }
 
         .divider {
@@ -89,27 +106,25 @@
 
         /* Datos del paciente */
         .patient-data {
-            margin-bottom: 20px;
             width: 100%;
             overflow: hidden;
+            margin-top: 15px;
+            margin-bottom: 15px;
         }
 
         .patient-address {
             float: left;
             width: 20%;
-            margin-left: 20px;
         }
 
         .patient-dni {
             float: right;
             width: 20%;
-            margin-right: 20px;
             text-align: right;
         }
 
         /* Datos de pago */
         .payment-data {
-            margin-left: 40px;
             width: 100%;
             height: 50px;
             line-height: 50px; /* Para centrar verticalmente */
@@ -117,15 +132,16 @@
 
         /* Servicios */
         .services-data {
-            margin: 0;
+            margin: 20px 0 0 0 ;
             padding: 0;
             width: 100%;
-            height: 610px;
+            height: 620px;
         }
 
         .services-data p {
-            margin-top: 20px;
-            margin-left: 20px;
+            margin: 0;
+            padding: 0;
+            font-weight: bold;
         }
 
         .services-table {
@@ -182,24 +198,29 @@
 <body>
 <div class="invoice-box">
     <div class="header">
-        <img src="images/climedar-negro.png" alt="Logo Climedar" />
+        <div class="header-1row">
+            <img src="images/climedar-negro.png" alt="Logo Climedar" />
 
-        <div class="invoice-data">
-            <h1>Factura</h1>
-            <p th:text="|Nro factura: 0001-${invoiceNumber}|">Nro factura: 0001-99999999</p>
-            <p th:text="|Fecha: ${date}|">Fecha: 10-10-2025</p>
+            <div class="invoice-data">
+                <h1>Factura</h1>
+                <p th:text="|Nro factura: 0001-${invoiceNumber}|">Nro factura: 0001-99999999</p>
+                <p th:text="|Fecha: ${date}|">Fecha: 10-10-2025</p>
+            </div>
         </div>
 
-        <div class="climedar-data">
-            <p><b>Climedar</b></p>
-            <p>LA PLATA</p>
-            <p>IVA RESPONSABLE INSCRIPTO</p>
+        <div class="header-2row">
+            <div class="climedar-data">
+                <p><b>Climedar</b></p>
+                <p>LA PLATA</p>
+                <p>IVA RESPONSABLE INSCRIPTO</p>
+            </div>
+
+            <div class="climedar-cuit">
+                <p>CUIT: 99-99999999-9</p>
+                <p>IIBB: 999999999</p>
+            </div>
         </div>
 
-        <div class="climedar-cuit">
-            <p>CUIT: 99-99999999-9</p>
-            <p>IIBB: 999999999</p>
-        </div>
     </div>
 
     <div class="divider"></div>
