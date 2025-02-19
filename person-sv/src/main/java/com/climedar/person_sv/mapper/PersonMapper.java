@@ -5,6 +5,7 @@ import com.climedar.person_sv.dto.request.create.CreatePersonDTO;
 import com.climedar.person_sv.dto.request.update.UpdatePersonDTO;
 import com.climedar.person_sv.dto.response.GetPersonDTO;
 import com.climedar.person_sv.entity.Person;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -22,5 +23,6 @@ public interface PersonMapper {
     GetPersonDTO toDTO(Person person);
 
     @Mapping(target = "address", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.IGNORE)
     void updateEntity(@MappingTarget Person person, UpdatePersonDTO personDTO);
 }
