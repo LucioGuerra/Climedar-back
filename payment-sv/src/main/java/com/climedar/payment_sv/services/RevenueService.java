@@ -1,9 +1,10 @@
 package com.climedar.payment_sv.services;
 
 import com.climedar.payment_sv.dto.request.OriginName;
+import com.climedar.payment_sv.dto.request.RevenueSpecificationDTO;
 import com.climedar.payment_sv.dto.response.GetRevenueDTO;
-import com.climedar.payment_sv.entity.Revenue;
-import com.climedar.payment_sv.entity.RevenueType;
+import com.climedar.payment_sv.entity.revenue.Revenue;
+import com.climedar.payment_sv.entity.revenue.RevenueType;
 import com.climedar.payment_sv.event.internal.PaymentEvent;
 import com.climedar.payment_sv.external.model.medical_services.ServicesType;
 import com.climedar.payment_sv.mapper.RevenueMapper;
@@ -34,18 +35,17 @@ public class RevenueService {
 
     //todo: actualizar los datos cuando se modifiquen las especialidades
 
-    public List<GetRevenueDTO> getAllRevenue(LocalDate date, LocalDate fromDate, LocalDate toDate,
-                                             RevenueType revenueType, String specialityName, ServicesType servicesType,
-                                             OriginName originName){
+    public List<GetRevenueDTO> getAllRevenue(RevenueSpecificationDTO specificationDTO) {
 
-        Specification<Revenue> specification = Specification.where(RevenueSpecification.byDate(date, fromDate, toDate))
-                .and(RevenueSpecification.byType(revenueType))
-                .and(RevenueSpecification.bySpeciality(specialityName))
-                .and(RevenueSpecification.byMedicalService(servicesType));
+        Specification<Revenue> specification =
+                Specification.where(RevenueSpecification.byDate(LocalDate.parse(specificationDTO.date()), LocalDate.parse(specificationDTO.fromDate()), LocalDate.parse(specificationDTO.toDate())))
+                .and(RevenueSpecification.byType(specificationDTO.revenueType()))
+                .and(RevenueSpecification.bySpeciality(specificationDTO.specialityName()))
+                .and(RevenueSpecification.byMedicalService(specificationDTO.servicesType()));
 
         List<Revenue> revenues = revenueRepository.findAll(specification);
 
-         return switch (originName) {
+         return switch (specificationDTO.originName()) {
             case SPECIALITY -> revenues.stream().map(revenueMapper::toDTOSpecialityName).toList();
             case MEDICAL_SERVICE -> revenues.stream().map(revenueMapper::toDTOServiceType).toList();
          };

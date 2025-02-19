@@ -29,6 +29,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2024.0.0</spring-cloud.version>
+		<netflix-dgs.version>10.0.3</netflix-dgs.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -140,9 +141,13 @@
 			<version>9.9.4</version>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.jasperreports</groupId>
-			<artifactId>jasperreports</artifactId>
-			<version>6.21.3</version>
+			<groupId>com.netflix.graphql.dgs</groupId>
+			<artifactId>graphql-dgs-spring-graphql-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.climedar.library</groupId>
+			<artifactId>page-request-info</artifactId>
+			<version>1.0</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
@@ -151,6 +156,13 @@
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
 				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.netflix.graphql.dgs</groupId>
+				<artifactId>graphql-dgs-platform-dependencies</artifactId>
+				<version>${netflix-dgs.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

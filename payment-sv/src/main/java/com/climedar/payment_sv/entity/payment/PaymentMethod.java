@@ -1,4 +1,4 @@
-package com.climedar.payment_sv.entity;
+package com.climedar.payment_sv.entity.payment;
 
 public enum PaymentMethod {
     CASH,

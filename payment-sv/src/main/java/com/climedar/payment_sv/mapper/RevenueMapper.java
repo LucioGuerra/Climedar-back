@@ -1,7 +1,7 @@
 package com.climedar.payment_sv.mapper;
 
 import com.climedar.payment_sv.dto.response.GetRevenueDTO;
-import com.climedar.payment_sv.entity.Revenue;
+import com.climedar.payment_sv.entity.revenue.Revenue;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

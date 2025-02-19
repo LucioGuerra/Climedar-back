@@ -1,0 +1,6 @@
+type Query{
+    getAllRevenues(specification: RevenueSpecification): [Revenue]!
+
+    getAllPayments(pageRequest: PageRequest!, specification: PaymentSpecification): PaymentPage!
+    getPaymentById(id: ID!): Payment!
+}

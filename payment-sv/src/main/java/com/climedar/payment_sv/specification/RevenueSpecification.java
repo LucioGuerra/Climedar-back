@@ -1,7 +1,7 @@
 package com.climedar.payment_sv.specification;
 
-import com.climedar.payment_sv.entity.Revenue;
-import com.climedar.payment_sv.entity.RevenueType;
+import com.climedar.payment_sv.entity.revenue.Revenue;
+import com.climedar.payment_sv.entity.revenue.RevenueType;
 import com.climedar.payment_sv.external.model.medical_services.ServicesType;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;

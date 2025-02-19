@@ -1,6 +1,6 @@
 package com.climedar.payment_sv.dto.request;
 
-import com.climedar.payment_sv.entity.PaymentMethod;
+import com.climedar.payment_sv.entity.payment.PaymentMethod;
 
 import java.math.BigDecimal;
 

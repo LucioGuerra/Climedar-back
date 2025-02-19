@@ -1,0 +1,55 @@
+input PaymentSpecification{
+    date: String
+    fromDate: String
+    toDate: String
+    amount: Float
+    fromAmount: Float
+    toAmount: Float
+    canceled: Boolean
+    consultationId: ID
+    patientId: ID
+}
+
+input RevenueSpecification{
+    date: String
+    fromDate: String
+    toDate: String
+    revenueType: RevenueType
+    specialityName: String
+    servicesType: ServiceType
+    originName: OriginName
+}
+
+enum RevenueType{
+    DAILY,
+    MONTHLY,
+}
+
+enum ServiceType{
+    GENERAL,
+    SPECIALIST,
+    SURGERY,
+    EXAMS,
+    THERAPY,
+}
+
+enum OriginName{
+    SPECIALITY,
+    MEDICAL_SERVICE,
+}
+
+input PageRequest{
+    page: Int!
+    size: Int!
+    order: Order
+}
+
+input Order {
+    field: String!
+    direction: SortDirection!
+}
+
+enum SortDirection {
+    ASC
+    DESC
+}

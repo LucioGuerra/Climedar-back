@@ -1,5 +1,6 @@
-package com.climedar.payment_sv.entity;
+package com.climedar.payment_sv.entity.payment;
 
+import com.climedar.payment_sv.entity.Invoice;
 import jakarta.persistence.*;
 import lombok.Data;
 

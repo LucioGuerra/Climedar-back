@@ -1,10 +1,11 @@
 package com.climedar.payment_sv.specification;
 
 
-import com.climedar.payment_sv.entity.Payment;
+import com.climedar.payment_sv.entity.payment.Payment;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class PaymentSpecification {
@@ -27,7 +28,7 @@ public class PaymentSpecification {
         };
     }
 
-    public static Specification<Payment> paymentByAmount(Double amount, Double fromAmount, Double toAmount) {
+    public static Specification<Payment> paymentByAmount(BigDecimal amount, BigDecimal fromAmount, BigDecimal toAmount) {
         return (root, query, cb) -> {
             Predicate predicate = cb.conjunction();
 

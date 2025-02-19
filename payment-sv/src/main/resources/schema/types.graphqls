@@ -1,0 +1,30 @@
+type Revenue{
+    name: String!
+    amount: Float!
+}
+
+type Payment{
+    id: ID!
+    amount: Float!
+    paymentDate: String!
+    paymentMethod: String!
+    consultation: ConsultationModel!
+}
+
+type ConsultationModel @extends{
+    id: ID! @external
+}
+
+type PageInfo {
+    currentPage: Int!
+    totalPages: Int!
+    totalItems: Int!
+    itemsPerPage: Int!
+    hasNext: Boolean!
+    hasPrevious: Boolean!
+}
+
+type PaymentPage{
+    pageInfo: PageInfo!
+    payments: [Payment]!
+}

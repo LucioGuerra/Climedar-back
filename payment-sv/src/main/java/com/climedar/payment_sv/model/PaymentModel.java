@@ -1,6 +1,6 @@
 package com.climedar.payment_sv.model;
 
-import com.climedar.payment_sv.entity.PaymentMethod;
+import com.climedar.payment_sv.entity.payment.PaymentMethod;
 import com.climedar.payment_sv.external.model.Patient;
 import lombok.Data;
 

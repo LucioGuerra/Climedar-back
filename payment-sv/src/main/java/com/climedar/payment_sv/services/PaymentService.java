@@ -1,8 +1,9 @@
 package com.climedar.payment_sv.services;
 
 import com.climedar.payment_sv.dto.request.CreatePaymentDTO;
+import com.climedar.payment_sv.dto.request.PaymentSpecificationDTO;
 import com.climedar.payment_sv.entity.Invoice;
-import com.climedar.payment_sv.entity.Payment;
+import com.climedar.payment_sv.entity.payment.Payment;
 import com.climedar.payment_sv.event.internal.PaymentEvent;
 import com.climedar.payment_sv.external.model.Consultation;
 import com.climedar.payment_sv.external.model.Patient;
@@ -89,15 +90,18 @@ public class PaymentService {
         return ResponseEntity.noContent().build();
     }
 
-    public Page<PaymentModel> getAllPayments(Pageable pageable, LocalDate date, LocalDate fromDate, LocalDate toDate,
-                                        Double amount, Double fromAmount, Double toAmount,
-                                        Boolean canceled, Long patientId, Long consultationId) {
+    public Page<PaymentModel> getAllPayments(Pageable pageable, PaymentSpecificationDTO specificationDTO) {
 
-        Specification<Payment> spec = Specification.where(PaymentSpecification.paymentByCanceled(canceled))
-                .and(PaymentSpecification.paymentByDate(date, fromDate, toDate))
-                .and(PaymentSpecification.paymentByAmount(amount, fromAmount, toAmount))
-                .and(PaymentSpecification.paymentByPatientId(patientId))
-                .and(PaymentSpecification.paymentByConsultationId(consultationId));
+        Specification<Payment> spec =
+                Specification.where(PaymentSpecification.paymentByCanceled(specificationDTO.getCanceled()))
+                .and(PaymentSpecification.paymentByDate(LocalDate.parse(specificationDTO.getDate()),
+                                LocalDate.parse(specificationDTO.getFromDate()),
+                                LocalDate.parse(specificationDTO.getToDate()))
+                .and(PaymentSpecification.paymentByAmount(specificationDTO.getAmount(),
+                                specificationDTO.getFromAmount(),
+                                specificationDTO.getToAmount())
+                .and(PaymentSpecification.paymentByPatientId(specificationDTO.getPatientId()))
+                .and(PaymentSpecification.paymentByConsultationId(specificationDTO.getConsultationId()))));
 
         Page<Payment> payments = paymentRepository.findAll(spec, pageable);
 
@@ -112,6 +116,12 @@ public class PaymentService {
             paymentModel.setPatient(consultationPatientMap.get(payment.getConsultationId()));
             return paymentModel;
         });
+    }
+
+    public PaymentModel getPaymentById(Long id) {
+        Payment payment = paymentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Payment not found with id: " + id));
+        return paymentMapper.toModel(payment);
     }
 
     public ResponseEntity<byte[]> getReceiptByPayment(Long paymentId) {

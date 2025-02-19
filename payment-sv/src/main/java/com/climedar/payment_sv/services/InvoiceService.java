@@ -1,7 +1,7 @@
 package com.climedar.payment_sv.services;
 
 import com.climedar.payment_sv.entity.Invoice;
-import com.climedar.payment_sv.entity.Payment;
+import com.climedar.payment_sv.entity.payment.Payment;
 import com.climedar.payment_sv.external.model.Consultation;
 import com.climedar.payment_sv.external.model.Patient;
 import com.climedar.payment_sv.external.model.medical_services.MedicalServices;
