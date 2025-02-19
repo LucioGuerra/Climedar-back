@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Set;
 
-@FeignClient(name = "medical-services-sv")
+@FeignClient(name = "medical-service-sv")
 public interface MedicalServicesRepository {
     @GetMapping("/api/public/medical-services/{id}")
     MedicalServicesWrapped getMedicalServiceById(@PathVariable Long id);
