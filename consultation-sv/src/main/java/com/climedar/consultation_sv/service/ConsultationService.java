@@ -5,16 +5,14 @@ import com.climedar.consultation_sv.dto.request.CreateOvertimeConsultationDTO;
 import com.climedar.consultation_sv.dto.request.MedicalServicesWrapped;
 import com.climedar.consultation_sv.dto.request.UpdateConsultationDTO;
 import com.climedar.consultation_sv.entity.Consultation;
+import com.climedar.consultation_sv.external.model.doctor.Doctor;
 import com.climedar.consultation_sv.external.model.doctor.Shift;
 import com.climedar.consultation_sv.external.model.doctor.ShiftState;
 import com.climedar.consultation_sv.external.model.medical_service.MedicalServicesModel;
 import com.climedar.consultation_sv.external.model.patient.Patient;
 import com.climedar.consultation_sv.mapper.ConsultationMapper;
 import com.climedar.consultation_sv.model.ConsultationModel;
-import com.climedar.consultation_sv.repository.ConsultationRepository;
-import com.climedar.consultation_sv.repository.MedicalServicesRepository;
-import com.climedar.consultation_sv.repository.PatientRepository;
-import com.climedar.consultation_sv.repository.ShiftRepository;
+import com.climedar.consultation_sv.repository.*;
 import com.climedar.consultation_sv.specification.ConsultationSpecification;
 import com.climedar.library.exception.ClimedarException;
 import jakarta.persistence.EntityNotFoundException;
@@ -96,6 +94,16 @@ public class ConsultationService {
                 medicalServicesRepository.findAllById(createConsultationDTO.medicalServicesId());
         List<MedicalServicesModel> medicalServicesModels = medicalServicesWrappeds.stream().map(MedicalServicesWrapped::getMedicalServices).toList();
 
+        Doctor doctor = shiftRepository.findDoctorById((createConsultationDTO.doctorId()));
+        for (MedicalServicesModel medicalServicesModel : medicalServicesModels) {
+            if (!doctor.getSpeciality().getId().equals(medicalServicesModel.getSpeciality().getId())) {
+                throw new ClimedarException("DOCTOR_DOESNT_PROVIDE_THESE_SERVICES", "Doctor speciality and medical " +
+                        "service " +
+                        "speciality " +
+                        "doesn't match");
+            }
+        }
+
         Shift shift;
         if (createConsultationDTO.shiftId() != null) {
             shift = shiftRepository.findById(createConsultationDTO.shiftId());
@@ -111,14 +119,7 @@ public class ConsultationService {
         }
 
 
-        for (MedicalServicesModel medicalServicesModel : medicalServicesModels) {
-            if (!shift.getDoctor().getSpeciality().getId().equals(medicalServicesModel.getSpeciality().getId())) {
-                throw new ClimedarException("DOCTOR_DOESNT_PROVIDE_THESE_SERVICES", "Doctor speciality and medical " +
-                        "service " +
-                        "speciality " +
-                        "doesn't match");
-            }
-        }
+
 
         Patient patient = patientRepository.findById(createConsultationDTO.patientId());
 

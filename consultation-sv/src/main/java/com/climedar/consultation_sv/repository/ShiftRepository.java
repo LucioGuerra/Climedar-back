@@ -1,6 +1,7 @@
 package com.climedar.consultation_sv.repository;
 
 import com.climedar.consultation_sv.dto.request.CreateOvertimeShiftDTO;
+import com.climedar.consultation_sv.external.model.doctor.Doctor;
 import com.climedar.consultation_sv.external.model.doctor.Shift;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
@@ -31,4 +32,7 @@ public interface ShiftRepository {
 
     @PostMapping("/api/public/shifts")
     Shift createShift(@RequestParam Long doctorId, @RequestParam Duration timeOfShifts);
+
+    @GetMapping("/api/public/doctors/{id}")
+    Doctor findDoctorById(@PathVariable Long id);
 }
