@@ -22,10 +22,10 @@ public class GraphqlResolverAdapter {
     private final MedicalService medicalService;
     private final PageInfoMapper pageInfoMapper;
 
-    public MedicalPackagePage getAllPackages(PageRequestInput input) {
+    public MedicalPackagePage getAllPackages(PageRequestInput input, Long specialityId, String name) {
         Pageable pageable = PageRequest.of(input.getPage()-1, input.getSize(), input.getSort());
 
-        Page<MedicalPackageModel> medicalPackageModels = packageService.getAllPackages(pageable);
+        Page<MedicalPackageModel> medicalPackageModels = packageService.getAllPackages(pageable, specialityId, name);
 
         MedicalPackagePage medicalPackagePage = new MedicalPackagePage();
         medicalPackagePage.setPageInfo(pageInfoMapper.toPageInfo(medicalPackageModels));
