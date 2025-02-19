@@ -41,7 +41,10 @@ public class ConsultationService {
     private final MedicalServicesRepository medicalServicesRepository;
 
     public Float getConsultationPrice(Set<Long> servicesIds, Long patientId) {
-        Patient patient = patientRepository.findById(patientId);
+        Patient patient = null;
+        if (patientId != null) {
+            patient = patientRepository.findById(patientId);
+        }
         List<MedicalServicesWrapped> medicalServicesWrappeds = medicalServicesRepository.findAllById(servicesIds);
         List<MedicalServicesModel> medicalServicesModels = medicalServicesWrappeds.stream().map(MedicalServicesWrapped::getMedicalServices).toList();
         return calculateFinalPrice(medicalServicesModels, patient).floatValue();
