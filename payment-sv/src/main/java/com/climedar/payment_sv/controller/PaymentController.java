@@ -19,4 +19,14 @@ public class PaymentController {
     public ResponseEntity<byte[]> createPayment(@RequestBody CreatePaymentDTO paymentDTO) {
         return paymentService.createPayment(paymentDTO);
     }
+
+    @GetMapping(path = "/{id}/receipt", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> getReceiptByPayment(@PathVariable Long id) {
+        return paymentService.getReceiptByPayment(id);
+    }
+
+    @GetMapping(path = "/invoice/consultation/{consultationId}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> getInvoiceByConsultation(@PathVariable Long consultationId) {
+        return paymentService.getInvoiceByConsultation(consultationId);
+    }
 }

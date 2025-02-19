@@ -4,7 +4,6 @@ import com.climedar.payment_sv.entity.Invoice;
 import com.climedar.payment_sv.entity.Payment;
 import com.climedar.payment_sv.external.model.Consultation;
 import com.climedar.payment_sv.external.model.Patient;
-import com.climedar.payment_sv.external.model.medical_services.MedicalService;
 import com.climedar.payment_sv.external.model.medical_services.MedicalServices;
 import com.climedar.payment_sv.external.model.medical_services.MedicalServicesWrapped;
 import com.climedar.payment_sv.repository.ConsultationRepository;
@@ -16,10 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
-import org.thymeleaf.context.Context;
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +33,7 @@ public class InvoiceService {
 
 
 
-    public byte[] generateInvoice(Payment payment) {
+    public byte[] createInvoice(Payment payment) {
         Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
         Patient patient = consultation.getPatient();
         List<MedicalServices> medicalServices = consultation.getMedicalServicesModel();
@@ -58,9 +54,18 @@ public class InvoiceService {
         return exportService.getInvoicePDF(this.getInvoiceData(invoice, patient, medicalServices));
     }
 
+    public ResponseEntity<byte[]> getInvoice(Long invoiceId) {
+        Invoice invoice = invoiceRepository.findById(invoiceId).orElseThrow(() -> new EntityNotFoundException("Invoice not found for id: " + invoiceId));
+        return generateInvoice(invoice);
+    }
+
 
     public ResponseEntity<byte[]> getInvoiceByPayment(Long paymentId) {
-        Invoice invoice = invoiceRepository.findByPatientId(paymentId).orElseThrow(() -> new EntityNotFoundException("Invoice not found for payment id: " + paymentId));
+        Invoice invoice = invoiceRepository.findByPaymentId(paymentId).orElseThrow(() -> new EntityNotFoundException("Invoice not found for payment id: " + paymentId));
+        return generateInvoice(invoice);
+    }
+
+    private ResponseEntity<byte[]> generateInvoice(Invoice invoice) {
         Patient patient = patientRepository.getPatientById(invoice.getPatientId());
         List<MedicalServices> medicalServices = medicalServicesRepository.getMedicalServicesByIds(invoice.getMedicalServicesId()).stream().map(MedicalServicesWrapped::getMedicalServices).toList();
 
@@ -68,7 +73,6 @@ public class InvoiceService {
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDisposition(ContentDisposition.builder("inline")
                 .filename("invoice_" + invoice.getPayment().getId() + ".pdf").build());
-
 
 
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(exportService.getInvoicePDF(this.getInvoiceData(invoice, patient, medicalServices)));

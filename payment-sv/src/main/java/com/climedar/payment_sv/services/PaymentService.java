@@ -66,7 +66,7 @@ public class PaymentService {
 
 
         //todo: retornar tambien el recibo
-        return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(invoiceService.generateInvoice(payment));
+        return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(invoiceService.createInvoice(payment));
     }
 
     public ResponseEntity<Void> cancelPayment(Long paymentId) {
