@@ -55,7 +55,7 @@ public class PackageService {
 
         for (Long serviceId : createPackageDTO.servicesIds()) {
             MedicalServiceEntity medicalServiceEntity = medicalService.getMedicalServiceEntityById(serviceId);
-            if (medicalServiceEntity.getSpecialityId().equals(createPackageDTO.specialityId())) {
+            if (!medicalServiceEntity.getSpecialityId().equals(createPackageDTO.specialityId())) {
                 throw new ClimedarException("SERVICE_SPECIALITY_MISMATCH", "Service speciality does not match package speciality");
             }
             medicalPackageEntity.addService(medicalServiceEntity);

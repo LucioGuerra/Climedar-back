@@ -2,19 +2,20 @@
 <html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Factura</title>
-    <link rel="stylesheet" type="text/css" href="invoice/invoice_style.css" />
+    <title>Recibo</title>
+    <link rel="stylesheet" type="text/css" href="receipt/receipt_style.css" />
 </head>
 <body>
-<div class="invoice-box">
+<div class="receipt-box">
     <div class="header">
         <div class="header-1row">
             <img src="images/climedar-negro.png" alt="Logo Climedar" />
 
-            <div class="invoice-data">
-                <h1>Factura</h1>
+            <div class="receipt-data">
+                <h1>RECIBO</h1>
+                <p th:href="|Nro recibo: ${receiptNumber}|">Nro recibo: 999999999</p>
                 <p th:text="|Nro factura: 0001-${invoiceNumber}|">Nro factura: 0001-99999999</p>
-                <p th:text="|Fecha: ${invoiceDate}|">Fecha: 10-10-2025</p>
+                <p th:text="|Fecha: ${paymentDate}|">Fecha: 10-10-2025</p>
             </div>
         </div>
 

@@ -1,6 +1,7 @@
 package com.climedar.payment_sv.services;
 
 import com.climedar.payment_sv.dto.request.CreatePaymentDTO;
+import com.climedar.payment_sv.entity.Invoice;
 import com.climedar.payment_sv.entity.Payment;
 import com.climedar.payment_sv.event.internal.PaymentEvent;
 import com.climedar.payment_sv.external.model.Consultation;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -112,7 +114,7 @@ public class PaymentService {
         });
     }
 
-   /* public ResponseEntity<byte[]> getReceiptByPayment(Long paymentId) {
+    public ResponseEntity<byte[]> getReceiptByPayment(Long paymentId) {
         Payment payment = paymentRepository.findByIdAndCanceled(paymentId, false)
                 .orElseThrow(() -> new EntityNotFoundException("Payment not found with id: " + paymentId));
         HttpHeaders headers = new HttpHeaders();
@@ -122,9 +124,24 @@ public class PaymentService {
 
         Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
         Patient patient = consultation.getPatient();
-        List<MedicalServices> medicalServices = consultation.getMedicalServices();
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(exportService.getReceiptPDF(payment,
-                patient, medicalServices));
+        List<MedicalServices> medicalServices = consultation.getMedicalServicesModel();
+        Invoice invoice = payment.getInvoice();
+
+        Map<String, Object> receiptData = new HashMap<>();
+        receiptData.put("paymentNumber", String.format("%010d", payment.getId()));
+        receiptData.put("invoiceNumber", String.format("%010d", invoice.getId()));
+        receiptData.put("paymentDate", payment.getPaymentDate());
+        receiptData.put("patientName", patient.getName());
+        receiptData.put("patientAddress", patient.getAddress().toString());
+        receiptData.put("patientProvince", "La Plata");
+        receiptData.put("patientDni", patient.getDni());
+        receiptData.put("patientPhone", patient.getPhone());
+        receiptData.put("patientEmail", patient.getEmail());
+        receiptData.put("finalPrice", consultation.getFinalPrice());
+        receiptData.put("services", medicalServices);
+        receiptData.put("paymentMethod", payment.getPaymentMethod().getDisplayName());
+
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(exportService.getReceiptPDF(receiptData));
     }
 
     public ResponseEntity<byte[]> getInvoiceByConsultation(Long consultationId) {
@@ -132,11 +149,12 @@ public class PaymentService {
                 .orElseThrow(() -> new EntityNotFoundException("Payment not found for consultation id: " + consultationId));
 
         return invoiceService.getInvoiceByPayment(payment.getId());
-    }*/
+    }
 
 
     public List<Payment> getPaymentsByDate(LocalDate date) {
         return paymentRepository.findByPaymentDateBetweenAndCanceled(date.atStartOfDay(), date.atTime(23, 59, 59),
                 false);
     }
+
 }

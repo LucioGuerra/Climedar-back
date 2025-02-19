@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
+@Table(name = "medical_service")
 public class MedicalServiceEntity extends MedicalServicesEntity {
 
 

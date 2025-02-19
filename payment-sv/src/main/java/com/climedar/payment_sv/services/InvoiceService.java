@@ -6,6 +6,7 @@ import com.climedar.payment_sv.external.model.Consultation;
 import com.climedar.payment_sv.external.model.Patient;
 import com.climedar.payment_sv.external.model.medical_services.MedicalService;
 import com.climedar.payment_sv.external.model.medical_services.MedicalServices;
+import com.climedar.payment_sv.external.model.medical_services.MedicalServicesWrapped;
 import com.climedar.payment_sv.repository.ConsultationRepository;
 import com.climedar.payment_sv.repository.InvoiceRepository;
 import com.climedar.payment_sv.repository.MedicalServicesRepository;
@@ -35,6 +36,7 @@ public class InvoiceService {
     private final MedicalServicesRepository medicalServicesRepository;
 
 
+
     public byte[] generateInvoice(Payment payment) {
         Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
         Patient patient = consultation.getPatient();
@@ -53,31 +55,38 @@ public class InvoiceService {
         invoice.setMedicalServicesId(medicalServicesId);
 
         invoiceRepository.save(invoice);
-
-        Map<String, Object> invoiceData = new HashMap<>();
-        invoiceData.put("invoiceNumber", String.format("%10d", invoice.getId()));
-        invoiceData.put("invoiceDate", invoice.getInvoiceDate());
-        invoiceData.put("patientName", patient.getName());
-        invoiceData.put("patientAddress", patient.getAddress().toString());
-        invoiceData.put("patientPhone", patient.getPhone());
-        invoiceData.put("patientEmail", patient.getEmail());
-        invoiceData.put("finalPrice", consultation.getFinalPrice());
-        invoiceData.put("services", medicalServices);
-        invoiceData.put("paymentMethod", payment.getPaymentMethod());
-        return exportService.getInvoicePDF(invoiceData);
+        return exportService.getInvoicePDF(this.getInvoiceData(invoice, patient, medicalServices));
     }
 
 
-    /*public ResponseEntity<byte[]> getInvoiceByPayment(Long paymentId) {
+    public ResponseEntity<byte[]> getInvoiceByPayment(Long paymentId) {
         Invoice invoice = invoiceRepository.findByPatientId(paymentId).orElseThrow(() -> new EntityNotFoundException("Invoice not found for payment id: " + paymentId));
         Patient patient = patientRepository.getPatientById(invoice.getPatientId());
-        MedicalServices medicalServices = medicalServicesRepository.getMedicalServiceById(invoice.getMedicalServicesId()).getMedicalServices();
+        List<MedicalServices> medicalServices = medicalServicesRepository.getMedicalServicesByIds(invoice.getMedicalServicesId()).stream().map(MedicalServicesWrapped::getMedicalServices).toList();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDisposition(ContentDisposition.builder("inline")
                 .filename("invoice_" + invoice.getPayment().getId() + ".pdf").build());
 
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(exportService.getInvoicePDF(invoice, patient, medicalServices));
-    }*/
+
+
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(exportService.getInvoicePDF(this.getInvoiceData(invoice, patient, medicalServices)));
+    }
+
+    private Map<String, Object> getInvoiceData(Invoice invoice, Patient patient, List<MedicalServices> medicalServices) {
+        Map<String, Object> invoiceData = new HashMap<>();
+        invoiceData.put("invoiceNumber", String.format("%010d", invoice.getId()));
+        invoiceData.put("invoiceDate", invoice.getInvoiceDate());
+        invoiceData.put("patientName", patient.getName());
+        invoiceData.put("patientAddress", patient.getAddress().toString());
+        invoiceData.put("patientProvince", "La Plata");
+        invoiceData.put("patientDni", patient.getDni());
+        invoiceData.put("patientPhone", patient.getPhone());
+        invoiceData.put("patientEmail", patient.getEmail());
+        invoiceData.put("finalPrice", invoice.getTotalAmount());
+        invoiceData.put("services", medicalServices);
+        invoiceData.put("paymentMethod", invoice.getPayment().getPaymentMethod().getDisplayName());
+        return invoiceData;
+    }
 }

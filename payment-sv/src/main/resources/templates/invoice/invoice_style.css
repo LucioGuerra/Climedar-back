@@ -108,12 +108,12 @@ h3 {
 
 .patient-address {
     float: left;
-    width: 20%;
+    width: 40%;
 }
 
 .patient-dni {
     float: right;
-    width: 20%;
+    width: 40%;
     text-align: right;
 }
 

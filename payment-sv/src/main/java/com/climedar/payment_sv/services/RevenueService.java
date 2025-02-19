@@ -1,16 +1,19 @@
 package com.climedar.payment_sv.services;
 
+import com.climedar.payment_sv.dto.request.OriginName;
+import com.climedar.payment_sv.dto.response.GetRevenueDTO;
 import com.climedar.payment_sv.entity.Revenue;
 import com.climedar.payment_sv.entity.RevenueType;
 import com.climedar.payment_sv.event.internal.PaymentEvent;
 import com.climedar.payment_sv.external.model.medical_services.ServicesType;
+import com.climedar.payment_sv.mapper.RevenueMapper;
 import com.climedar.payment_sv.repository.MedicalServicesRepository;
 import com.climedar.payment_sv.repository.RevenueRepository;
 import com.climedar.payment_sv.repository.SpecialityRepository;
-import jakarta.annotation.PostConstruct;
+import com.climedar.payment_sv.specification.RevenueSpecification;
 import lombok.AllArgsConstructor;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +29,26 @@ public class RevenueService {
     private final RevenueRepository revenueRepository;
     private final MedicalServicesRepository medicalServicesRepository;
     private final SpecialityRepository specialityRepository;
+    private final RevenueMapper revenueMapper;
 
-    //todo: obtener datos de las ganancias
     //todo: actualizar los datos cuando se modifiquen las especialidades
-/*
+
+    public List<GetRevenueDTO> getAllRevenue(LocalDate date, LocalDate fromDate, LocalDate toDate,
+                                             RevenueType revenueType, String specialityName, ServicesType servicesType,
+                                             OriginName originName){
+
+        Specification<Revenue> specification = Specification.where(RevenueSpecification.byDate(date, fromDate, toDate))
+                .and(RevenueSpecification.byType(revenueType))
+                .and(RevenueSpecification.bySpeciality(specialityName))
+                .and(RevenueSpecification.byMedicalService(servicesType));
+
+        List<Revenue> revenues = revenueRepository.findAll(specification);
+
+         return switch (originName) {
+            case SPECIALITY -> revenues.stream().map(revenueMapper::toDTOSpecialityName).toList();
+            case MEDICAL_SERVICE -> revenues.stream().map(revenueMapper::toDTOServiceType).toList();
+         };
+    }
 
     @EventListener(condition = "#event.amount() > 0")
     public void handlerPaymentEvent(PaymentEvent event) {
@@ -40,7 +59,6 @@ public class RevenueService {
         revenue.setTotalPayments(revenue.getTotalPayments() + 1);
         revenueRepository.save(revenue);
     }
-*/
 
     @EventListener(condition = "#event.amount() < 0")
     public void handlerCancelPaymentEvent(PaymentEvent event) {

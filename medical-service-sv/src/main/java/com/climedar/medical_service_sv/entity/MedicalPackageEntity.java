@@ -12,6 +12,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
+@Table(name = "medical_package")
 public class MedicalPackageEntity extends MedicalServicesEntity {
 
     @Id

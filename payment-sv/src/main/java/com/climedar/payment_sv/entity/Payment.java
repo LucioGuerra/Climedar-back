@@ -26,6 +26,9 @@ public class Payment {
     @Column(name = "payment_method", nullable = false, updatable = false)
     private PaymentMethod paymentMethod;
 
+    @OneToOne
+    private Invoice invoice;
+
     private Boolean canceled;
 
     public Payment() {

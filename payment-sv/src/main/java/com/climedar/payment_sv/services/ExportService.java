@@ -45,25 +45,23 @@ public class ExportService {
         return baos.toByteArray();
     }
 
-   /* @SneakyThrows
-    public byte[] getReceiptPDF(Payment payment, Patient patient, List<MedicalServices> medicalServices) {
-        InputStream inputStream = getClass().getResourceAsStream("/jasper_report/receipt_template.jasper");
+    @SneakyThrows
+    public byte[] getReceiptPDF(Map<String, Object> invoiceData) {
+        Context context = new Context();
+        context.setVariables(invoiceData);
 
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("receipt_id", payment.getId());
-        parameters.put("patient_name", patient.getName());
-        parameters.put("patient_address", patient.getAddress());
-        parameters.put("patient_phone", patient.getPhone());
-        parameters.put("patient_email", patient.getEmail());
-        parameters.put("patient_surname", patient.getSurname());
-        parameters.put("patient_dni", patient.getDni());
-        parameters.put("total_amount", payment.getAmount());
-        parameters.put("invoice_date", payment.getPaymentDate());
-        parameters.put("services_names", medicalServices.getName());
-        parameters.put("services_prices", medicalServices.getPrice());
-        parameters.put("services_codes", medicalServices.getCode());
+        String html = templateEngine.process("receipt/receipt_template", context);
 
-        JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters, new JREmptyDataSource());
-        return JasperExportManager.exportReportToPdf(jasperPrint);
-    }*/
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ITextRenderer renderer = new ITextRenderer();
+
+
+        String baseUrl = new ClassPathResource("/templates/").getURL().toExternalForm();
+        renderer.setDocumentFromString(html, baseUrl);
+        renderer.layout();
+        renderer.createPDF(baos, false);
+        renderer.finishPDF();
+
+        return baos.toByteArray();
+    }
 }

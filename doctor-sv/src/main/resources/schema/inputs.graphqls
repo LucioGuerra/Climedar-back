@@ -111,11 +111,11 @@ input UpdateDoctorInput {
     surname: String
     dni: String
     gender: Gender
-    birthDate: String
+    birthdate: String
     salary: Float
     email: String
     phone: String
-    specialityId: ID
+    speciality: SpecialityInput
     address: AddressInput
 }
 
