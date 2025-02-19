@@ -45,6 +45,9 @@ public class ConsultationService {
         if (patientId != null) {
             patient = patientRepository.findById(patientId);
         }
+        if (servicesIds.isEmpty()) {
+            return 0f;
+        }
         List<MedicalServicesWrapped> medicalServicesWrappeds = medicalServicesRepository.findAllById(servicesIds);
         List<MedicalServicesModel> medicalServicesModels = medicalServicesWrappeds.stream().map(MedicalServicesWrapped::getMedicalServices).toList();
         return calculateFinalPrice(medicalServicesModels, patient).floatValue();
