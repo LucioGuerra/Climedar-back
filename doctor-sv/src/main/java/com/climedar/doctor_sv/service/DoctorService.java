@@ -159,7 +159,7 @@ public class DoctorService {
 
         Person personToUpdate = personRepository.findById(doctor.getPersonId());
 
-        if (this.personDataMatcher(personToUpdate, doctorModel)) {
+        if (!this.personDataMatcher(personToUpdate, doctorModel)) {
             personMapper.updatePerson(personToUpdate, doctorModel);
             personRepository.updatePerson(personToUpdate.getPersonId(), personToUpdate);
         }
