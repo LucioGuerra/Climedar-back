@@ -39,8 +39,14 @@ public class PackageService {
         return medicalPackageMapper.toModel(medicalPackageEntity);
     }
 
-    public Page<MedicalPackageModel> getAllPackages(Pageable pageable) {
+    public Page<MedicalPackageModel> getAllPackages(Pageable pageable, Long specialityId, String name) {
         Specification<MedicalPackageEntity> specification = Specification.where((root, query, cb) -> cb.equal(root.get("deleted"), false));
+        if (specialityId != null) {
+            specification = specification.and((root, query, cb) -> cb.equal(root.get("specialityId"), specialityId));
+        }
+        if (name != null) {
+            specification = specification.and((root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
+        }
         Page<MedicalPackageEntity> medicalPackageEntities = medicalPackageRepository.findAll(specification, pageable);
         return medicalPackageEntities.map(medicalPackageMapper::toModel);
 
@@ -55,7 +61,7 @@ public class PackageService {
 
         for (Long serviceId : createPackageDTO.servicesIds()) {
             MedicalServiceEntity medicalServiceEntity = medicalService.getMedicalServiceEntityById(serviceId);
-            if (medicalServiceEntity.getSpecialityId().equals(createPackageDTO.specialityId())) {
+            if (!medicalServiceEntity.getSpecialityId().equals(createPackageDTO.specialityId())) {
                 throw new ClimedarException("SERVICE_SPECIALITY_MISMATCH", "Service speciality does not match package speciality");
             }
             medicalPackageEntity.addService(medicalServiceEntity);

@@ -19,7 +19,7 @@ public interface PageInfoMapper {
 
     @Named("extractPageNumber")
     default int extractPageNumber(Page<?> page) {
-        return page.getNumber();
+        return page.getNumber() + 1;
     }
 
     @Named("extractTotalElements")
