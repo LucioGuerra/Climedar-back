@@ -88,7 +88,7 @@ public class InvoiceService {
         invoiceData.put("patientDni", patient.getDni());
         invoiceData.put("patientPhone", patient.getPhone());
         invoiceData.put("patientEmail", patient.getEmail());
-        invoiceData.put("finalPrice", invoice.getTotalAmount());
+        invoiceData.put("finalPrice", invoice.getTotalAmount().floatValue());
         invoiceData.put("services", medicalServices);
         invoiceData.put("paymentMethod", invoice.getPayment().getPaymentMethod().getDisplayName());
         return invoiceData;

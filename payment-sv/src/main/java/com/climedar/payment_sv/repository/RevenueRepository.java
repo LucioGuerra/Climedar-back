@@ -2,7 +2,7 @@ package com.climedar.payment_sv.repository;
 
 import com.climedar.payment_sv.entity.revenue.Revenue;
 import com.climedar.payment_sv.entity.revenue.RevenueType;
-import com.climedar.payment_sv.external.model.medical_services.ServicesType;
+import com.climedar.payment_sv.external.model.medical_services.ServiceType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -15,5 +15,5 @@ public interface RevenueRepository extends JpaRepository<Revenue, Long>, JpaSpec
 
     List<Revenue> findByDateAndRevenueType(LocalDate date, RevenueType revenueType);
 
-    Revenue findByDateAndRevenueTypeAndSpecialityNameAndMedicalServicesType(LocalDate date, RevenueType revenueType, String specialityName, ServicesType medicalServicesType);
+    Revenue findByDateAndRevenueTypeAndSpecialityNameAndMedicalServiceType(LocalDate date, RevenueType revenueType, String specialityName, ServiceType medicalServiceType);
 }

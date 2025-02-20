@@ -12,7 +12,7 @@ public interface RevenueMapper {
     @Mapping(target = "amount", source = "amount")
     GetRevenueDTO toDTOSpecialityName(Revenue revenue);
 
-    @Mapping(target = "name", source = "medicalServicesType")
+    @Mapping(target = "name", source = "medicalServiceType")
     @Mapping(target = "amount", source = "amount")
     GetRevenueDTO toDTOServiceType(Revenue revenue);
 }

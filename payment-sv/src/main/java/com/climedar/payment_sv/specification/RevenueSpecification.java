@@ -2,7 +2,7 @@ package com.climedar.payment_sv.specification;
 
 import com.climedar.payment_sv.entity.revenue.Revenue;
 import com.climedar.payment_sv.entity.revenue.RevenueType;
-import com.climedar.payment_sv.external.model.medical_services.ServicesType;
+import com.climedar.payment_sv.external.model.medical_services.ServiceType;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -33,7 +33,7 @@ public class RevenueSpecification {
         return (root, query, cb) -> speciality == null? null : cb.equal(root.get("specialityName"), speciality);
     }
 
-    public static Specification<Revenue> byMedicalService(ServicesType medicalService) {
+    public static Specification<Revenue> byMedicalService(ServiceType medicalService) {
         return (root, query, cb) -> medicalService == null? null : cb.equal(root.get("medicalServicesType"), medicalService);
     }
 

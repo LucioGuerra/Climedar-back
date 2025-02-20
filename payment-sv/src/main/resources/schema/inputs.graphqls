@@ -16,7 +16,7 @@ input RevenueSpecification{
     toDate: String
     revenueType: RevenueType
     specialityName: String
-    servicesType: ServiceType
+    serviceType: ServiceType
     originName: OriginName
 }
 

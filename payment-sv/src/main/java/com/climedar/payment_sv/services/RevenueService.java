@@ -5,7 +5,7 @@ import com.climedar.payment_sv.dto.response.GetRevenueDTO;
 import com.climedar.payment_sv.entity.revenue.Revenue;
 import com.climedar.payment_sv.entity.revenue.RevenueType;
 import com.climedar.payment_sv.event.PaymentEvent;
-import com.climedar.payment_sv.external.model.medical_services.ServicesType;
+import com.climedar.payment_sv.external.model.medical_services.ServiceType;
 import com.climedar.payment_sv.mapper.RevenueMapper;
 import com.climedar.payment_sv.repository.MedicalServicesRepository;
 import com.climedar.payment_sv.repository.RevenueRepository;
@@ -40,7 +40,7 @@ public class RevenueService {
                 Specification.where(RevenueSpecification.byDate(LocalDate.parse(specificationDTO.date()), LocalDate.parse(specificationDTO.fromDate()), LocalDate.parse(specificationDTO.toDate())))
                 .and(RevenueSpecification.byType(specificationDTO.revenueType()))
                 .and(RevenueSpecification.bySpeciality(specificationDTO.specialityName()))
-                .and(RevenueSpecification.byMedicalService(specificationDTO.servicesType()));
+                .and(RevenueSpecification.byMedicalService(specificationDTO.serviceType()));
 
         List<Revenue> revenues = revenueRepository.findAll(specification);
 
@@ -53,8 +53,8 @@ public class RevenueService {
     @EventListener(condition = "#event.amount() > 0")
     public void handlerPaymentEvent(PaymentEvent event) {
         Revenue revenue =
-                revenueRepository.findByDateAndRevenueTypeAndSpecialityNameAndMedicalServicesType((event.date().toLocalDate()),
-                RevenueType.DAILY, event.specialityName(), event.servicesType());
+                revenueRepository.findByDateAndRevenueTypeAndSpecialityNameAndMedicalServiceType((event.date().toLocalDate()),
+                RevenueType.DAILY, event.specialityName(), event.serviceType());
         revenue.setAmount(revenue.getAmount().add(event.amount()));
         revenue.setTotalPayments(revenue.getTotalPayments() + 1);
         revenueRepository.save(revenue);
@@ -62,10 +62,10 @@ public class RevenueService {
 
     @EventListener(condition = "#event.amount() < 0")
     public void handlerCancelPaymentEvent(PaymentEvent event) {
-        Revenue dailyRevenue = revenueRepository.findByDateAndRevenueTypeAndSpecialityNameAndMedicalServicesType(event.date().toLocalDate(),
-                RevenueType.DAILY, event.specialityName(), event.servicesType());
-        Revenue monthlyRevenue = revenueRepository.findByDateAndRevenueTypeAndSpecialityNameAndMedicalServicesType(event.date().toLocalDate(),
-                RevenueType.DAILY, event.specialityName(), event.servicesType());
+        Revenue dailyRevenue = revenueRepository.findByDateAndRevenueTypeAndSpecialityNameAndMedicalServiceType(event.date().toLocalDate(),
+                RevenueType.DAILY, event.specialityName(), event.serviceType());
+        Revenue monthlyRevenue = revenueRepository.findByDateAndRevenueTypeAndSpecialityNameAndMedicalServiceType(event.date().toLocalDate(),
+                RevenueType.DAILY, event.specialityName(), event.serviceType());
         monthlyRevenue.setAmount(monthlyRevenue.getAmount().add(event.amount()));
         dailyRevenue.setAmount(dailyRevenue.getAmount().add(event.amount()));
         revenueRepository.save(monthlyRevenue);
@@ -74,15 +74,15 @@ public class RevenueService {
     @Scheduled(cron = "0 0 0 * * ?")
     public void createDailyAmount(){
         Set<String> specialitiesNames = specialityRepository.getAllSpecialitiesName();
-        Set<ServicesType> servicesTypes = medicalServicesRepository.getAllServicesType();
+        Set<ServiceType> serviceTypes = medicalServicesRepository.getAllServicesType();
         for (String specialityName : specialitiesNames){
-            for (ServicesType servicesType : servicesTypes){
+            for (ServiceType serviceType : serviceTypes){
                 Revenue revenue = new Revenue();
                 revenue.setDate(LocalDate.now());
                 revenue.setAmount(BigDecimal.ZERO);
                 revenue.setTotalPayments(0L);
                 revenue.setSpecialityName(specialityName);
-                revenue.setMedicalServicesType(servicesType);
+                revenue.setMedicalServiceType(serviceType);
                 revenue.setRevenueType(RevenueType.DAILY);
                 revenueRepository.save(revenue);
             }
@@ -92,15 +92,15 @@ public class RevenueService {
     @Scheduled(cron = "0 0 0 1 * ?")
     public void createMonthlyAmount(){
         Set<String> specialitiesNames = specialityRepository.getAllSpecialitiesName();
-        Set<ServicesType> servicesTypes = medicalServicesRepository.getAllServicesType();
+        Set<ServiceType> serviceTypes = medicalServicesRepository.getAllServicesType();
         for (String specialityName : specialitiesNames){
-            for (ServicesType servicesType : servicesTypes){
+            for (ServiceType serviceType : serviceTypes){
                 Revenue revenue = new Revenue();
                 revenue.setDate(LocalDate.now().withDayOfMonth(1));
                 revenue.setAmount(BigDecimal.ZERO);
                 revenue.setTotalPayments(0L);
                 revenue.setSpecialityName(specialityName);
-                revenue.setMedicalServicesType(servicesType);
+                revenue.setMedicalServiceType(serviceType);
                 revenue.setRevenueType(RevenueType.MONTHLY);
                 revenueRepository.save(revenue);
             }
@@ -116,7 +116,7 @@ public class RevenueService {
         for (Revenue monthyRevenue : monthlyRevenues){
             for (Revenue dailyRevenue : dailyRevenues){
                 if (monthyRevenue.getSpecialityName().equals(dailyRevenue.getSpecialityName()) &&
-                    monthyRevenue.getMedicalServicesType().equals(dailyRevenue.getMedicalServicesType())){
+                    monthyRevenue.getMedicalServiceType().equals(dailyRevenue.getMedicalServiceType())){
                     monthyRevenue.setAmount(monthyRevenue.getAmount().add(dailyRevenue.getAmount()));
                     monthyRevenue.setTotalPayments(monthyRevenue.getTotalPayments() + dailyRevenue.getTotalPayments());
                 }

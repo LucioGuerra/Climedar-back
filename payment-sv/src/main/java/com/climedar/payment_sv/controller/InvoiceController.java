@@ -21,7 +21,7 @@ public class InvoiceController {
         return invoiceService.getInvoice(id);
     }
 
-    @GetMapping(path = "/payment/{id}/", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(path = "/payment/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> getInvoiceByPayment(@PathVariable Long id) {
         return invoiceService.getInvoiceByPayment(id);
     }

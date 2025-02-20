@@ -72,7 +72,7 @@
                 <tr th:each="service : ${services}">
                     <td class="col-first" th:text="|${service.code}|">MS-THER-CAR-00001</td>
                     <td class="col-second" th:text="|${service.name}|">Consulta Ginecologica</td>
-                    <td class="col-last" th:text="|'$' ${service.price}|">$ 5000000</td>
+                    <td class="col-last" th:text="|$ ${service.price}|">$ 5000000</td>
                 </tr>
                 </tbody>
             </table>
@@ -81,7 +81,7 @@
     </div>
 
     <div class="total">
-        <h1 th:text="|TOTAL: '$'${finalPrice}|">TOTAL: $5000000</h1>
+        <h1 th:text="|TOTAL: $${finalPrice}|">TOTAL: $5000000</h1>
     </div>
 </div>
 </body>

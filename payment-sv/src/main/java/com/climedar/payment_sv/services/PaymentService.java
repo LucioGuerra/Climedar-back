@@ -51,11 +51,11 @@ public class PaymentService {
         for (MedicalServices medicalService : consultation.getMedicalServicesModel()) {
             if (medicalService.getClass() == MedicalService.class) {
                 eventPublisher.publishEvent(new PaymentEvent(medicalService.getPrice(), payment.getPaymentDate(),
-                        ((MedicalService) medicalService).getServicesType(), ((MedicalService) medicalService).getSpeciality().getName()));
+                        ((MedicalService) medicalService).getServiceType(), ((MedicalService) medicalService).getSpeciality().getName()));
             }else {
                 for (MedicalService medicalService1 : ((MedicalPackage) medicalService).getMedicalServices()) {
                     eventPublisher.publishEvent(new PaymentEvent(medicalService1.getPrice(), payment.getPaymentDate(),
-                            medicalService1.getServicesType(), medicalService1.getSpeciality().getName()));
+                            medicalService1.getServiceType(), medicalService1.getSpeciality().getName()));
                 }
             }
         }
@@ -79,11 +79,11 @@ public class PaymentService {
         for (MedicalServices medicalService : consultation.getMedicalServicesModel()) {
             if (medicalService.getClass() == MedicalService.class) {
                 eventPublisher.publishEvent(new PaymentEvent(medicalService.getPrice().negate(), payment.getPaymentDate(),
-                        ((MedicalService) medicalService).getServicesType(), ((MedicalService) medicalService).getSpeciality().getName()));
+                        ((MedicalService) medicalService).getServiceType(), ((MedicalService) medicalService).getSpeciality().getName()));
             }else {
                 for (MedicalService medicalService1 : ((MedicalPackage) medicalService).getMedicalServices()) {
                     eventPublisher.publishEvent(new PaymentEvent(medicalService1.getPrice().negate(), payment.getPaymentDate(),
-                            medicalService1.getServicesType(), medicalService1.getSpeciality().getName()));
+                            medicalService1.getServiceType(), medicalService1.getSpeciality().getName()));
                 }
             }
         }

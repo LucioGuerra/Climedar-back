@@ -1,6 +1,6 @@
 package com.climedar.payment_sv.external.model.medical_services;
 
-public enum ServicesType {
+public enum ServiceType {
     GENERAL,
     SPECIALIST,
     SURGERY,

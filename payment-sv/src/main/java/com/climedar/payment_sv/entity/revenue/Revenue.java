@@ -1,6 +1,6 @@
 package com.climedar.payment_sv.entity.revenue;
 
-import com.climedar.payment_sv.external.model.medical_services.ServicesType;
+import com.climedar.payment_sv.external.model.medical_services.ServiceType;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -26,7 +26,7 @@ public class Revenue {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "medical_services_type", nullable = false)
-    private ServicesType medicalServicesType;
+    private ServiceType medicalServiceType;
 
     @Column(name = "total_payments", nullable = false)
     private Long totalPayments;

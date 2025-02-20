@@ -12,7 +12,7 @@ public class MedicalService implements MedicalServices{
     private String name;
     private String code;
     private Speciality speciality;
-    private ServicesType servicesType;
+    private ServiceType serviceType;
 
 
     public MedicalService(String code, BigDecimal price, String name) {
