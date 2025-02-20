@@ -37,24 +37,24 @@ public class SecurityConfig {
     @Bean
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        // Origen permitido
+
         corsConfiguration.addAllowedOrigin("http://localhost:4200");
 
-        // Métodos permitidos
+
         corsConfiguration.addAllowedMethod("GET");
         corsConfiguration.addAllowedMethod("POST");
         corsConfiguration.addAllowedMethod("PUT");
         corsConfiguration.addAllowedMethod("DELETE");
         corsConfiguration.addAllowedMethod("OPTIONS");
 
-        // Headers permitidos
+
         corsConfiguration.addAllowedHeader("Authorization");
         corsConfiguration.addAllowedHeader("Content-Type");
         corsConfiguration.addAllowedHeader("Accept");
         corsConfiguration.addAllowedHeader("X-Requested-With");
         corsConfiguration.addAllowedHeader("Origin");
 
-        // Permitir credenciales (cookies, autenticación)
+
         corsConfiguration.setAllowCredentials(true);
 
 

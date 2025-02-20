@@ -17,6 +17,9 @@ public class GatewayRoutesConfig {
                 .route("apollo-federation", r -> r.path("/graphql/**")
                         .filters(GatewayFilterSpec::tokenRelay)
                         .uri("lb://apollo-federation"))
+                .route("payment-sv", r -> r.path("/api/public/payments/**")
+                        .filters(GatewayFilterSpec::tokenRelay)
+                        .uri("lb://payment-sv"))
                 .build();
     }
 }

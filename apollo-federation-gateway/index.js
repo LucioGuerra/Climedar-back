@@ -50,6 +50,7 @@ eurekaClient.start(async (error) => {
             {name: 'consultation-sv', path: '/graphql'},
             {name: 'doctor-sv', path: '/graphql'},
             {name: 'patient-sv', path: '/graphql'},
+            {name: 'payment-sv', path: '/graphql'},
         ];
 
         // Función para obtener la URL de los servicios desde Eureka

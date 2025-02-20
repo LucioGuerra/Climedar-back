@@ -163,32 +163,35 @@ services:
       eureka-sv:
         condition: service_started
 
-  #payment-sv:
-  #  build: ./payment-sv
-  #  container_name: payment-sv
-  #  ports:
-  #    - "8085:8085"
-  #  environment:
-  #    DB_USER: "root"
-  #    DB_PASSWORD: "root"
-  #    DB_URL: "hackacode-db:3306"
-  #    DB_NAME: "payment_db"
-  #    EUREKA_URL: "eureka-sv:8761"
-  #  volumes:
-  #    - ${PAYMENT_DIR}/payment-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
-  #  networks:
-  #    - hackacode
-  #  healthcheck:
-  #    test: ["CMD-SHELL", "wget -qO- http://localhost:8085/actuator/health || exit 1"]
-  #    interval: 20s
-  #    timeout: 5s
-  #    retries: 10
-
-  #  depends_on:
-  #    mysql:
-  #      condition: service_healthy
-  #    eureka-sv:
-  #      condition: service_started
+  payment-sv:
+    build: ./payment-sv
+    container_name: payment-sv
+    ports:
+      - "8085:8085"
+    environment:
+      DB_USER: "root"
+      DB_PASSWORD: "root"
+      DB_URL: "hackacode-db:3306"
+      DB_NAME: "payment_db"
+      EUREKA_URL: "eureka-sv:8761"
+    volumes:
+      - ${PAYMENT_DIR}/payment-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
+    networks:
+      - hackacode
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8085/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-sv:
+        condition: service_started
+      medical-service-sv:
+        condition: service_healthy
+      doctor-sv:
+        condition: service_healthy
 
   person-sv:
     build: ./person-sv
@@ -219,8 +222,8 @@ services:
         condition: service_healthy
       patient-sv:
         condition: service_healthy
-      #payment-sv:
-      #  condition: service_healthy
+      payment-sv:
+       condition: service_healthy
 
 networks:
   hackacode:

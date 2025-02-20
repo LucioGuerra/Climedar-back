@@ -28,6 +28,7 @@ public class SecurityConfig {
                         .requestMatchers("/graphiql/**").permitAll()
                         .requestMatchers("/graphql/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                         .anyRequest().permitAll()
                 )
                 .cors(withDefaults())
