@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 
 public record CreatePaymentDTO(
         Long consultationId,
-        PaymentMethod paymentMethod,
-        BigDecimal amount
+        PaymentMethod paymentMethod
 ) {
 }

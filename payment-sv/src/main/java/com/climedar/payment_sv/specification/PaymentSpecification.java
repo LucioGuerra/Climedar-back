@@ -10,18 +10,18 @@ import java.time.LocalDate;
 
 public class PaymentSpecification {
 
-    public static Specification<Payment> paymentByDate(LocalDate date, LocalDate fromDate, LocalDate toDate) {
+    public static Specification<Payment> paymentByDate(String date, String fromDate, String toDate) {
         return (root, query, cb) -> {
             Predicate predicate = cb.conjunction();
 
             if (date != null) {
-                predicate = cb.and(predicate, cb.equal(root.get("date"), date));
+                predicate = cb.and(predicate, cb.equal(root.get("date"), LocalDate.parse(date)));
             }
             if (fromDate != null) {
-                predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("date"), fromDate));
+                predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("date"), LocalDate.parse(fromDate)));
             }
             if (toDate != null) {
-                predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("date"), toDate));
+                predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("date"), LocalDate.parse(toDate)));
             }
 
             return predicate;

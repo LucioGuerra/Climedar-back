@@ -39,4 +39,8 @@ public class PaymentGraphqlAdapter {
     public PaymentModel getPaymentById(Long id) {
         return paymentService.getPaymentById(id);
     }
+
+    public Boolean cancelPayment(Long id) {
+        return paymentService.cancelPayment(id);
+    }
 }

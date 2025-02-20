@@ -14,10 +14,10 @@ input RevenueSpecification{
     date: String
     fromDate: String
     toDate: String
-    revenueType: RevenueType
+    revenueType: RevenueType!
     specialityName: String
     serviceType: ServiceType
-    originName: OriginName
+    originName: OriginName!
 }
 
 enum RevenueType{

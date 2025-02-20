@@ -36,15 +36,19 @@ public class RevenueService {
 
     public List<GetRevenueDTO> getAllRevenue(RevenueSpecificationDTO specificationDTO) {
 
+        if (specificationDTO == null) {
+            specificationDTO = new RevenueSpecificationDTO();
+        }
+
         Specification<Revenue> specification =
-                Specification.where(RevenueSpecification.byDate(LocalDate.parse(specificationDTO.date()), LocalDate.parse(specificationDTO.fromDate()), LocalDate.parse(specificationDTO.toDate())))
-                .and(RevenueSpecification.byType(specificationDTO.revenueType()))
-                .and(RevenueSpecification.bySpeciality(specificationDTO.specialityName()))
-                .and(RevenueSpecification.byMedicalService(specificationDTO.serviceType()));
+                Specification.where(RevenueSpecification.byDate(specificationDTO.getDate(), specificationDTO.getFromDate(), specificationDTO.getToDate()))
+                .and(RevenueSpecification.byType(specificationDTO.getRevenueType()))
+                .and(RevenueSpecification.bySpeciality(specificationDTO.getSpecialityName()))
+                .and(RevenueSpecification.byMedicalService(specificationDTO.getServiceType()));
 
         List<Revenue> revenues = revenueRepository.findAll(specification);
 
-         return switch (specificationDTO.originName()) {
+         return switch (specificationDTO.getOriginName()) {
             case SPECIALITY -> revenues.stream().map(revenueMapper::toDTOSpecialityName).toList();
             case MEDICAL_SERVICE -> revenues.stream().map(revenueMapper::toDTOServiceType).toList();
          };

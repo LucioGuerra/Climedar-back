@@ -44,9 +44,12 @@ public class PaymentService {
 
     @Transactional
     public ResponseEntity<byte[]> createPayment(CreatePaymentDTO paymentDTO) {
-        Payment payment = paymentMapper.toEntity(paymentDTO);
+        Payment payment = new Payment();
+        payment.setConsultationId(paymentDTO.consultationId());
         Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
+        payment.setAmount(consultation.getFinalPrice());
         payment.setInvoice(invoiceService.createInvoice(payment));
+        payment.setPaymentMethod(paymentDTO.paymentMethod());
         paymentRepository.save(payment);
 
         for (MedicalServices medicalService : consultation.getMedicalServicesModel()) {
@@ -65,7 +68,7 @@ public class PaymentService {
         return invoiceService.getInvoiceByPayment(payment.getId());
     }
 
-    public ResponseEntity<Void> cancelPayment(Long paymentId) {
+    public Boolean cancelPayment(Long paymentId) {
         Payment payment = paymentRepository.findByIdAndCanceled(paymentId, false)
                 .orElseThrow(() -> new EntityNotFoundException("Payment not found with id: " + paymentId));
         Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
@@ -82,28 +85,30 @@ public class PaymentService {
                 }
             }
         }
-        return ResponseEntity.noContent().build();
+        return true;
     }
 
     public Page<PaymentModel> getAllPayments(Pageable pageable, PaymentSpecificationDTO specificationDTO) {
 
         Specification<Payment> spec =
                 Specification.where(PaymentSpecification.paymentByCanceled(specificationDTO.getCanceled()))
-                .and(PaymentSpecification.paymentByDate(LocalDate.parse(specificationDTO.getDate()),
-                                LocalDate.parse(specificationDTO.getFromDate()),
-                                LocalDate.parse(specificationDTO.getToDate()))
+                .and(PaymentSpecification.paymentByDate(specificationDTO.getDate(), specificationDTO.getFromDate(), specificationDTO.getToDate()))
                 .and(PaymentSpecification.paymentByAmount(specificationDTO.getAmount(),
                                 specificationDTO.getFromAmount(),
                                 specificationDTO.getToAmount())
                 .and(PaymentSpecification.paymentByPatientId(specificationDTO.getPatientId()))
-                .and(PaymentSpecification.paymentByConsultationId(specificationDTO.getConsultationId()))));
+                .and(PaymentSpecification.paymentByConsultationId(specificationDTO.getConsultationId())));
 
         Page<Payment> payments = paymentRepository.findAll(spec, pageable);
+
+        if (payments.isEmpty()) {
+            return Page.empty();
+        }
 
         List<Long> consultationIds = payments.map(Payment::getConsultationId).getContent();
         List<Consultation> consultations = consultationRepository.findAllById(consultationIds);
 
-       Map<Long, Patient> consultationPatientMap = consultations.stream()
+        Map<Long, Patient> consultationPatientMap = consultations.stream()
                 .collect(Collectors.toMap(Consultation::getId, Consultation::getPatient));
 
         return payments.map(payment -> {

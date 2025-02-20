@@ -8,6 +8,7 @@ import com.climedar.payment_sv.entity.payment.Payment;
 import com.climedar.payment_sv.model.PaymentModel;
 import com.climedar.payment_sv.services.PaymentService;
 import com.netflix.graphql.dgs.DgsComponent;
+import com.netflix.graphql.dgs.DgsMutation;
 import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.InputArgument;
 import lombok.AllArgsConstructor;
@@ -31,5 +32,10 @@ public class PaymentDataFetcher {
     @DgsQuery
     public PaymentModel getPaymentById(@InputArgument Long id) {
         return paymentGraphqlAdapter.getPaymentById(id);
+    }
+
+    @DgsMutation
+    public Boolean cancelPayment(@InputArgument Long id) {
+        return paymentGraphqlAdapter.cancelPayment(id);
     }
 }

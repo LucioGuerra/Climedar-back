@@ -4,10 +4,10 @@ import com.climedar.patient_sv.model.PatientModel;
 import com.climedar.patient_sv.service.PatientService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @RestController
@@ -19,5 +19,10 @@ public class PatientController {
     @GetMapping("/{id}")
     public ResponseEntity<PatientModel> getPatientById(@PathVariable Long id) {
         return ResponseEntity.ok(patientService.getPatientById(id));
+    }
+
+    @GetMapping("/ids")
+    public ResponseEntity<List<PatientModel>> getAllPatientsByIds(@RequestParam Set<Long> ids){
+        return ResponseEntity.ok(patientService.getAllPatientsByIds(ids));
     }
 }

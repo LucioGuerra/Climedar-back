@@ -11,18 +11,18 @@ import java.time.LocalDate;
 
 public class RevenueSpecification {
 
-    public static Specification<Revenue> byDate(LocalDate date, LocalDate startDate, LocalDate endDate) {
+    public static Specification<Revenue> byDate(String date, String startDate, String endDate) {
         return (root, query, cb) ->
         {
             Predicate predicate = cb.conjunction();
             if (date != null) {
-                return cb.equal(root.get("date"), date);
+                return cb.equal(root.get("date"), LocalDate.parse(date));
             }
             if(startDate != null){
-                predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("date"), startDate));
+                predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("date"), LocalDate.parse(startDate)));
             }
             if(endDate != null){
-                predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("date"), endDate));
+                predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("date"), LocalDate.parse(endDate)));
             }
             return predicate;
         };

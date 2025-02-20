@@ -186,4 +186,21 @@ public class ConsultationService {
         return medicalServicesModel.stream().mapToDouble(MedicalServicesModel::getPrice).sum() * 0.80;
     }
 
+    public List<ConsultationModel> getConsultationsByIds(Set<Long> ids) {
+        List<Consultation> consultations = consultationRepository.findAllById(ids);
+        Set<Long> shiftIds = new HashSet<>();
+
+        consultations.forEach(consultation -> {
+            shiftIds.add(consultation.getShiftId());
+        });
+
+        List<Shift> shifts = shiftRepository.findAllById(shiftIds);
+        Map<Long, Shift> shiftMap = shifts.stream().collect(Collectors.toMap(Shift::getId, Function.identity()));
+
+        return consultations.stream().map(consultation -> {
+            Shift shift = shiftMap.get(consultation.getShiftId());
+            return consultationMapper.toModel(consultation, shift);
+        }).toList();
+    }
+
 }

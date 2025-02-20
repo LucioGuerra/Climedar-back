@@ -14,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -184,5 +185,15 @@ public class PatientService {
                         Patient::getId,
                         patient -> patientMapper.toModel(patient, personMap.get(patient.getPersonId()))
                 ));
+    }
+
+    public List<PatientModel> getAllPatientsByIds(Set<Long> ids) {
+        List<Patient> patients = patientRepository.getPatientsByIdIn(ids);
+        List<Person> persons = personRepository.findAllById(patients.stream().map(Patient::getPersonId).collect(Collectors.toSet()));
+        Map<Long, Person> personMap = persons.stream().collect(Collectors.toMap(Person::getPersonId, Function.identity()));
+
+        return patients.stream()
+                .map(patient -> patientMapper.toModel(patient, personMap.get(patient.getPersonId()))).toList();
+
     }
 }

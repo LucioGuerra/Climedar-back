@@ -5,10 +5,10 @@ import com.climedar.consultation_sv.model.ConsultationModel;
 import com.climedar.consultation_sv.service.ConsultationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @RestController
@@ -20,6 +20,11 @@ public class ConsultationController {
     @GetMapping("/{id}")
     public ResponseEntity<ConsultationModel> getConsultation(@PathVariable Long id){
         return ResponseEntity.ok(consultationRestAdapter.getConsultationById(id));
+    }
+
+    @GetMapping("/ids")
+    public ResponseEntity<List<ConsultationModel>> getAllConsultationsByIds(@RequestParam("consultationIds") Set<Long> consultationIds){
+        return ResponseEntity.ok(consultationRestAdapter.getConsultationsByIds(consultationIds));
     }
 
 }

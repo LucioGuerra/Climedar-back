@@ -34,6 +34,7 @@ public class Payment {
 
     public Payment() {
         this.canceled = false;
+        this.paymentDate = LocalDateTime.now();
     }
 
 }
