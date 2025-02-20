@@ -133,9 +133,9 @@ public class PaymentService {
         Invoice invoice = payment.getInvoice();
 
         Map<String, Object> receiptData = new HashMap<>();
-        receiptData.put("paymentNumber", String.format("%010d", payment.getId()));
+        receiptData.put("receiptNumber", String.format("%010d", payment.getId()));
         receiptData.put("invoiceNumber", String.format("%010d", invoice.getId()));
-        receiptData.put("paymentDate", payment.getPaymentDate());
+        receiptData.put("paymentDate", payment.getPaymentDate().toLocalDate());
         receiptData.put("patientName", patient.getName());
         receiptData.put("patientAddress", patient.getAddress().toString());
         receiptData.put("patientProvince", "La Plata");

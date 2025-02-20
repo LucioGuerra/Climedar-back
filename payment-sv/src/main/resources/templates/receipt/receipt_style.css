@@ -71,7 +71,7 @@ h3 {
     padding: 0;
 }
 
-.header-1row .invoice-data {
+.header-1row .receipt-data {
     float: right;
     text-align: right;
 }
@@ -129,7 +129,7 @@ h3 {
     margin: 20px 0 0 0 ;
     padding: 0;
     width: 100%;
-    height: 620px;
+    height: 625px;
 }
 
 .services-data p {

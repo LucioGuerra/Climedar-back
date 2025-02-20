@@ -31,4 +31,6 @@ public class MedicalServiceModel implements MedicalServicesModel {
 
     @NotNull(message = "Speciality not be null")
     private Speciality speciality;
+
+    private String type = "service";
 }

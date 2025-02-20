@@ -13,7 +13,7 @@
 
             <div class="receipt-data">
                 <h1>RECIBO</h1>
-                <p th:href="|Nro recibo: ${receiptNumber}|">Nro recibo: 999999999</p>
+                <p th:text="|Nro recibo: ${receiptNumber}|">Nro recibo: 999999999</p>
                 <p th:text="|Nro factura: 0001-${invoiceNumber}|">Nro factura: 0001-99999999</p>
                 <p th:text="|Fecha: ${paymentDate}|">Fecha: 10-10-2025</p>
             </div>
@@ -73,7 +73,7 @@
                 <tr th:each="service : ${services}">
                     <td class="col-first" th:text="|${service.code}|">MS-THER-CAR-00001</td>
                     <td class="col-second" th:text="|${service.name}|">Consulta Ginecologica</td>
-                    <td class="col-last" th:text="|'$' ${service.price}|">$ 5000000</td>
+                    <td class="col-last" th:text="|$ ${service.price}|">$ 5000000</td>
                 </tr>
                 </tbody>
             </table>
@@ -82,7 +82,7 @@
     </div>
 
     <div class="total">
-        <h1 th:text="|TOTAL: '$'${finalPrice}|">TOTAL: $5000000</h1>
+        <h1 th:text="|TOTAL: $${finalPrice}|">TOTAL: $5000000</h1>
     </div>
 </div>
 </body>

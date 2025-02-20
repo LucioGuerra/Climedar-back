@@ -16,6 +16,8 @@ public class MedicalPackageModel implements MedicalServicesModel {
     private Double price;
     private Speciality speciality;
 
+    private String type = "package";
+
     public MedicalPackageModel(Long id) {
         this.id = id;
     }

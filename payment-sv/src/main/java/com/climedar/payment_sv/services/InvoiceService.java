@@ -47,8 +47,7 @@ public class InvoiceService {
         }
         invoice.setMedicalServicesId(medicalServicesId);
 
-        invoiceRepository.save(invoice);
-        return invoice;
+        return invoiceRepository.save(invoice);
     }
 
     public ResponseEntity<byte[]> getInvoice(Long invoiceId) {

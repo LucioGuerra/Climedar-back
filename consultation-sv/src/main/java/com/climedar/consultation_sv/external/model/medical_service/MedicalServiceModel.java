@@ -14,6 +14,7 @@ public class MedicalServiceModel implements MedicalServicesModel {
     private String description;
     private Duration estimatedDuration;
     private ServiceType serviceType;
+    private String type = "service";
     private Speciality speciality;
 
     public MedicalServiceModel(String code) {
