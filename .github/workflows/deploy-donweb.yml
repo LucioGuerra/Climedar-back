@@ -29,5 +29,5 @@ jobs:
           script: |
             cd /root/deploy
             ./build_all.sh
-            docker-compose -f docker-compose-donweb.yml down
-            docker-compose -f docker-compose-donweb.yml up -d
+            podman-compose down
+            podman-compose up -d
