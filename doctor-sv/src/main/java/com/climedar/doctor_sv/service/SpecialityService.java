@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -66,5 +67,10 @@ public class SpecialityService {
 
     public Set<String> getAllSpecialitiesNames() {
         return specialityRepository.getAllSpecialitiesNames();
+    }
+
+    public Set<SpecialityModel> getSpecialitiesByIds(Set<Long> ids) {
+        Set<Speciality> specialities = specialityRepository.findByIdIn(ids);
+        return specialities.stream().map(specialityMapper::toModel).collect(Collectors.toSet());
     }
 }

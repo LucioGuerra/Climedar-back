@@ -1,4 +1,4 @@
-package com.climedar.payment_sv.event.internal;
+package com.climedar.payment_sv.event;
 
 import com.climedar.payment_sv.external.model.medical_services.ServicesType;
 import lombok.Data;

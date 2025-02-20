@@ -1,11 +1,10 @@
 package com.climedar.payment_sv.services;
 
-import com.climedar.payment_sv.dto.request.OriginName;
 import com.climedar.payment_sv.dto.request.RevenueSpecificationDTO;
 import com.climedar.payment_sv.dto.response.GetRevenueDTO;
 import com.climedar.payment_sv.entity.revenue.Revenue;
 import com.climedar.payment_sv.entity.revenue.RevenueType;
-import com.climedar.payment_sv.event.internal.PaymentEvent;
+import com.climedar.payment_sv.event.PaymentEvent;
 import com.climedar.payment_sv.external.model.medical_services.ServicesType;
 import com.climedar.payment_sv.mapper.RevenueMapper;
 import com.climedar.payment_sv.repository.MedicalServicesRepository;

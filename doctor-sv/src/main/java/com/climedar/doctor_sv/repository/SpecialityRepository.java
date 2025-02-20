@@ -12,4 +12,7 @@ import java.util.Set;
 public interface SpecialityRepository extends JpaRepository<Speciality, Long>, JpaSpecificationExecutor<Speciality> {
     @Query("SELECT s.name FROM Speciality s")
     Set<String> getAllSpecialitiesNames();
+
+    @Query("SELECT s FROM Speciality s WHERE s.id IN :ids")
+    Set<Speciality> findByIdIn(Set<Long> ids);
 }

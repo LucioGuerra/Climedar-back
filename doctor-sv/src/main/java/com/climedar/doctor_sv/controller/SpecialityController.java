@@ -4,10 +4,7 @@ import com.climedar.doctor_sv.entity.Speciality;
 import com.climedar.doctor_sv.model.SpecialityModel;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.climedar.doctor_sv.service.SpecialityService;
 
 import java.util.Set;
@@ -28,5 +25,10 @@ public class SpecialityController {
     @GetMapping("/names")
     public ResponseEntity<Set<String>> getAllSpecialitiesNames() {
         return ResponseEntity.ok().body(specialityService.getAllSpecialitiesNames());
+    }
+
+    @GetMapping("/ids")
+    public ResponseEntity<Set<SpecialityModel>> getSpecialitiesByIds(@RequestParam Set<Long> ids) {
+        return ResponseEntity.ok().body(specialityService.getSpecialitiesByIds(ids));
     }
 }

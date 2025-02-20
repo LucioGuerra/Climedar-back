@@ -4,15 +4,21 @@ import com.climedar.medical_service_sv.dto.response.MedicalServicesWrapped;
 import com.climedar.medical_service_sv.entity.MedicalPackageEntity;
 import com.climedar.medical_service_sv.entity.MedicalServiceEntity;
 import com.climedar.medical_service_sv.entity.ServiceType;
+import com.climedar.medical_service_sv.external.model.Speciality;
 import com.climedar.medical_service_sv.mapper.MedicalPackageMapper;
 import com.climedar.medical_service_sv.mapper.MedicalServiceMapper;
+import com.climedar.medical_service_sv.model.MedicalPackageModel;
+import com.climedar.medical_service_sv.model.MedicalServiceModel;
 import com.climedar.medical_service_sv.repository.MedicalPackageRepository;
 import com.climedar.medical_service_sv.repository.MedicalServiceRepository;
+import com.climedar.medical_service_sv.repository.SpecialityRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -22,6 +28,7 @@ public class MedicalServicesService {
     private final MedicalPackageRepository medicalPackageRepository;
     private final MedicalServiceMapper medicalServiceMapper;
     private final MedicalPackageMapper medicalPackageMapper;
+    private final SpecialityRepository specialityRepository;
 
     public Set<ServiceType> getAllServicesType() {
         return new HashSet<>(Arrays.asList(ServiceType.values()));
@@ -71,21 +78,42 @@ public class MedicalServicesService {
     }
 
     private List<MedicalServicesWrapped> getWrappedMap(List<MedicalPackageEntity> packageEntities, List<MedicalServiceEntity> serviceEntities) {
-        Map<Long, MedicalServicesWrapped> wrappedMap = new HashMap<>();
+        List<MedicalServicesWrapped> wrappedList = new ArrayList<>();
+
+        Set<Long> specialityIds = new HashSet<>();
+
+        for (MedicalPackageEntity packageEntity : packageEntities) {
+            specialityIds.add(packageEntity.getSpecialityId());
+        }
+
+        for (MedicalServiceEntity serviceEntity : serviceEntities) {
+            specialityIds.add(serviceEntity.getSpecialityId());
+        }
+
+        Set<Speciality> specialities = specialityRepository.getAllSpecialitiesByIds(specialityIds);
+        Map<Long, Speciality> specialityMap = specialities.stream().collect(Collectors.toMap(Speciality::getId, Function.identity()));
 
         for (MedicalPackageEntity packageEntity : packageEntities) {
             MedicalServicesWrapped wrapped = new MedicalServicesWrapped();
-            wrapped.setMedicalPackageModel(medicalPackageMapper.toModel(packageEntity));
-            wrappedMap.put(packageEntity.getId(), wrapped);
+
+            MedicalPackageModel model = medicalPackageMapper.toModel(packageEntity);
+            model.setSpeciality(specialityMap.get(packageEntity.getSpecialityId()));
+
+            wrapped.setMedicalPackageModel(model);
+            wrappedList.add(wrapped);
         }
 
         for (MedicalServiceEntity serviceEntity : serviceEntities) {
             MedicalServicesWrapped wrapped = new MedicalServicesWrapped();
-            wrapped.setMedicalServiceModel(medicalServiceMapper.toModel(serviceEntity));
-            wrappedMap.put(serviceEntity.getId(), wrapped);
+
+            MedicalServiceModel model = medicalServiceMapper.toModel(serviceEntity);
+            model.setSpeciality(specialityMap.get(serviceEntity.getSpecialityId()));
+
+            wrapped.setMedicalServiceModel(model);
+            wrappedList.add(wrapped);
         }
 
 
-        return new ArrayList<>(wrappedMap.values());
+        return wrappedList;
     }
 }
