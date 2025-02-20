@@ -16,7 +16,7 @@ public interface MedicalServicesRepository {
     MedicalServicesWrapped getMedicalServiceById(@PathVariable Long id);
 
     @GetMapping("/api/public/medical-services/ids")
-    List<MedicalServicesWrapped> getMedicalServicesByIds(@RequestParam List<Long> ids);
+    List<MedicalServicesWrapped> findAllById(@RequestParam Set<Long> ids);
 
     @GetMapping("/api/public/medical-services/types")
     Set<ServiceType> getAllServicesType();

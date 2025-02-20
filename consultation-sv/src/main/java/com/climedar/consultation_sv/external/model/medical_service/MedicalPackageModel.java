@@ -12,7 +12,6 @@ public class MedicalPackageModel implements MedicalServicesModel {
     private String code;
     private Double price;
     private List<MedicalServiceModel> services;
-    private String type = "package";
     private Duration estimatedDuration;
     private Speciality speciality;
 

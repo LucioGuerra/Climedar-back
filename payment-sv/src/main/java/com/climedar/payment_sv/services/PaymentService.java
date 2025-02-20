@@ -46,6 +46,7 @@ public class PaymentService {
     public ResponseEntity<byte[]> createPayment(CreatePaymentDTO paymentDTO) {
         Payment payment = paymentMapper.toEntity(paymentDTO);
         Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
+        payment.setInvoice(invoiceService.createInvoice(payment));
         paymentRepository.save(payment);
 
         for (MedicalServices medicalService : consultation.getMedicalServicesModel()) {
@@ -60,14 +61,8 @@ public class PaymentService {
             }
         }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDisposition(ContentDisposition.builder("inline")
-                .filename("invoice_"+payment.getId()+".pdf").build());
-
-
         //todo: retornar tambien el recibo
-        return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(invoiceService.createInvoice(payment));
+        return invoiceService.getInvoiceByPayment(payment.getId());
     }
 
     public ResponseEntity<Void> cancelPayment(Long paymentId) {

@@ -16,10 +16,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -33,7 +30,7 @@ public class InvoiceService {
 
 
 
-    public byte[] createInvoice(Payment payment) {
+    public Invoice createInvoice(Payment payment) {
         Consultation consultation = consultationRepository.getConsultation(payment.getConsultationId());
         Patient patient = consultation.getPatient();
         List<MedicalServices> medicalServices = consultation.getMedicalServicesModel();
@@ -51,7 +48,7 @@ public class InvoiceService {
         invoice.setMedicalServicesId(medicalServicesId);
 
         invoiceRepository.save(invoice);
-        return exportService.getInvoicePDF(this.getInvoiceData(invoice, patient, medicalServices));
+        return invoice;
     }
 
     public ResponseEntity<byte[]> getInvoice(Long invoiceId) {
@@ -67,7 +64,9 @@ public class InvoiceService {
 
     private ResponseEntity<byte[]> generateInvoice(Invoice invoice) {
         Patient patient = patientRepository.getPatientById(invoice.getPatientId());
-        List<MedicalServices> medicalServices = medicalServicesRepository.getMedicalServicesByIds(invoice.getMedicalServicesId()).stream().map(MedicalServicesWrapped::getMedicalServices).toList();
+        Set<Long> medicalServicesId = new HashSet<>(invoice.getMedicalServicesId());
+        List<MedicalServicesWrapped> medicalServicesWrappeds = medicalServicesRepository.findAllById(medicalServicesId);
+        List<MedicalServices> medicalServices = medicalServicesWrappeds.stream().map(MedicalServicesWrapped::getMedicalServices).toList();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
