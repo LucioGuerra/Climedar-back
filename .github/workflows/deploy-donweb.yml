@@ -1,0 +1,33 @@
+name: Deploy DonWeb
+
+on:
+    push:
+        branches:
+          - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+
+      - name: Deploy on remote server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASS }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            cd /root/deploy
+            ./build_all.sh
+            docker-compose -f docker-compose-donweb.yml down
+            docker-compose -f docker-compose-donweb.yml up -d
