@@ -1,6 +1,6 @@
 services:
   mysql:
-    image: mysql:8.0
+    image: docker.io/mysql:8.0
     mem_limit: 512m
     container_name: hackacode-db
     restart: always
