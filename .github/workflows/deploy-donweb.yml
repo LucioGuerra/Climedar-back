@@ -27,7 +27,7 @@ jobs:
           password: ${{ secrets.SERVER_PASS }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            cd /root/deploy
+            cd /root/deploy/Climedar-back
             ./build_all.sh
             podman-compose down
             podman-compose up -d
