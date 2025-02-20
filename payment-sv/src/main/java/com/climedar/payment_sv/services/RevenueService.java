@@ -1,7 +1,9 @@
 package com.climedar.payment_sv.services;
 
+import com.climedar.library.exception.ClimedarException;
 import com.climedar.payment_sv.dto.request.RevenueSpecificationDTO;
-import com.climedar.payment_sv.dto.response.GetRevenueDTO;
+import com.climedar.payment_sv.dto.response.RevenueLineChartDTO;
+import com.climedar.payment_sv.dto.response.RevenuePieChartDTO;
 import com.climedar.payment_sv.entity.revenue.Revenue;
 import com.climedar.payment_sv.entity.revenue.RevenueType;
 import com.climedar.payment_sv.event.PaymentEvent;
@@ -20,8 +22,11 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -34,7 +39,7 @@ public class RevenueService {
 
     //todo: actualizar los datos cuando se modifiquen las especialidades
 
-    public List<GetRevenueDTO> getAllRevenue(RevenueSpecificationDTO specificationDTO) {
+    public List<RevenuePieChartDTO> getAllRevenuePieChart(RevenueSpecificationDTO specificationDTO) {
 
         if (specificationDTO == null) {
             specificationDTO = new RevenueSpecificationDTO();
@@ -52,6 +57,48 @@ public class RevenueService {
             case SPECIALITY -> revenues.stream().map(revenueMapper::toDTOSpecialityName).toList();
             case MEDICAL_SERVICE -> revenues.stream().map(revenueMapper::toDTOServiceType).toList();
          };
+    }
+
+    public List<RevenueLineChartDTO> getAllRevenueLineChart(String fromDate, String toDate, RevenueType revenueType) {
+        LocalDate from = LocalDate.parse(fromDate);
+        LocalDate to = LocalDate.parse(toDate);
+        if (from.isAfter(to)) {
+            throw new ClimedarException("DATE_FROM_IS_AFTER_DATE_TO", "The date from is after the date to");
+        }
+
+        List<RevenueLineChartDTO> revenues = new ArrayList<>();
+
+
+        List<Object[]> result = revenueRepository.findByDateBetweenAndRevenueType(from, to, revenueType);
+        Map<LocalDate, BigDecimal> revenueMap = result.stream()
+                .collect(Collectors.toMap(
+                        row -> (LocalDate) row[0],
+                        row -> (BigDecimal) row[1]
+                ));
+
+        LocalDate current;
+        switch (revenueType){
+            case DAILY -> {
+                current = from;
+                while (current.isBefore(to)){
+                    BigDecimal totalToCurrent = revenueMap.getOrDefault(current, BigDecimal.ZERO);
+                    RevenueLineChartDTO revenueLineChartDTO = new RevenueLineChartDTO(current, totalToCurrent);
+                    revenues.add(revenueLineChartDTO);
+                    current = current.plusDays(1);
+                }
+            }
+            case MONTHLY -> {
+                current = from.withDayOfMonth(1);
+                while (current.isBefore(to)){
+                    BigDecimal totalToCurrent = revenueMap.getOrDefault(current, BigDecimal.ZERO);
+                    RevenueLineChartDTO revenueLineChartDTO = new RevenueLineChartDTO(current, totalToCurrent);
+                    revenues.add(revenueLineChartDTO);
+                    current = current.plusMonths(1);
+                }
+            }
+        }
+
+        return revenues;
     }
 
     @EventListener(condition = "#event.amount() > 0")

@@ -1,5 +1,6 @@
 type Query{
-    getAllRevenues(specification: RevenueSpecification!): [Revenue]!
+    getAllRevenuesPieChart(specification: RevenueSpecification!): [RevenuePieChart]!
+    getAllRevenuesLineChart(fromDate: String!, toDate: String!, revenueType: RevenueType!): [RevenueLineChart]!
 
     getAllPayments(pageRequest: PageRequest!, specification: PaymentSpecification): PaymentPage!
     getPaymentById(id: ID!): Payment!

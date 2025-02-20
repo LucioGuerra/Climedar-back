@@ -51,6 +51,7 @@ public class PaymentService {
         payment.setInvoice(invoiceService.createInvoice(payment));
         payment.setPaymentMethod(paymentDTO.paymentMethod());
         paymentRepository.save(payment);
+        //todo: lanzar un evento para poner como pagada la consulta
 
         for (MedicalServices medicalService : consultation.getMedicalServicesModel()) {
             if (medicalService.getClass() == MedicalService.class) {

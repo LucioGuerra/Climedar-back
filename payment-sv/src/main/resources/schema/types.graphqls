@@ -1,5 +1,10 @@
-type Revenue{
+type RevenuePieChart{
     name: String!
+    amount: Float!
+}
+
+type RevenueLineChart{
+    date: String!
     amount: Float!
 }
 
