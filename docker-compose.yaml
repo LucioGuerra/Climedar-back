@@ -1,6 +1,7 @@
 services:
   mysql:
     image: mysql:8.0
+    mem_limit: 512m
     container_name: hackacode-db
     restart: always
     environment:
@@ -20,6 +21,7 @@ services:
 
   api-gateway:
     build: ./api-gateway
+    mem_limit: 512m
     container_name: api-gateway
     environment:
         - ISSUER_URI=${ISSUER_URI}
@@ -35,6 +37,7 @@ services:
 
   apollo-federation:
     build: ./apollo-federation-gateway
+    mem_limit: 256m
     container_name: apollo-federation
     ports:
       - "4000:4000"
@@ -46,6 +49,7 @@ services:
 
   eureka-sv:
     build: ./eureka-sv
+    mem_limit: 384m
     container_name: eureka-sv
     ports:
       - "8761:8761"
@@ -61,6 +65,7 @@ services:
 
   consultation-sv:
     build: ./consultation-sv
+    mem_limit: 768m
     container_name: consultation-sv
     ports:
       - "8086:8086"
@@ -87,6 +92,7 @@ services:
 
   doctor-sv:
     build: ./doctor-sv
+    mem_limit: 768m
     container_name: doctor-sv
     ports:
       - "8083:8083"
@@ -113,6 +119,7 @@ services:
 
   medical-service-sv:
     build: ./medical-service-sv
+    mem_limit: 512m
     container_name: medical-service-sv
     ports:
       - "8081:8081"
@@ -139,6 +146,7 @@ services:
 
   patient-sv:
     build: ./patient-sv
+    mem_limit: 512m
     container_name: patient-sv
     ports:
       - "8082:8082"
@@ -165,6 +173,7 @@ services:
 
   payment-sv:
     build: ./payment-sv
+    mem_limit: 768m
     container_name: payment-sv
     ports:
       - "8085:8085"
@@ -195,6 +204,7 @@ services:
 
   person-sv:
     build: ./person-sv
+    mem_limit: 768m
     container_name: person-sv
     ports:
       - "8084:8084"
