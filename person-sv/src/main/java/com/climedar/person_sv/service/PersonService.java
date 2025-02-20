@@ -53,9 +53,8 @@ public class PersonService {
             person.setAddress(addressService.createAddress(updatePersonDTO.address()));
         }
 
-
-        personRepository.save(person);
-        return ResponseEntity.status(HttpStatus.OK).body(personMapper.toDTO(person));
+        GetPersonDTO personDTO = personMapper.toDTO(personRepository.save(person));
+        return ResponseEntity.status(HttpStatus.OK).body(personDTO);
     }
 
     public ResponseEntity<Void> deletePerson(Long id) {

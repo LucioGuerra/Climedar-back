@@ -25,8 +25,8 @@ public class PackageDataFetcher {
     }
 
     @DgsQuery
-    public MedicalPackagePage getAllMedicalPackages(@InputArgument PageRequestInput input) {
-        return graphqlAdapter.getAllPackages(input);
+    public MedicalPackagePage getAllMedicalPackages(@InputArgument PageRequestInput input, @InputArgument Long specialityId, @InputArgument String name) {
+        return graphqlAdapter.getAllPackages(input, specialityId, name);
     }
 
     @DgsMutation

@@ -66,7 +66,7 @@ public class PersonController {
         return personService.createPerson(createPersonDTO);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<GetPersonDTO> updatePerson(@PathVariable Long id,
                                                       @RequestBody UpdatePersonDTO updatePersonDTO) {
         return personService.updatePerson(id, updatePersonDTO);

@@ -159,15 +159,19 @@ public class DoctorService {
 
         Person personToUpdate = personRepository.findById(doctor.getPersonId());
 
-        if (this.personDataMatcher(personToUpdate, doctorModel)) {
+        Person person;
+        if (!this.personDataMatcher(personToUpdate, doctorModel)) {
             personMapper.updatePerson(personToUpdate, doctorModel);
-            personRepository.updatePerson(personToUpdate.getPersonId(), personToUpdate);
+            person = personRepository.updatePerson(doctor.getPersonId(), personToUpdate);
+        }
+        else {
+            person = personToUpdate;
         }
 
         doctorMapper.updateEntity(doctor, doctorModel);
         doctorRepository.save(doctor);
 
-        return doctorMapper.toModel(doctor, personToUpdate);
+        return doctorMapper.toModel(doctor, person);
     }
 
     @Transactional

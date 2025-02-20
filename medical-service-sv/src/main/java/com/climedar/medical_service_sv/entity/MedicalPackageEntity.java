@@ -15,10 +15,6 @@ import java.util.Set;
 @Table(name = "medical_package")
 public class MedicalPackageEntity extends MedicalServicesEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(unique = true, nullable = false, length = 28)
     private String code;
 
