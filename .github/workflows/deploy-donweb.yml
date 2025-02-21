@@ -28,6 +28,6 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd /root/deploy/Climedar-back
-            ./build_all.sh
-            podman-compose down
-            podman-compose up -d
+            podman stop -a
+            podman rm -a
+            ./run_all.sh
