@@ -234,7 +234,3 @@ services:
         condition: service_healthy
       payment-sv:
        condition: service_healthy
-
-networks:
-  hackacode:
-    driver: bridge
