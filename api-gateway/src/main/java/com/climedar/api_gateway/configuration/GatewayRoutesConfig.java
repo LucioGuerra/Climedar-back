@@ -20,6 +20,9 @@ public class GatewayRoutesConfig {
                 .route("payment-sv", r -> r.path("/api/public/payments/**")
                         .filters(GatewayFilterSpec::tokenRelay)
                         .uri("lb://payment-sv"))
+                .route("eureka-sv", r -> r.path("/eureka/**")
+                        .filters(GatewayFilterSpec::tokenRelay)
+                        .uri("lb://eureka-sv"))
                 .build();
     }
 }

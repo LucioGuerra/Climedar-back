@@ -178,6 +178,11 @@ public class RevenueService {
 
     @PostConstruct
     public void createInitialAmount(){
+        try {
+            Thread.sleep(10*1000);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
         List<Revenue> dailyRevenues = revenueRepository.findByDateAndRevenueType(LocalDate.now(), RevenueType.DAILY);
         List<Revenue> monthlyRevenues = revenueRepository.findByDateAndRevenueType(LocalDate.now().withDayOfMonth(1),
                 RevenueType.MONTHLY);
