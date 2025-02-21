@@ -23,6 +23,7 @@ type MedicalPackageModel implements MedicalServicesModel @key(fields: "code"){
     estimatedDuration: String!
     price: Float!
     services: [MedicalServiceModel!]!
+    speciality: SpecialityModel!
 }
 
 type SpecialityModel @extends {

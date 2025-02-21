@@ -92,7 +92,7 @@ public class PackageService {
             medicalPackageEntity.getServices().clear();
             for (Long serviceId : packageDTO.servicesIds()) {
                 MedicalServiceEntity medicalServiceEntity = medicalService.getMedicalServiceEntityById(serviceId);
-                if (medicalServiceEntity.getSpecialityId().equals(medicalPackageEntity.getSpecialityId())) {
+                if (!medicalServiceEntity.getSpecialityId().equals(medicalPackageEntity.getSpecialityId())) {
                     throw new ClimedarException("SERVICE_SPECIALITY_MISMATCH", "Service speciality does not match package speciality");
                 }
                 medicalPackageEntity.addService(medicalServiceEntity);
