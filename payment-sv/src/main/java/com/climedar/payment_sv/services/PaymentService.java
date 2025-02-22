@@ -5,6 +5,7 @@ import com.climedar.payment_sv.dto.request.PaymentSpecificationDTO;
 import com.climedar.payment_sv.entity.Invoice;
 import com.climedar.payment_sv.entity.payment.Payment;
 import com.climedar.payment_sv.event.PaymentEvent;
+import com.climedar.payment_sv.external.event.ConfirmedPay;
 import com.climedar.payment_sv.external.model.Consultation;
 import com.climedar.payment_sv.external.model.Patient;
 import com.climedar.payment_sv.external.model.medical_services.MedicalPackage;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.*;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +43,7 @@ public class PaymentService {
     private final ApplicationEventPublisher eventPublisher;
     private final ExportService exportService;
     private final ConsultationRepository consultationRepository;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Transactional
     public ResponseEntity<byte[]> createPayment(CreatePaymentDTO paymentDTO) {
@@ -51,7 +54,7 @@ public class PaymentService {
         payment.setInvoice(invoiceService.createInvoice(payment));
         payment.setPaymentMethod(paymentDTO.paymentMethod());
         paymentRepository.save(payment);
-        //todo: lanzar un evento para poner como pagada la consulta
+        kafkaTemplate.send("confirmed-pay", new ConfirmedPay(payment.getConsultationId(), true));
 
         for (MedicalServices medicalService : consultation.getMedicalServicesModel()) {
             if (medicalService.getClass() == MedicalService.class) {
