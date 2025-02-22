@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 
@@ -30,10 +31,12 @@ public class ShiftController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ShiftModel>> getAllShifts(@RequestParam(required = false) Long doctorId,
-                                                         @RequestParam(required = false) String date,
-                                                         @PageableDefault(size = 50) Pageable pageable) {
-        return ResponseEntity.status(200).body(shiftService.getAllShifts(pageable, new ShiftSpecificationDTO(doctorId, date)));
+    public ResponseEntity<Page<ShiftModel>> getAllShifts(@RequestParam(required = false) String date,
+                                                         @RequestParam(required = false) String fromTime,
+                                                         @RequestParam(required = false) String toTime,
+                                                         @RequestParam(required = false) String starTime,
+                                                         @PageableDefault(size = 1000) Pageable pageable) {
+        return ResponseEntity.status(200).body(shiftService.getAllShifts(pageable, new ShiftSpecificationDTO(date, fromTime, toTime, starTime)));
     }
 
     @GetMapping("/ids")

@@ -15,7 +15,9 @@ public class ConsultationModel {
     private Long id;
     private LocalDate date;
     private LocalTime startTime;
+    private LocalTime endTime;
     private Duration estimatedDuration;
+    private Boolean isPaid;
     private String description;
     private Double finalPrice;
     private String observation;

@@ -55,6 +55,11 @@ public class ShiftDataFetcher {
         return shiftAdapter.deleteShift(id);
     }
 
+    @DgsMutation
+    public ShiftModel cancelShift(@InputArgument Long id) {
+        return shiftAdapter.cancelShift(id);
+    }
+
     @DgsEntityFetcher(name = "ShiftModel")
     public ShiftModel getShift(Map<String, Object> values) {
         Long id = Long.parseLong((String) values.get("id"));

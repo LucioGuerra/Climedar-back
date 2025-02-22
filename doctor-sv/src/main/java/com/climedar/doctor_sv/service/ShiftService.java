@@ -2,16 +2,16 @@ package com.climedar.doctor_sv.service;
 
 import com.climedar.doctor_sv.builder.shift.ShiftDirector;
 import com.climedar.doctor_sv.dto.request.CreateShiftDTO;
-import com.climedar.doctor_sv.dto.request.RecurringShiftDTO;
 import com.climedar.doctor_sv.dto.request.ShiftBuilder;
 import com.climedar.doctor_sv.dto.request.specification.ShiftSpecificationDTO;
 import com.climedar.doctor_sv.entity.Doctor;
 import com.climedar.doctor_sv.entity.Shift;
 import com.climedar.doctor_sv.entity.ShiftState;
-import com.climedar.doctor_sv.external.model.Person;
+import com.climedar.doctor_sv.external.event.published.ShiftCanceledEvent;
 import com.climedar.doctor_sv.mapper.ShiftMapper;
 import com.climedar.doctor_sv.model.DoctorModel;
 import com.climedar.doctor_sv.model.ShiftModel;
+import com.climedar.doctor_sv.repository.ConsultationRepository;
 import com.climedar.doctor_sv.repository.ShiftRepository;
 import com.climedar.doctor_sv.specification.ShiftSpecification;
 import com.climedar.library.exception.ClimedarException;
@@ -20,15 +20,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -39,6 +36,8 @@ public class ShiftService {
     private final ShiftMapper shiftMapper;
     private final DoctorService doctorService;
     private final ShiftDirector shiftDirector;
+    private final ConsultationRepository consultationRepository;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public ShiftModel getShiftById(Long id) {
         Shift shift = shiftRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + id));
@@ -108,6 +107,11 @@ public class ShiftService {
     @Transactional
     public Boolean deleteShift(Long id) {
         Shift shift = shiftRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + id));
+
+        if (consultationRepository.existConsultationForShift(id)){
+            throw new ClimedarException("SHIFT_HAS_A_CONSULTATION", "Shift has a consultation and doesnt could be deleted");
+        }
+
         shift.setDeleted(true);
         shiftRepository.save(shift);
         return true;
@@ -169,6 +173,7 @@ public class ShiftService {
         shiftRepository.save(shift);
     }
 
+    @Transactional //TODO: Debe permitir cancelar muchos turnos
     public ShiftModel cancelShift(Long id) {
         Shift shift = shiftRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + id));
         if (shift.getState() == ShiftState.CANCELED) {
@@ -177,6 +182,7 @@ public class ShiftService {
         shift.setState(ShiftState.CANCELED);
         shiftRepository.save(shift);
         //TODO: erase consultation and send notification to the patient
+        kafkaTemplate.send("shift-canceled", new ShiftCanceledEvent(shift.getId()));
         return shiftMapper.toModel(shift);
     }
 }

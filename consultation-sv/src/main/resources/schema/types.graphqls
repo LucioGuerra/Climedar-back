@@ -1,14 +1,17 @@
 type ConsultationModel @key(fields: "id") {
     id: ID!
-    date: String!
-    startTime: String!
+    date: String
+    startTime: String
+    endTime: String
     description: String!
     medicalServicesModel: [MedicalServicesModel]!
     finalPrice: Float!
     observation: String
     doctor: DoctorModel!
     patient: PatientModel!
+    isPaid: Boolean!
 }
+
 
 type DoctorModel @extends{
     id: ID! @external

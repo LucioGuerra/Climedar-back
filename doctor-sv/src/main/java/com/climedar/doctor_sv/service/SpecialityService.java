@@ -1,6 +1,7 @@
 package com.climedar.doctor_sv.service;
 
 import com.climedar.doctor_sv.entity.Speciality;
+import com.climedar.doctor_sv.external.event.published.UpdateSpecialityNameEvent;
 import com.climedar.doctor_sv.mapper.SpecialityMapper;
 import com.climedar.doctor_sv.model.SpecialityModel;
 import com.climedar.doctor_sv.repository.SpecialityRepository;
@@ -10,7 +11,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,6 +24,7 @@ public class SpecialityService {
 
     private final SpecialityRepository specialityRepository;
     private final SpecialityMapper specialityMapper;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public Speciality findEntityById(Long id) {
         return specialityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Speciality not found with id: " + id));
@@ -50,10 +54,17 @@ public class SpecialityService {
         return specialityMapper.toModel(speciality);
     }
 
+    @Transactional
     public SpecialityModel updateSpeciality(Long id, SpecialityModel specialityModel) {
         Speciality specialityToUpdate = this.findEntityById(id);
+        String oldName = specialityToUpdate.getName();
         specialityMapper.updateEntity(specialityToUpdate, specialityModel);
         specialityRepository.save(specialityToUpdate);
+
+        if (specialityModel.getName() != null){
+            kafkaTemplate.send("speciality-update", new UpdateSpecialityNameEvent(specialityModel.getName(), oldName));
+        }
+
         return specialityMapper.toModel(specialityToUpdate);
     }
 

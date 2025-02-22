@@ -5,6 +5,7 @@ import com.climedar.payment_sv.entity.revenue.RevenueType;
 import com.climedar.payment_sv.external.model.medical_services.ServiceType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -28,4 +29,8 @@ public interface RevenueRepository extends JpaRepository<Revenue, Long>, JpaSpec
     List<Object[]> findByDateBetweenAndRevenueType(@Param("from") LocalDate fromDate,
                                                    @Param("to") LocalDate toDate,
                                                    @Param("revenueType") RevenueType revenueType);
+
+    @Modifying
+    @Query("UPDATE Revenue r SET r.specialityName = :newName WHERE r.specialityName = :oldName")
+    void updateSpecialityName(@Param("newName") String newName, @Param("oldName") String oldName);
 }

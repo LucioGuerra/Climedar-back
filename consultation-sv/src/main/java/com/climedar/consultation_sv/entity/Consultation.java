@@ -30,8 +30,11 @@ public class Consultation {
     @Column(length = 3000)
     private String observation;
 
-    @Column(name = "shift_id", nullable = false, unique = true)
+    @Column(name = "shift_id")
     private Long shiftId;
+
+    @Column(name = "doctor_id", nullable = false)
+    private Long doctorId;
 
     @Column(name = "patient_id", nullable = false)
     private Long patientId;

@@ -1,13 +1,12 @@
 #!/bin/bash
 
 
-SERVICIOS=("api-gateway" "consultation-sv" "doctor-sv" "eureka-sv" "medical-service-sv" "notification-sv" "patient-sv" "payment-sv" "person-sv")
+set -a 
+source .env-build-all
+set -a
 
-export DB_URL="localhost:3306"
-export DB_USER="root"
-export DB_PASSWORD="root"
-export EUREKA_URL="localhost:8761"
-export ISSUER_URI="http://dev-rf6iib6ciw3jlk0l.us.auth0.com/"
+
+SERVICIOS=("api-gateway" "consultation-sv" "doctor-sv" "eureka-sv" "medical-service-sv" "notification-sv" "patient-sv" "payment-sv" "person-sv")
 
 for servicio in "${SERVICIOS[@]}"; do
     echo "Procesando $servicio..."

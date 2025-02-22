@@ -1,6 +1,5 @@
-package com.climedar.consultation_sv.repository;
+package com.climedar.consultation_sv.repository.feign;
 
-import com.climedar.consultation_sv.dto.request.CreateOvertimeShiftDTO;
 import com.climedar.consultation_sv.external.model.doctor.Doctor;
 import com.climedar.consultation_sv.external.model.doctor.Shift;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -9,17 +8,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @FeignClient(name = "doctor-sv")
 public interface ShiftRepository {
 
     @GetMapping("/api/public/shifts/{id}")
-    Shift findById(@PathVariable Long id);
+    Optional<Shift> findById(@PathVariable Long id);
 
     @GetMapping("/api/public/shifts")
-    Page<Shift> getAllShift(@RequestParam Long doctorId, @RequestParam LocalDate date);
+    Page<Shift> getAllShift(@RequestParam LocalDate date, @RequestParam LocalTime starTime, @RequestParam LocalTime fromTime, @RequestParam LocalTime toTime);
 
     @GetMapping("/api/public/shifts/ids")
     List<Shift> findAllById(@RequestParam Set<Long> ids);
