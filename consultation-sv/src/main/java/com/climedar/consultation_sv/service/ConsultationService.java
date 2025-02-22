@@ -102,15 +102,6 @@ public class ConsultationService {
                 medicalServicesRepository.findAllById(createConsultationDTO.medicalServicesId());
         List<MedicalServicesModel> medicalServicesModels = medicalServicesWrappeds.stream().map(MedicalServicesWrapped::getMedicalServices).toList();
 
-        Doctor doctor = shiftRepository.findDoctorById((createConsultationDTO.doctorId()));
-        for (MedicalServicesModel medicalServicesModel : medicalServicesModels) {
-            if (!doctor.getSpeciality().getId().equals(medicalServicesModel.getSpeciality().getId())) {
-                throw new ClimedarException("DOCTOR_DOESNT_PROVIDE_THESE_SERVICES", "Doctor speciality and medical " +
-                        "service " +
-                        "speciality " +
-                        "doesn't match");
-            }
-        }
 
         Shift shift;
         if (createConsultationDTO.shiftId() != null) {
@@ -126,7 +117,15 @@ public class ConsultationService {
             shift = shiftRepository.createShift(createConsultationDTO.doctorId(), duration);
         }
 
-
+        Doctor doctor = shift.getDoctor();
+        for (MedicalServicesModel medicalServicesModel : medicalServicesModels) {
+            if (!doctor.getSpeciality().getId().equals(medicalServicesModel.getSpeciality().getId())) {
+                throw new ClimedarException("DOCTOR_DOESNT_PROVIDE_THESE_SERVICES", "Doctor speciality and medical " +
+                        "service " +
+                        "speciality " +
+                        "doesn't match");
+            }
+        }
 
 
         Patient patient = patientRepository.findById(createConsultationDTO.patientId());
