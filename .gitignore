@@ -9,3 +9,4 @@ biblioteca/page-request-info/target/*
 biblioteca/pague-request-info/target/*
 .env
 .env-build-all
+Certificados/*

@@ -1,10 +1,10 @@
 package com.climedar.consultation_sv.service;
 
 import com.climedar.consultation_sv.dto.request.CreateConsultationDTO;
-import com.climedar.consultation_sv.dto.request.CreateOvertimeConsultationDTO;
 import com.climedar.consultation_sv.dto.request.MedicalServicesWrapped;
 import com.climedar.consultation_sv.dto.request.UpdateConsultationDTO;
 import com.climedar.consultation_sv.entity.Consultation;
+import com.climedar.consultation_sv.external.event.ConfirmedPayEvent;
 import com.climedar.consultation_sv.external.model.doctor.Doctor;
 import com.climedar.consultation_sv.external.model.doctor.Shift;
 import com.climedar.consultation_sv.external.model.doctor.ShiftState;
@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -208,6 +209,14 @@ public class ConsultationService {
             Shift shift = shiftMap.get(consultation.getShiftId());
             return consultationMapper.toModel(consultation, shift);
         }).toList();
+    }
+
+    @Transactional
+    @KafkaListener(topics = "confirmed-pay", groupId = "consultation-sv")
+    public void consumeConfirmedPay(ConfirmedPayEvent event) {
+        Consultation consultation = consultationRepository.findById(event.getConsultationId()).orElseThrow(() -> new EntityNotFoundException("Consultation not found with id: " + event.getConsultationId()));
+        consultation.setPaid(true);
+        consultationRepository.save(consultation);
     }
 
 }

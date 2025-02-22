@@ -5,7 +5,7 @@ import com.climedar.payment_sv.dto.request.PaymentSpecificationDTO;
 import com.climedar.payment_sv.entity.Invoice;
 import com.climedar.payment_sv.entity.payment.Payment;
 import com.climedar.payment_sv.event.PaymentEvent;
-import com.climedar.payment_sv.external.event.ConfirmedPay;
+import com.climedar.payment_sv.external.event.ConfirmedPayEvent;
 import com.climedar.payment_sv.external.model.Consultation;
 import com.climedar.payment_sv.external.model.Patient;
 import com.climedar.payment_sv.external.model.medical_services.MedicalPackage;
@@ -54,7 +54,7 @@ public class PaymentService {
         payment.setInvoice(invoiceService.createInvoice(payment));
         payment.setPaymentMethod(paymentDTO.paymentMethod());
         paymentRepository.save(payment);
-        kafkaTemplate.send("confirmed-pay", new ConfirmedPay(payment.getConsultationId(), true));
+        kafkaTemplate.send("confirmed-pay", new ConfirmedPayEvent(payment.getConsultationId()));
 
         for (MedicalServices medicalService : consultation.getMedicalServicesModel()) {
             if (medicalService.getClass() == MedicalService.class) {
