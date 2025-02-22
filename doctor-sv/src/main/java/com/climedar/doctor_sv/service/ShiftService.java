@@ -173,6 +173,7 @@ public class ShiftService {
         shiftRepository.save(shift);
     }
 
+    @Transactional //TODO: Debe permitir cancelar muchos turnos
     public ShiftModel cancelShift(Long id) {
         Shift shift = shiftRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + id));
         if (shift.getState() == ShiftState.CANCELED) {
