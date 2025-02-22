@@ -16,7 +16,6 @@ import java.util.Map;
 @Configuration
 public class KafkaProducerConfig {
 
-
     @Value("${KAFKA_URL}")
     private String kafkaUrl;
 

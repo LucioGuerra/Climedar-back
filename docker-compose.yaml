@@ -78,11 +78,12 @@ services:
       PROFILE: "dev"
       KAFKA_URL: ${KAFKA_URL}
       KAFKA_PASSWORD: ${KAFKA_PASSWORD}
-      KAFKA_TRUSTSTORE_LOCATION: ${KAFKA_TRUSTSTORE_LOCATION}
+      KAFKA_TRUSTSTORE_LOCATION: /app/certs/truststore.jks
       KAFKA_TRUSTSTORE_PASSWORD: ${KAFKA_TRUSTSTORE_PASSWORD}
       KAFKA_USER: ${KAFKA_USER}
     volumes:
       - ${CONSULTATION_DIR}/consultation-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
+      - ${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro
     networks:
       - hackacode
     healthcheck:
@@ -111,11 +112,12 @@ services:
       PROFILE: "dev"
       KAFKA_URL: ${KAFKA_URL}
       KAFKA_PASSWORD: ${KAFKA_PASSWORD}
-      KAFKA_TRUSTSTORE_LOCATION: ${KAFKA_TRUSTSTORE_LOCATION}
+      KAFKA_TRUSTSTORE_LOCATION: /app/certs/truststore.jks
       KAFKA_TRUSTSTORE_PASSWORD: ${KAFKA_TRUSTSTORE_PASSWORD}
       KAFKA_USER: ${KAFKA_USER}
     volumes:
       - ${DOCTOR_DIR}/doctor-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
+      - ${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro
     networks:
       - hackacode
     healthcheck:
@@ -172,11 +174,12 @@ services:
       PROFILE: "dev"
       KAFKA_URL: ${KAFKA_URL}
       KAFKA_PASSWORD: ${KAFKA_PASSWORD}
-      KAFKA_TRUSTSTORE_LOCATION: ${KAFKA_TRUSTSTORE_LOCATION}
+      KAFKA_TRUSTSTORE_LOCATION: /app/certs/truststore.jks
       KAFKA_TRUSTSTORE_PASSWORD: ${KAFKA_TRUSTSTORE_PASSWORD}
       KAFKA_USER: ${KAFKA_USER}
     volumes:
       - ${PATIENT_DIR}/patient-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
+      - ${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro
     networks:
       - hackacode
     healthcheck:
@@ -205,11 +208,12 @@ services:
       PROFILE: "dev"
       KAFKA_URL: ${KAFKA_URL}
       KAFKA_PASSWORD: ${KAFKA_PASSWORD}
-      KAFKA_TRUSTSTORE_LOCATION: ${KAFKA_TRUSTSTORE_LOCATION}
+      KAFKA_TRUSTSTORE_LOCATION: /app/certs/truststore.jks
       KAFKA_TRUSTSTORE_PASSWORD: ${KAFKA_TRUSTSTORE_PASSWORD}
       KAFKA_USER: ${KAFKA_USER}
     volumes:
       - ${PAYMENT_DIR}/payment-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
+      - ${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro
     networks:
       - hackacode
     healthcheck:

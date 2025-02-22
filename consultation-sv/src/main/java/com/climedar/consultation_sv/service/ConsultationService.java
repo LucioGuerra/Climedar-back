@@ -5,6 +5,7 @@ import com.climedar.consultation_sv.dto.request.MedicalServicesWrapped;
 import com.climedar.consultation_sv.dto.request.UpdateConsultationDTO;
 import com.climedar.consultation_sv.entity.Consultation;
 import com.climedar.consultation_sv.external.event.received.ConfirmedPayEvent;
+import com.climedar.consultation_sv.external.event.received.ShiftCanceledEvent;
 import com.climedar.consultation_sv.external.model.doctor.Doctor;
 import com.climedar.consultation_sv.external.model.doctor.Shift;
 import com.climedar.consultation_sv.external.model.doctor.ShiftState;
@@ -221,8 +222,8 @@ public class ConsultationService {
 
     @Transactional
     @KafkaListener(topics = "shift-canceled", groupId = "consultation-sv")
-    public void consumeShiftCanceled(Long shiftId) {
-        Consultation consultation = consultationRepository.findByShiftId(shiftId);
+    public void consumeShiftCanceled(ShiftCanceledEvent event) {
+        Consultation consultation = consultationRepository.findByShiftId(event.getShiftId());
         consultation.setShiftId(-1L);
         consultationRepository.save(consultation);
     }

@@ -40,7 +40,7 @@ public class KafkaConsumerConfig {
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-        config.put(JsonDeserializer.TYPE_MAPPINGS, "com.climedar.doctor_sv.external.event.published.ShiftCanceledEvent:com.climedar.consultation_sv.external.event.ConfirmedPayEvent");
+        config.put(JsonDeserializer.TYPE_MAPPINGS, "com.climedar.doctor_sv.external.event.published.UpdateSpecialityNameEvent:com.climedar.payment_sv.external.event.received.UpdateSpecialityNameEvent");
 
 
 
