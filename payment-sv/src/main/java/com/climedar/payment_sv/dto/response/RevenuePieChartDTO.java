@@ -4,6 +4,6 @@ import java.math.BigDecimal;
 
 public record RevenuePieChartDTO(
         String name,
-        BigDecimal amount
+        BigDecimal value
 ) {
 }

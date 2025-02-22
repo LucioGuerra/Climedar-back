@@ -5,6 +5,6 @@ import java.time.LocalDate;
 
 public record RevenueLineChartDTO (
         LocalDate date,
-        BigDecimal amount
+        BigDecimal value
 ){
 }

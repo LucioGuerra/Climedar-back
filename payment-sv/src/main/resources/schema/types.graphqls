@@ -1,11 +1,11 @@
 type RevenuePieChart{
     name: String!
-    amount: Float!
+    value: Float!
 }
 
 type RevenueLineChart{
     date: String!
-    amount: Float!
+    value: Float!
 }
 
 type Payment{
