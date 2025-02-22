@@ -54,8 +54,8 @@ public class RevenueService {
         List<Revenue> revenues = revenueRepository.findAll(specification);
 
          return switch (specificationDTO.getOriginName()) {
-            case SPECIALITY -> revenues.stream().map(revenueMapper::toDTOSpecialityName).toList();
-            case MEDICAL_SERVICE -> revenues.stream().map(revenueMapper::toDTOServiceType).toList();
+             case MEDICAL_SERVICE -> revenues.stream().map(revenueMapper::toDTOSpecialityName).toList();
+            case SPECIALITY -> revenues.stream().map(revenueMapper::toDTOServiceType).toList();
          };
     }
 
