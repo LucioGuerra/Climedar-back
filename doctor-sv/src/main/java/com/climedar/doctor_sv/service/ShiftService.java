@@ -12,6 +12,7 @@ import com.climedar.doctor_sv.external.model.Person;
 import com.climedar.doctor_sv.mapper.ShiftMapper;
 import com.climedar.doctor_sv.model.DoctorModel;
 import com.climedar.doctor_sv.model.ShiftModel;
+import com.climedar.doctor_sv.repository.ConsultationRepository;
 import com.climedar.doctor_sv.repository.ShiftRepository;
 import com.climedar.doctor_sv.specification.ShiftSpecification;
 import com.climedar.library.exception.ClimedarException;
@@ -39,6 +40,7 @@ public class ShiftService {
     private final ShiftMapper shiftMapper;
     private final DoctorService doctorService;
     private final ShiftDirector shiftDirector;
+    private final ConsultationRepository consultationRepository;
 
     public ShiftModel getShiftById(Long id) {
         Shift shift = shiftRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + id));
@@ -108,6 +110,11 @@ public class ShiftService {
     @Transactional
     public Boolean deleteShift(Long id) {
         Shift shift = shiftRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + id));
+
+        if (consultationRepository.existConsultationForShift(id)){
+            throw new ClimedarException("SHIFT_HAS_A_CONSULTATION", "Shift has a consultation and doesnt could be deleted");
+        }
+
         shift.setDeleted(true);
         shiftRepository.save(shift);
         return true;
