@@ -33,6 +33,9 @@ public class Consultation {
     @Column(name = "shift_id")
     private Long shiftId;
 
+    @Column(name = "doctor_id", nullable = false)
+    private Long doctorId;
+
     @Column(name = "patient_id", nullable = false)
     private Long patientId;
 

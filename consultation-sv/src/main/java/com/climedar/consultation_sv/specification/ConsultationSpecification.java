@@ -20,22 +20,6 @@ public class ConsultationSpecification {
         return (root, query, cb) -> medicalServicesCodes == null? cb.conjunction(): root.get("medicalServicesCode").in(medicalServicesCodes);
     }
 
-    public static Specification<Consultation> ByTime(LocalTime startTime, LocalTime fromTime, LocalTime toTime) {
-        return (root, query, cb) -> {
-            if (startTime != null) {
-                return cb.equal(root.get("startTime"), startTime);
-            }else if (fromTime == null && toTime == null) {
-                return cb.conjunction();
-            } else if (fromTime == null) {
-                return cb.lessThanOrEqualTo(root.get("startTime"), toTime);
-            } else if (toTime == null) {
-                return cb.greaterThanOrEqualTo(root.get("startTime"), fromTime);
-            } else {
-                return cb.between(root.get("startTime"), fromTime, toTime);
-            }
-        };
-    }
-
     public static Specification<Consultation> likeDescription(String description) {
         return (root, query, cb) -> description == null? cb.conjunction(): cb.like(root.get("description"), "%" + description + "%");
     }
@@ -46,5 +30,9 @@ public class ConsultationSpecification {
 
     public static Specification<Consultation> byDeleted(Boolean deleted) {
         return (root, query, cb) -> deleted == null? cb.conjunction(): cb.equal(root.get("deleted"), deleted);
+    }
+
+    public static Specification<Consultation> ByDoctorId(Long doctorId) {
+        return (root, query, cb) -> doctorId == null? cb.conjunction(): cb.equal(root.get("doctorId"), doctorId);
     }
 }

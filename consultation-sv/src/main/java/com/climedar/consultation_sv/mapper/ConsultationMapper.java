@@ -22,16 +22,23 @@ import java.util.List;
 public interface ConsultationMapper {
 
 
+    @Mapping(target = "isPaid", source = "consultation.paid")
     @Mapping(source = "consultation.id", target = "id")
     @Mapping(source = "shift.date", target = "date")
     @Mapping(source = "shift.startTime", target = "startTime")
+    @Mapping(source = "shift.endTime", target = "endTime")
     @Mapping(source = "consultation.description", target = "description")
     @Mapping(source = "consultation.finalPrice", target = "finalPrice")
     @Mapping(source = "consultation.observation", target = "observation")
     @Mapping(expression = "java(this.getPatient(consultation))", target = "patient")
-    @Mapping(expression = "java(this.getDoctor(shift))", target = "doctor")
+    @Mapping(expression = "java(this.getDoctor(consultation))", target = "doctor")
     @Mapping(expression = "java(this.getMedicalServices(consultation))", target = "medicalServicesModel")
-    ConsultationModel toModel(Consultation consultation, Shift shift);
+    ConsultationModel toModelWithShift(Consultation consultation, Shift shift);
+
+
+    @Mapping(expression = "java(this.getPatient(consultation))", target = "patient")
+    @Mapping(expression = "java(this.getMedicalServices(consultation))", target = "medicalServicesModel")
+    ConsultationModel toModelWithoutShift(Consultation consultation);
 
 
     @Mapping(target = "medicalServicesCode", ignore = true)
@@ -40,9 +47,11 @@ public interface ConsultationMapper {
     Consultation toEntity(CreateConsultationDTO createConsultationDTO);
 
 
-
-    default Doctor getDoctor(Shift shift) {
-        return new Doctor(shift.getDoctor().getId());
+    default Doctor getDoctor(Consultation consultation) {
+        if (consultation == null){
+            return null;
+        }
+        return new Doctor(consultation.getDoctorId());
     }
 
     default List<MedicalServicesModel> getMedicalServices(Consultation consultation) {

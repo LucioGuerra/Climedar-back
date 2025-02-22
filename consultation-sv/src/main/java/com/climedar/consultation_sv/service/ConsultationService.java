@@ -14,6 +14,9 @@ import com.climedar.consultation_sv.external.model.patient.Patient;
 import com.climedar.consultation_sv.mapper.ConsultationMapper;
 import com.climedar.consultation_sv.model.ConsultationModel;
 import com.climedar.consultation_sv.repository.*;
+import com.climedar.consultation_sv.repository.feign.MedicalServicesRepository;
+import com.climedar.consultation_sv.repository.feign.PatientRepository;
+import com.climedar.consultation_sv.repository.feign.ShiftRepository;
 import com.climedar.consultation_sv.specification.ConsultationSpecification;
 import com.climedar.library.exception.ClimedarException;
 import jakarta.persistence.EntityNotFoundException;
@@ -57,8 +60,13 @@ public class ConsultationService {
 
     public ConsultationModel getConsultationById(Long id) {
         Consultation consultation = consultationRepository.findByIdAndNotDeleted(id).orElseThrow(() -> new EntityNotFoundException("Consultation not found with id: " + id));
-        Shift shift = shiftRepository.findById(consultation.getShiftId());
-        return consultationMapper.toModel(consultation, shift);
+        Optional<Shift> shift = shiftRepository.findById(consultation.getShiftId());
+        if (shift.isEmpty()) {
+            ConsultationModel consultationModel = consultationMapper.toModelWithoutShift(consultation);
+            consultationModel.setDoctor(new Doctor(consultation.getDoctorId()));
+            return consultationModel;
+        }
+        return consultationMapper.toModelWithShift(consultation, shift.get());
     }
 
     public Page<ConsultationModel> getAllConsultations(Pageable pageable, Long patientId, Long doctorId,
@@ -67,31 +75,40 @@ public class ConsultationService {
                                                        String observation) {
 
         List<Long> shiftId = new ArrayList<>();
-        if (!(doctorId == null && date == null)) {
-            shiftId = shiftRepository.getAllShift(doctorId, date).stream().map(Shift::getId).toList();
+        if ((date != null || startTime != null || fromTime != null || toTime != null)) {
+            shiftId = shiftRepository.getAllShift(date, startTime, fromTime, toTime).stream().map(Shift::getId).toList();
         }
         Specification<Consultation> specification = Specification.where(ConsultationSpecification.ByPatientId(patientId))
                 .and(ConsultationSpecification.ByShiftId(shiftId))
                 .and(ConsultationSpecification.ByMedicalServicesCode(medicalServicesCode))
-                .and(ConsultationSpecification.ByTime(startTime, fromTime, toTime)) //todo: Este specification rompe todo por que ya no existe startime
                 .and(ConsultationSpecification.likeDescription(description))
                 .and(ConsultationSpecification.likeObservation(observation))
+                .and(ConsultationSpecification.ByDoctorId(doctorId))
                 .and(ConsultationSpecification.byDeleted(false));
 
         Page<Consultation> consultations = consultationRepository.findAll(specification, pageable);
 
+
+
         Set<Long> shiftIds = new HashSet<>();
 
         consultations.forEach(consultation -> {
-            shiftIds.add(consultation.getShiftId());
+            if (consultation.getShiftId() != null){
+                shiftIds.add(consultation.getShiftId());
+            }
         });
 
         List<Shift> shifts = shiftRepository.findAllById(shiftIds);
         Map<Long, Shift> shiftMap = shifts.stream().collect(Collectors.toMap(Shift::getId, Function.identity()));
 
         return consultations.map(consultation -> {
+            if (consultation.getShiftId() == null){
+                ConsultationModel consultationModel = consultationMapper.toModelWithoutShift(consultation);
+                consultationModel.setDoctor(new Doctor(consultation.getDoctorId()));
+                return consultationModel;
+            }
             Shift shift = shiftMap.get(consultation.getShiftId());
-            return consultationMapper.toModel(consultation, shift);
+            return consultationMapper.toModelWithShift(consultation, shift);
         });
     }
 
@@ -105,7 +122,7 @@ public class ConsultationService {
 
         Shift shift;
         if (createConsultationDTO.shiftId() != null) {
-            shift = shiftRepository.findById(createConsultationDTO.shiftId());
+            shift = shiftRepository.findById(createConsultationDTO.shiftId()).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + createConsultationDTO.shiftId()));
             if (shift.getState() == ShiftState.OCCUPIED) {
                 throw new ClimedarException("SHIFT_IS_OCCUPIED", "Shift is already occupied");
             }
@@ -139,7 +156,7 @@ public class ConsultationService {
         consultationRepository.save(consultation);
 
         shiftRepository.occupyShift(shift.getId());
-        return consultationMapper.toModel(consultation, shift);
+        return consultationMapper.toModelWithShift(consultation, shift);
     }
 
 
@@ -149,7 +166,7 @@ public class ConsultationService {
         Shift shift;
 
         if (updateConsultationDTO.shiftId() != null) {
-            shift = shiftRepository.findById(updateConsultationDTO.shiftId());
+            shift = shiftRepository.findById(updateConsultationDTO.shiftId()).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + updateConsultationDTO.shiftId()));
             if (shift.getState() == ShiftState.OCCUPIED) {
                 throw new ClimedarException("SHIFT_IS_OCCUPIED", "Shift is already occupied");
             }
@@ -157,8 +174,10 @@ public class ConsultationService {
             shiftRepository.clearShift(consultation.getShiftId());
             consultation.setShiftId(shift.getId());
         }else {
-            shift = shiftRepository.findById(consultation.getShiftId());
+            shift = shiftRepository.findById(consultation.getShiftId()).orElseThrow(() -> new EntityNotFoundException("Shift not found with id: " + consultation.getShiftId()));
         }
+
+
         if (updateConsultationDTO.medicalServicesId() != null) {
             List<MedicalServicesWrapped> medicalServicesWrappeds =
                     medicalServicesRepository.findAllById(updateConsultationDTO.medicalServicesId());
@@ -176,7 +195,7 @@ public class ConsultationService {
 
         consultationRepository.save(consultation);
 
-        return consultationMapper.toModel(consultation, shift);
+        return consultationMapper.toModelWithShift(consultation, shift);
     }
 
     public Boolean deleteConsultation(Long id) {
@@ -199,15 +218,22 @@ public class ConsultationService {
         Set<Long> shiftIds = new HashSet<>();
 
         consultations.forEach(consultation -> {
-            shiftIds.add(consultation.getShiftId());
+            if (consultation.getShiftId() != null){
+                shiftIds.add(consultation.getShiftId());
+            }
         });
 
         List<Shift> shifts = shiftRepository.findAllById(shiftIds);
         Map<Long, Shift> shiftMap = shifts.stream().collect(Collectors.toMap(Shift::getId, Function.identity()));
 
         return consultations.stream().map(consultation -> {
+            if (consultation.getShiftId() == null){
+                ConsultationModel consultationModel = consultationMapper.toModelWithoutShift(consultation);
+                consultationModel.setDoctor(new Doctor(consultation.getDoctorId()));
+                return consultationModel;
+            }
             Shift shift = shiftMap.get(consultation.getShiftId());
-            return consultationMapper.toModel(consultation, shift);
+            return consultationMapper.toModelWithShift(consultation, shift);
         }).toList();
     }
 

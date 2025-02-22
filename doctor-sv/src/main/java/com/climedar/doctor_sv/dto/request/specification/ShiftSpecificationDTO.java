@@ -24,6 +24,8 @@ public class ShiftSpecificationDTO {
     private Integer patients;
     private ShiftState state;
 
+
+
     @AssertTrue(message = "From date must be before to date")
     public boolean isFromDateBeforeToDate() {
         if (fromDate == null || toDate == null) {
@@ -40,10 +42,17 @@ public class ShiftSpecificationDTO {
         return LocalTime.parse(startTime).isBefore(LocalTime.parse(endTime));
     }
 
+    public ShiftSpecificationDTO(String date, String fromTime, String toTime, String starTime) {
+        this.date = date;
+        this.fromTime = fromTime;
+        this.toTime = toTime;
+        this.startTime = starTime;
+    }
+
     public ShiftSpecificationDTO() {
     }
 
-    public ShiftSpecificationDTO(Long doctorId, String date) {
+    public ShiftSpecificationDTO(String date) {
         this.doctorId = doctorId;
         this.date = date;
     }
