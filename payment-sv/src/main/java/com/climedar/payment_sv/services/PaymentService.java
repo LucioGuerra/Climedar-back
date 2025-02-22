@@ -53,6 +53,7 @@ public class PaymentService {
         payment.setAmount(consultation.getFinalPrice());
         payment.setInvoice(invoiceService.createInvoice(payment));
         payment.setPaymentMethod(paymentDTO.paymentMethod());
+
         paymentRepository.save(payment);
         kafkaTemplate.send("confirmed-pay", new ConfirmedPayEvent(payment.getConsultationId()));
 
