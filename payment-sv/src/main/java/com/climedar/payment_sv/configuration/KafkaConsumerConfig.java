@@ -1,21 +1,20 @@
-package com.climedar.consultation_sv.configuration;
+package com.climedar.payment_sv.configuration;
 
-import com.climedar.consultation_sv.external.event.ConfirmedPayEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.core.*;
-import org.springframework.kafka.support.mapping.DefaultJackson2JavaTypeMapper;
+import org.springframework.kafka.core.ConsumerFactory;
+import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class KafkaConfig {
+public class KafkaConsumerConfig {
 
     @Value("${KAFKA_URL}")
     private String kafkaUrl;
@@ -41,7 +40,7 @@ public class KafkaConfig {
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-        config.put(JsonDeserializer.TYPE_MAPPINGS, "com.climedar.payment_sv.external.event.ConfirmedPayEvent:com.climedar.consultation_sv.external.event.ConfirmedPayEvent");
+        config.put(JsonDeserializer.TYPE_MAPPINGS, "com.climedar.doctor_sv.external.event.published.ShiftCanceledEvent:com.climedar.consultation_sv.external.event.ConfirmedPayEvent");
 
 
 

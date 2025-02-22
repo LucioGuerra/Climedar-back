@@ -1,7 +1,7 @@
 package com.climedar.doctor_sv.service;
 
 import com.climedar.doctor_sv.entity.Speciality;
-import com.climedar.doctor_sv.external.event.SpecialityUpdateNameEvent;
+import com.climedar.doctor_sv.external.event.published.UpdateSpecialityNameEvent;
 import com.climedar.doctor_sv.mapper.SpecialityMapper;
 import com.climedar.doctor_sv.model.SpecialityModel;
 import com.climedar.doctor_sv.repository.SpecialityRepository;
@@ -57,11 +57,12 @@ public class SpecialityService {
     @Transactional
     public SpecialityModel updateSpeciality(Long id, SpecialityModel specialityModel) {
         Speciality specialityToUpdate = this.findEntityById(id);
+        String oldName = specialityToUpdate.getName();
         specialityMapper.updateEntity(specialityToUpdate, specialityModel);
         specialityRepository.save(specialityToUpdate);
 
         if (specialityModel.getName() != null){
-            kafkaTemplate.send("speciality-update", new SpecialityUpdateNameEvent(specialityModel.getName()));
+            kafkaTemplate.send("speciality-update", new UpdateSpecialityNameEvent(specialityModel.getName(), oldName));
         }
 
         return specialityMapper.toModel(specialityToUpdate);

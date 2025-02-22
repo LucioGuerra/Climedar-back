@@ -2,14 +2,12 @@ package com.climedar.doctor_sv.service;
 
 import com.climedar.doctor_sv.builder.shift.ShiftDirector;
 import com.climedar.doctor_sv.dto.request.CreateShiftDTO;
-import com.climedar.doctor_sv.dto.request.RecurringShiftDTO;
 import com.climedar.doctor_sv.dto.request.ShiftBuilder;
 import com.climedar.doctor_sv.dto.request.specification.ShiftSpecificationDTO;
 import com.climedar.doctor_sv.entity.Doctor;
 import com.climedar.doctor_sv.entity.Shift;
 import com.climedar.doctor_sv.entity.ShiftState;
-import com.climedar.doctor_sv.external.event.ShiftCanceledEvent;
-import com.climedar.doctor_sv.external.model.Person;
+import com.climedar.doctor_sv.external.event.published.ShiftCanceledEvent;
 import com.climedar.doctor_sv.mapper.ShiftMapper;
 import com.climedar.doctor_sv.model.DoctorModel;
 import com.climedar.doctor_sv.model.ShiftModel;
@@ -26,12 +24,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor

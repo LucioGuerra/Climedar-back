@@ -1,4 +1,4 @@
-package com.climedar.doctor_sv.external.event;
+package com.climedar.doctor_sv.external.event.published;
 
 import lombok.Data;
 

@@ -5,7 +5,7 @@ import com.climedar.payment_sv.dto.request.PaymentSpecificationDTO;
 import com.climedar.payment_sv.entity.Invoice;
 import com.climedar.payment_sv.entity.payment.Payment;
 import com.climedar.payment_sv.event.PaymentEvent;
-import com.climedar.payment_sv.external.event.ConfirmedPayEvent;
+import com.climedar.payment_sv.external.event.published.ConfirmedPayEvent;
 import com.climedar.payment_sv.external.model.Consultation;
 import com.climedar.payment_sv.external.model.Patient;
 import com.climedar.payment_sv.external.model.medical_services.MedicalPackage;

@@ -7,6 +7,7 @@ import com.climedar.payment_sv.dto.response.RevenuePieChartDTO;
 import com.climedar.payment_sv.entity.revenue.Revenue;
 import com.climedar.payment_sv.entity.revenue.RevenueType;
 import com.climedar.payment_sv.event.PaymentEvent;
+import com.climedar.payment_sv.external.event.received.UpdateSpecialityNameEvent;
 import com.climedar.payment_sv.external.model.medical_services.ServiceType;
 import com.climedar.payment_sv.mapper.RevenueMapper;
 import com.climedar.payment_sv.repository.MedicalServicesRepository;
@@ -17,8 +18,10 @@ import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -36,8 +39,6 @@ public class RevenueService {
     private final MedicalServicesRepository medicalServicesRepository;
     private final SpecialityRepository specialityRepository;
     private final RevenueMapper revenueMapper;
-
-    //todo: actualizar los datos cuando se modifiquen las especialidades
 
     public List<RevenuePieChartDTO> getAllRevenuePieChart(RevenueSpecificationDTO specificationDTO) {
 
@@ -99,6 +100,12 @@ public class RevenueService {
         }
 
         return revenues;
+    }
+
+    @Transactional
+    @KafkaListener(topics = "speciality-update", groupId = "revenue")
+    public void updateSpecialityName(UpdateSpecialityNameEvent event){
+        revenueRepository.updateSpecialityName(event.getNewName(), event.getOldName());
     }
 
     @EventListener(condition = "#event.amount() > 0")
