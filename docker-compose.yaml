@@ -75,7 +75,12 @@ services:
       DB_URL: "hackacode-db:3306"             # Nombre del servicio MySQL
       DB_NAME: "consultation_db"  # Nombre de la base de datos para este servicio
       EUREKA_URL: "eureka-sv:8761"
-      PROFILE: "prod"
+      PROFILE: "dev"
+      KAFKA_URL: ${KAFKA_URL}
+      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
+      KAFKA_TRUSTSTORE_LOCATION: ${KAFKA_TRUSTSTORE_LOCATION}
+      KAFKA_TRUSTSTORE_PASSWORD: ${KAFKA_TRUSTSTORE_PASSWORD}
+      KAFKA_USER: ${KAFKA_USER}
     volumes:
       - ${CONSULTATION_DIR}/consultation-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
     networks:
@@ -103,7 +108,12 @@ services:
       DB_URL: "hackacode-db:3306"
       DB_NAME: "doctor_db"
       EUREKA_URL: "eureka-sv:8761"
-      PROFILE: "prod"
+      PROFILE: "dev"
+      KAFKA_URL: ${KAFKA_URL}
+      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
+      KAFKA_TRUSTSTORE_LOCATION: ${KAFKA_TRUSTSTORE_LOCATION}
+      KAFKA_TRUSTSTORE_PASSWORD: ${KAFKA_TRUSTSTORE_PASSWORD}
+      KAFKA_USER: ${KAFKA_USER}
     volumes:
       - ${DOCTOR_DIR}/doctor-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
     networks:
@@ -131,7 +141,7 @@ services:
       DB_URL: "hackacode-db:3306"
       DB_NAME: "medical_service_db"
       EUREKA_URL: "eureka-sv:8761"
-      PROFILE: "prod"
+      PROFILE: "dev"
     volumes:
       - ${MEDICAL_DIR}/medical-service-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
     networks:
@@ -159,7 +169,12 @@ services:
       DB_URL: "hackacode-db:3306"
       DB_NAME: "patient_db"
       EUREKA_URL: "eureka-sv:8761"
-      PROFILE: "prod"
+      PROFILE: "dev"
+      KAFKA_URL: ${KAFKA_URL}
+      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
+      KAFKA_TRUSTSTORE_LOCATION: ${KAFKA_TRUSTSTORE_LOCATION}
+      KAFKA_TRUSTSTORE_PASSWORD: ${KAFKA_TRUSTSTORE_PASSWORD}
+      KAFKA_USER: ${KAFKA_USER}
     volumes:
       - ${PATIENT_DIR}/patient-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
     networks:
@@ -187,7 +202,12 @@ services:
       DB_URL: "hackacode-db:3306"
       DB_NAME: "payment_db"
       EUREKA_URL: "eureka-sv:8761"
-      PROFILE: "prod"
+      PROFILE: "dev"
+      KAFKA_URL: ${KAFKA_URL}
+      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
+      KAFKA_TRUSTSTORE_LOCATION: ${KAFKA_TRUSTSTORE_LOCATION}
+      KAFKA_TRUSTSTORE_PASSWORD: ${KAFKA_TRUSTSTORE_PASSWORD}
+      KAFKA_USER: ${KAFKA_USER}
     volumes:
       - ${PAYMENT_DIR}/payment-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
     networks:
@@ -219,7 +239,7 @@ services:
       DB_URL: "hackacode-db:3306"
       DB_NAME: "person_db"
       EUREKA_URL: "eureka-sv:8761"
-      PROFILE: "prod"
+      PROFILE: "dev"
     volumes:
       - ${PERSON_DIR}/person-sv-0.0.1-SNAPSHOT.jar:/app/app.jar
     networks:

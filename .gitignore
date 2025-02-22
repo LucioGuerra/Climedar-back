@@ -7,3 +7,5 @@ mysql/data/*
 biblioteca/expection/target/*
 biblioteca/page-request-info/target/*
 biblioteca/pague-request-info/target/*
+.env
+.env-build-all
