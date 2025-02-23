@@ -6,11 +6,11 @@ source .env-build-all
 set -a
 
 
-SERVICIOS=("api-gateway" "consultation-sv" "doctor-sv" "eureka-sv" "medical-service-sv" "notification-sv" "patient-sv" "payme                       nt-sv" "person-sv")
+SERVICIOS=("api-gateway" "consultation-sv" "doctor-sv" "eureka-sv" "medical-service-sv" "notification-sv" "patient-sv" "payment-sv" "person-sv")
 
 for servicio in "${SERVICIOS[@]}"; do
     echo "Procesando $servicio..."
-    cd $servicio || { echo "No se pudo acceder a /$servicio"; continue; }
+    cd "$servicio" || { echo "No se pudo acceder a /$servicio"; continue; }
 
     if [ "$servicio" == "consultation-sv" ]; then
         export DB_NAME="consultation_db"
