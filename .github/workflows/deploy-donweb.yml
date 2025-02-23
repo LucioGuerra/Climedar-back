@@ -32,4 +32,5 @@ jobs:
             podman stop -a
             podman rm -a
             chmod +x run_all.sh
+            chmod +x build_all.sh
             ./run_all.sh
