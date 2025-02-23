@@ -6,7 +6,7 @@ source .env-build-all
 set -a
 
 
-SERVICIOS=("api-gateway" "consultation-sv" "doctor-sv" "eureka-sv" "medical-service-sv" "notification-sv" "patient-sv" "payme                       nt-sv" "person-sv")
+SERVICIOS=("api-gateway" "consultation-sv" "doctor-sv" "eureka-sv" "medical-service-sv" "notification-sv" "patient-sv" "payment-sv" "person-sv")
 
 for servicio in "${SERVICIOS[@]}"; do
     echo "Procesando $servicio..."
