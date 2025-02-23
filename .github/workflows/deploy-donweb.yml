@@ -31,4 +31,5 @@ jobs:
             git pull
             podman stop -a
             podman rm -a
+            chmod +x run_all.sh
             ./run_all.sh
