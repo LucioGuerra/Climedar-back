@@ -63,7 +63,7 @@ fi
 # Espera a que MySQL responda (usa mysqladmin ping)
 wait_for hackacode-db "mysqladmin ping -h localhost"
 
-./build.all.sh
+./build_all.sh
 
 ##############################
 # 2. Servicio Eureka
