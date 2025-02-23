@@ -30,6 +30,8 @@ jobs:
             cd /root/deploy/Climedar-back
             git stash push --include-untracked
             git pull
+            chmod +x run_all.sh
+            chmod +x build_all.sh
             podman stop -a
             podman rm -a
             ./run_all.sh
