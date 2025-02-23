@@ -32,9 +32,11 @@ wait_for() {
 }
 
 # Crear la red (si no existe)
-if ! podman network exists hackacode; then
-    podman network create hackacode
+if podman network exists hackacode; then
+    podman network rm hackacode
 fi
+
+podman network create hackacode
 
 ##############################
 # 1. Servicio MySQL
