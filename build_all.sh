@@ -26,6 +26,8 @@ for servicio in "${SERVICIOS[@]}"; do
         export DB_NAME="payment_db"
     fi
 
+    rm -rf target
+
     if [ "$servicio" == "payment-sv" ]; then
         mvn clean package -DskipTests
     else
