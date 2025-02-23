@@ -79,6 +79,7 @@ else
     podman run -d \
       --name eureka-sv \
       --memory 384m \
+      --restart=always \
       -p 8761:8761 \
       -v "${EUREKA_DIR}/eureka-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
       --network hackacode \
@@ -99,6 +100,7 @@ else
     podman run -d \
       --name doctor-sv \
       --memory 768m \
+      --restart=always \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -126,6 +128,7 @@ else
     podman run -d \
       --name medical-service-sv \
       --memory 512m \
+      --restart=always \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -154,6 +157,7 @@ else
     podman run -d \
       --name patient-sv \
       --memory 512m \
+      --restart=always \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -181,6 +185,7 @@ else
     podman run -d \
       --name consultation-sv \
       --memory 768m \
+      --restart=always \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -208,6 +213,7 @@ else
     podman run -d \
       --name payment-sv \
       --memory 768m \
+      --restart=always \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -243,6 +249,7 @@ else
     podman run -d \
       --name person-sv \
       --memory 768m \
+      --restart=always \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -271,6 +278,7 @@ else
     podman run -d \
       --name apollo-federation \
       --memory 256m \
+      --restart=always \
       -p 4000:4000 \
       --network hackacode \
       apollo-federation
@@ -290,6 +298,7 @@ else
     podman run -d \
       --name api-gateway \
       --memory 512m \
+      --restart=always \
       -e ISSUER_URI="${ISSUER_URI}" \
       -e EUREKA_URL=eureka-sv:8761 \
       -p 443:443 \
