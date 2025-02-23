@@ -90,8 +90,15 @@ podman run -d \
 -e DB_URL=hackacode-db:3306 \
 -e DB_NAME=doctor_db \
 -e EUREKA_URL=eureka-sv:8761 \
+-e KAFKA_URL="${KAFKA_URL}" \
+-e KAFKA_PASSWORD="${KAFKA_PASSWORD}" \
+-e KAFKA_TRUSTSTORE_LOCATION="/app/certs/truststore.jks" \
+-e KAFKA_TRUSTSTORE_PASSWORD="${KAFKA_TRUSTSTORE_PASSWORD}" \
+-e KAFKA_USER="${KAFKA_USER}" \
+-e PROFILE=prod \
 -p 8083:8083 \
 -v "${DOCTOR_DIR}/doctor-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
+-v "${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro" \
 --network hackacode \
 doctor-sv &
 
@@ -106,6 +113,7 @@ podman run -d \
 -e DB_URL=hackacode-db:3306 \
 -e DB_NAME=medical_service_db \
 -e EUREKA_URL=eureka-sv:8761 \
+-e PROFILE=prod \
 -p 8081:8081 \
 -v "${MEDICAL_DIR}/medical-service-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
 --network hackacode \
@@ -131,8 +139,15 @@ podman run -d \
   -e DB_URL=hackacode-db:3306 \
   -e DB_NAME=patient_db \
   -e EUREKA_URL=eureka-sv:8761 \
+  -e KAFKA_URL="${KAFKA_URL}" \
+  -e KAFKA_PASSWORD="${KAFKA_PASSWORD}" \
+  -e KAFKA_TRUSTSTORE_LOCATION="/app/certs/truststore.jks" \
+  -e KAFKA_TRUSTSTORE_PASSWORD="${KAFKA_TRUSTSTORE_PASSWORD}" \
+  -e KAFKA_USER="${KAFKA_USER}" \
+  -e PROFILE=prod \
   -p 8082:8082 \
   -v "${PATIENT_DIR}/patient-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
+  -v "${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro" \
   --network hackacode \
   patient-sv &
 
@@ -147,8 +162,15 @@ podman run -d \
   -e DB_URL=hackacode-db:3306 \
   -e DB_NAME=consultation_db \
   -e EUREKA_URL=eureka-sv:8761 \
+  -e KAFKA_URL="${KAFKA_URL}" \
+  -e KAFKA_PASSWORD="${KAFKA_PASSWORD}" \
+  -e KAFKA_TRUSTSTORE_LOCATION="/app/certs/truststore.jks" \
+  -e KAFKA_TRUSTSTORE_PASSWORD="${KAFKA_TRUSTSTORE_PASSWORD}" \
+  -e KAFKA_USER="${KAFKA_USER}" \
+  -e PROFILE=prod \
   -p 8086:8086 \
   -v "${CONSULTATION_DIR}/consultation-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
+  -v "${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro" \
   --network hackacode \
   consultation-sv &
 
@@ -163,8 +185,15 @@ podman run -d \
   -e DB_URL=hackacode-db:3306 \
   -e DB_NAME=payment_db \
   -e EUREKA_URL=eureka-sv:8761 \
+  -e KAFKA_URL="${KAFKA_URL}" \
+  -e KAFKA_PASSWORD="${KAFKA_PASSWORD}" \
+  -e KAFKA_TRUSTSTORE_LOCATION="/app/certs/truststore.jks" \
+  -e KAFKA_TRUSTSTORE_PASSWORD="${KAFKA_TRUSTSTORE_PASSWORD}" \
+  -e KAFKA_USER="${KAFKA_USER}" \
+  -e PROFILE=prod \
   -p 8085:8085 \
   -v "${PAYMENT_DIR}/payment-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
+  -v "${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro" \
   --network hackacode \
   payment-sv &
 
@@ -186,6 +215,7 @@ podman run -d \
   -e DB_URL=hackacode-db:3306 \
   -e DB_NAME=person_db \
   -e EUREKA_URL=eureka-sv:8761 \
+  -e PROFILE=prod \
   -p 8084:8084 \
   -v "${PERSON_DIR}/person-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
   --network hackacode \
