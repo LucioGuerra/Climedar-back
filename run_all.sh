@@ -35,6 +35,9 @@ wait_for() {
 podman container prune -f
 podman image prune -f
 podman system prune -f
+sudo truncate -s 0 /var/log/syslog
+sudo systemctl restart rsyslog
+
 
 # Crear la red (si no existe)
 if ! podman network exists hackacode; then
