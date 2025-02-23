@@ -34,7 +34,7 @@ wait_for() {
 
 podman container prune -f
 podman image prune -f
-podman system prune -a -f
+podman system prune -f
 
 # Crear la red (si no existe)
 if ! podman network exists hackacode; then
@@ -56,6 +56,8 @@ else
     podman run -d \
       --name hackacode-db \
       --memory 512m \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       --restart=always \
       -e MYSQL_ROOT_PASSWORD=root \
       -p 3306:3306 \
@@ -84,6 +86,8 @@ else
       --name eureka-sv \
       --memory 384m \
       --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -p 8761:8761 \
       -v "${EUREKA_DIR}/eureka-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
       --network hackacode \
@@ -105,6 +109,8 @@ else
       --name doctor-sv \
       --memory 768m \
       --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -133,6 +139,8 @@ else
       --name medical-service-sv \
       --memory 512m \
       --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -162,6 +170,8 @@ else
       --name patient-sv \
       --memory 512m \
       --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -190,6 +200,8 @@ else
       --name consultation-sv \
       --memory 768m \
       --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -218,6 +230,8 @@ else
       --name payment-sv \
       --memory 768m \
       --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -254,6 +268,8 @@ else
       --name person-sv \
       --memory 768m \
       --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -283,6 +299,8 @@ else
       --name apollo-federation \
       --memory 256m \
       --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -p 4000:4000 \
       --network hackacode \
       apollo-federation
@@ -303,6 +321,8 @@ else
       --name api-gateway \
       --memory 512m \
       --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -e ISSUER_URI="${ISSUER_URI}" \
       -e EUREKA_URL=eureka-sv:8761 \
       -p 443:443 \
