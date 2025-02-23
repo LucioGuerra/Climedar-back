@@ -15,13 +15,13 @@ public class PaymentSpecification {
             Predicate predicate = cb.conjunction();
 
             if (date != null) {
-                predicate = cb.and(predicate, cb.equal(root.get("date"), LocalDate.parse(date)));
+                predicate = cb.and(predicate, cb.equal(root.get("paymentDate"), LocalDate.parse(date)));
             }
             if (fromDate != null) {
-                predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("date"), LocalDate.parse(fromDate)));
+                predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("paymentDate"), LocalDate.parse(fromDate)));
             }
             if (toDate != null) {
-                predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("date"), LocalDate.parse(toDate)));
+                predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("paymentDate"), LocalDate.parse(toDate)));
             }
 
             return predicate;
