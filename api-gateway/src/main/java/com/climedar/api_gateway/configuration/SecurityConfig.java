@@ -39,6 +39,7 @@ public class SecurityConfig {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
         corsConfiguration.addAllowedOrigin("http://localhost:4200");
+        corsConfiguration.addAllowedOrigin("https://climedar-c7287.web.app/");
 
 
         corsConfiguration.addAllowedMethod("GET");
