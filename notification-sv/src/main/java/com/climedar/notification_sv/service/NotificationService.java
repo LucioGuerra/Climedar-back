@@ -14,7 +14,7 @@ public class NotificationService {
     private final JavaMailSender javaMailSender;
 
 
-    @KafkaListener(topics = "notification-topic", groupId = "notification-group")
+    @KafkaListener(topics = "notification", groupId = "notification-group")
     public void sendEmail(NotificationSendEvent event) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(event.getTo());
