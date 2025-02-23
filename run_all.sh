@@ -56,9 +56,9 @@ else
       --restart=always \
       -e MYSQL_ROOT_PASSWORD=root \
       -p 3306:3306 \
-      -v "$(pwd)/mysql/init:/docker-entrypoint-initdb.d" \
-      -v "$(pwd)/mysql/data:/var/lib/mysql" \
-      -v "$(pwd)/mysql/my.cnf:/etc/mysql/conf.d/my.cnf" \
+      -v "./mysql/init:/docker-entrypoint-initdb.d" \
+      -v "./mysql/data:/var/lib/mysql" \
+      -v "./mysql/my.cnf:/etc/mysql/conf.d/my.cnf" \
       --network hackacode \
       docker.io/mysql:8.0
 fi
