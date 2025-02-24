@@ -53,7 +53,7 @@ public class SecurityConfig {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
         corsConfiguration.addAllowedOrigin("http://localhost:4200");
-        corsConfiguration.addAllowedMethod("https://climedar-front.vercel.app/");
+        corsConfiguration.addAllowedOrigin("https://climedar-front.vercel.app/");
 
 
         corsConfiguration.addAllowedMethod(CorsConfiguration.ALL);
