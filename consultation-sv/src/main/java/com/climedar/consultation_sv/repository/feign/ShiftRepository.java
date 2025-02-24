@@ -16,24 +16,24 @@ import java.util.Set;
 @FeignClient(name = "doctor-sv")
 public interface ShiftRepository {
 
-    @GetMapping("/api/public/shifts/{id}")
+    @GetMapping("/api/shifts/{id}")
     Optional<Shift> findById(@PathVariable Long id);
 
-    @GetMapping("/api/public/shifts")
+    @GetMapping("/api/shifts")
     Page<Shift> getAllShift(@RequestParam LocalDate date, @RequestParam LocalTime starTime, @RequestParam LocalTime fromTime, @RequestParam LocalTime toTime);
 
-    @GetMapping("/api/public/shifts/ids")
+    @GetMapping("/api/shifts/ids")
     List<Shift> findAllById(@RequestParam Set<Long> ids);
 
-    @PostMapping("/api/public/shifts/{id}/occupy")
+    @PostMapping("/api/shifts/{id}/occupy")
     void occupyShift(@PathVariable Long id);
 
-    @PostMapping("/api/public/shifts/{id}/clear")
+    @PostMapping("/api/shifts/{id}/clear")
     void clearShift(@PathVariable Long id);
 
-    @PostMapping("/api/public/shifts")
+    @PostMapping("/api/shifts")
     Shift createShift(@RequestParam Long doctorId, @RequestParam Duration timeOfShifts);
 
-    @GetMapping("/api/public/doctors/{id}")
+    @GetMapping("/api/doctors/{id}")
     Doctor findDoctorById(@PathVariable Long id);
 }

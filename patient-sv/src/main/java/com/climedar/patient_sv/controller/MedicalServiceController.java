@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/public/medical-service")
+@RequestMapping("/api/medical-service")
 public class MedicalServiceController {
 }

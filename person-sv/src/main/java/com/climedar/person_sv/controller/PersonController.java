@@ -19,7 +19,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/public/persons")
+@RequestMapping("/api/persons")
 public class PersonController {
 
     private final PersonService personService;

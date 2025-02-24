@@ -11,7 +11,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/public/patients")
+@RequestMapping("/api/patients")
 public class PatientController {
 
     private final PatientService patientService;

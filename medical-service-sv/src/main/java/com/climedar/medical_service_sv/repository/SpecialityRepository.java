@@ -13,9 +13,9 @@ import java.util.Set;
 @FeignClient(name = "doctor-sv")
 public interface SpecialityRepository {
 
-    @GetMapping("/api/public/specialities/{id}")
+    @GetMapping("/api/specialities/{id}")
     Speciality getSpecialityById(@PathVariable Long id);
 
-    @GetMapping("/api/public/specialities/ids")
+    @GetMapping("/api/specialities/ids")
     Set<Speciality> getAllSpecialitiesByIds(@RequestParam Set<Long> ids);
 }

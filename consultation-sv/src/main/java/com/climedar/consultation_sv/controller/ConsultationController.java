@@ -12,7 +12,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/public/consultations")
+@RequestMapping("/api/consultations")
 public class ConsultationController {
 
     private final ConsultationRestAdapter consultationRestAdapter;

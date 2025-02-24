@@ -12,7 +12,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/public/medical-services")
+@RequestMapping("/api/medical-services")
 public class MedicalServicesController {
 
     private final MedicalServicesService medicalServicesService;

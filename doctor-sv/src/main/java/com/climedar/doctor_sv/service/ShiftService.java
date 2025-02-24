@@ -11,7 +11,7 @@ import com.climedar.doctor_sv.external.event.published.ShiftCanceledEvent;
 import com.climedar.doctor_sv.mapper.ShiftMapper;
 import com.climedar.doctor_sv.model.DoctorModel;
 import com.climedar.doctor_sv.model.ShiftModel;
-import com.climedar.doctor_sv.repository.ConsultationRepository;
+import com.climedar.doctor_sv.repository.feign.ConsultationRepository;
 import com.climedar.doctor_sv.repository.ShiftRepository;
 import com.climedar.doctor_sv.specification.ShiftSpecification;
 import com.climedar.library.exception.ClimedarException;

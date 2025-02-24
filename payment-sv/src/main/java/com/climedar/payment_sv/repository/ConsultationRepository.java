@@ -12,9 +12,9 @@ import java.util.Set;
 @FeignClient(name = "consultation-sv")
 public interface ConsultationRepository {
 
-    @GetMapping("/api/public/consultations/{id}")
+    @GetMapping("/api/consultations/{id}")
     Consultation getConsultation(@PathVariable Long id);
 
-    @GetMapping("/api/public/consultations/ids")
+    @GetMapping("/api/consultations/ids")
     List<Consultation> findAllById(@RequestParam List<Long> consultationIds);
 }

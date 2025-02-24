@@ -21,7 +21,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/public/shifts")
+@RequestMapping("/api/shifts")
 public class ShiftController {
     private final ShiftService shiftService;
 
