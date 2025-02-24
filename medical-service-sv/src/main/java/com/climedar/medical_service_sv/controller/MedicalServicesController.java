@@ -27,7 +27,7 @@ public class MedicalServicesController {
         return ResponseEntity.status(200).body(medicalServicesService.getMedicalServicesByIds(ids));
     }
 
-    @GetMapping("/types")
+    @GetMapping("/public/types")
     public ResponseEntity<Set<ServiceType>> getAllServicesType() {
         return ResponseEntity.status(200).body(medicalServicesService.getAllServicesType());
     }

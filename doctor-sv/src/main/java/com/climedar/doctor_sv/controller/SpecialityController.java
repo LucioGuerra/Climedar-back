@@ -22,7 +22,7 @@ public class SpecialityController {
         return ResponseEntity.ok().body(specialityService.getSpecialityById(id));
     }
 
-    @GetMapping("/names")
+    @GetMapping("/public/names")
     public ResponseEntity<Set<String>> getAllSpecialitiesNames() {
         return ResponseEntity.ok().body(specialityService.getAllSpecialitiesNames());
     }

@@ -9,6 +9,6 @@ import java.util.Set;
 @FeignClient(name = "doctor-sv")
 public interface SpecialityRepository {
 
-    @GetMapping("/api/specialities/names")
+    @GetMapping("/api/specialities/public/names")
     Set<String> getAllSpecialitiesName();
 }

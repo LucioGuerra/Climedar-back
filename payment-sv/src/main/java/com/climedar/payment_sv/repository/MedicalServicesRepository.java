@@ -18,6 +18,6 @@ public interface MedicalServicesRepository {
     @GetMapping("/api/medical-services/ids")
     List<MedicalServicesWrapped> findAllById(@RequestParam Set<Long> ids);
 
-    @GetMapping("/api/medical-services/types")
+    @GetMapping("/api/medical-services/public/types")
     Set<ServiceType> getAllServicesType();
 }
