@@ -14,4 +14,9 @@ public class Shift {
     private LocalTime endTime;
     private Integer patients;
     private ShiftState state;
+
+
+    public Shift(Long id) {
+        this.id = id;
+    }
 }

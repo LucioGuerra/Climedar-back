@@ -33,6 +33,7 @@ public interface ConsultationMapper {
     @Mapping(expression = "java(this.getPatient(consultation))", target = "patient")
     @Mapping(expression = "java(this.getDoctor(consultation))", target = "doctor")
     @Mapping(expression = "java(this.getMedicalServices(consultation))", target = "medicalServicesModel")
+    @Mapping(expression = "java(this.getShiftModel(consultation))", target = "shiftModel")
     ConsultationModel toModelWithShift(Consultation consultation, Shift shift);
 
 
@@ -45,6 +46,11 @@ public interface ConsultationMapper {
     @Mapping(target = "finalPrice", ignore = true)
     @Mapping(target = "id", ignore = true)
     Consultation toEntity(CreateConsultationDTO createConsultationDTO);
+
+
+    default Shift getShiftModel(Consultation consultation) {
+        return new Shift(consultation.getShiftId());
+    }
 
 
     default Doctor getDoctor(Consultation consultation) {

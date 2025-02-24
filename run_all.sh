@@ -125,6 +125,7 @@ else
       -e KAFKA_TRUSTSTORE_PASSWORD="${KAFKA_TRUSTSTORE_PASSWORD}" \
       -e KAFKA_USER="${KAFKA_USER}" \
       -e PROFILE=prod \
+      -e ISSUER_URI="${ISSUER_URI}" \
       -p 8083:8083 \
       -v "${DOCTOR_DIR}/doctor-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
       -v "${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro" \
@@ -150,6 +151,7 @@ else
       -e DB_NAME=medical_service_db \
       -e EUREKA_URL=eureka-sv:8761 \
       -e PROFILE=prod \
+      -e ISSUER_URI="${ISSUER_URI}" \
       -p 8081:8081 \
       -v "${MEDICAL_DIR}/medical-service-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
       --network hackacode \
@@ -186,6 +188,7 @@ else
       -e KAFKA_TRUSTSTORE_PASSWORD="${KAFKA_TRUSTSTORE_PASSWORD}" \
       -e KAFKA_USER="${KAFKA_USER}" \
       -e PROFILE=prod \
+      -e ISSUER_URI="${ISSUER_URI}" \
       -p 8082:8082 \
       -v "${PATIENT_DIR}/patient-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
       -v "${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro" \
@@ -216,6 +219,7 @@ else
       -e KAFKA_TRUSTSTORE_PASSWORD="${KAFKA_TRUSTSTORE_PASSWORD}" \
       -e KAFKA_USER="${KAFKA_USER}" \
       -e PROFILE=prod \
+      -e ISSUER_URI="${ISSUER_URI}" \
       -p 8086:8086 \
       -v "${CONSULTATION_DIR}/consultation-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
       -v "${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro" \
@@ -246,6 +250,7 @@ else
       -e KAFKA_TRUSTSTORE_PASSWORD="${KAFKA_TRUSTSTORE_PASSWORD}" \
       -e KAFKA_USER="${KAFKA_USER}" \
       -e PROFILE=prod \
+      -e ISSUER_URI="${ISSUER_URI}" \
       -p 8085:8085 \
       -v "${PAYMENT_DIR}/payment-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
       -v "${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro" \
@@ -279,6 +284,7 @@ else
       -e DB_NAME=person_db \
       -e EUREKA_URL=eureka-sv:8761 \
       -e PROFILE=prod \
+      -e ISSUER_URI="${ISSUER_URI}" \
       -p 8084:8084 \
       -v "${PERSON_DIR}/person-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
       --network hackacode \
