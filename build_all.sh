@@ -28,11 +28,7 @@ for servicio in "${SERVICIOS[@]}"; do
 
     rm -rf target
 
-    if [ "$servicio" == "payment-sv" ]; then
-        mvn clean package -DskipTests
-    else
-        mvn clean package
-    fi
+    mvn clean package -DskipTests
 
     if [ $? -ne 0 ]; then
         echo "Error al construir $servicio"
