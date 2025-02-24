@@ -30,8 +30,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/graphql").permitAll()
                         .requestMatchers("/actuator/health", "/actuator/info").permitAll()
-                        .requestMatchers("/api/**/public/**").permitAll()
+                        .requestMatchers("/api/medical-services/public/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .cors(AbstractHttpConfigurer::disable)
