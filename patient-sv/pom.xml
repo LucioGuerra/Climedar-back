@@ -129,6 +129,11 @@
 			<version>1.0</version>
 		</dependency>
 		<dependency>
+			<groupId>com.climedar.library</groupId>
+			<artifactId>request-interceptor</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>com.netflix.graphql.dgs</groupId>
 			<artifactId>graphql-dgs-spring-graphql-starter</artifactId>
 		</dependency>
