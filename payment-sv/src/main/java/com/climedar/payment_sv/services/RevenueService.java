@@ -16,6 +16,8 @@ import com.climedar.payment_sv.repository.SpecialityRepository;
 import com.climedar.payment_sv.specification.RevenueSpecification;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -185,11 +187,6 @@ public class RevenueService {
 
     @PostConstruct
     public void createInitialAmount(){
-        try {
-            Thread.sleep(10*1000);
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
         List<Revenue> dailyRevenues = revenueRepository.findByDateAndRevenueType(LocalDate.now(), RevenueType.DAILY);
         List<Revenue> monthlyRevenues = revenueRepository.findByDateAndRevenueType(LocalDate.now().withDayOfMonth(1),
                 RevenueType.MONTHLY);

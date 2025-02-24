@@ -10,10 +10,15 @@ public class FeignClientInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
-        String jwt = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        try {
+            String jwt = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
 
-        if (jwt != null) {
-            template.header("Authorization", "Bearer " + jwt);
+            if (jwt != null) {
+                template.header("Authorization", "Bearer " + jwt);
+            }
+        }catch (Exception e){
+            System.out.println("Error in FeignClientInterceptor");
         }
+
     }
 }
