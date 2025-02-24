@@ -7,6 +7,12 @@
   <version>1.0</version>
   <name>request-interceptor</name>
   <url>http://maven.apache.org</url>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.4.1</version> <!-- O la versión que estés utilizando -->
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -29,5 +35,22 @@
       <artifactId>spring-cloud-starter-openfeign</artifactId>
       <version>4.2.0</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+    </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <!-- Establece Java 17 para el compilador -->
+          <source>17</source>
+          <target>17</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

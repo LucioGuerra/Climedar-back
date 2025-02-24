@@ -35,7 +35,9 @@ public class DoctorService {
     public DoctorModel getDoctorById(Long id) {
         Doctor doctor = doctorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Doctor not found" +
                 " with id: " + id));
-        return doctorMapper.toModel(doctor, personRepository.findById(doctor.getPersonId()));
+        Person person = personRepository.findById(doctor.getPersonId());
+        DoctorModel model = doctorMapper.toModel(doctor, person);
+        return model;
     }
 
     public Page<DoctorModel> getAllDoctors(Pageable pageable, String fullName, String name,
