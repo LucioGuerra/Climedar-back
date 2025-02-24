@@ -27,10 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -79,22 +77,24 @@ public class RevenueService {
                         row -> (BigDecimal) row[1]
                 ));
 
+
         LocalDate current;
         switch (revenueType){
             case DAILY -> {
                 current = from;
                 while (current.isBefore(to)){
                     BigDecimal totalToCurrent = revenueMap.getOrDefault(current, BigDecimal.ZERO);
-                    RevenueLineChartDTO revenueLineChartDTO = new RevenueLineChartDTO(current, totalToCurrent);
+                    RevenueLineChartDTO revenueLineChartDTO = new RevenueLineChartDTO(current.toString(), totalToCurrent);
                     revenues.add(revenueLineChartDTO);
                     current = current.plusDays(1);
                 }
             }
             case MONTHLY -> {
                 current = from.withDayOfMonth(1);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-yyyy", new Locale("es", "ES"));
                 while (current.isBefore(to)){
                     BigDecimal totalToCurrent = revenueMap.getOrDefault(current, BigDecimal.ZERO);
-                    RevenueLineChartDTO revenueLineChartDTO = new RevenueLineChartDTO(current, totalToCurrent);
+                    RevenueLineChartDTO revenueLineChartDTO = new RevenueLineChartDTO(current.format(formatter), totalToCurrent);
                     revenues.add(revenueLineChartDTO);
                     current = current.plusMonths(1);
                 }
