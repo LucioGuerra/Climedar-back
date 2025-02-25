@@ -91,7 +91,7 @@ public class RevenueService {
             }
             case MONTHLY -> {
                 current = from.withDayOfMonth(1);
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-yyyy", new Locale("es", "ES"));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM 'de' yyyy", new Locale("es", "ES"));
                 while (current.isBefore(to)){
                     BigDecimal totalToCurrent = revenueMap.getOrDefault(current, BigDecimal.ZERO);
                     RevenueLineChartDTO revenueLineChartDTO = new RevenueLineChartDTO(current.format(formatter), totalToCurrent);
