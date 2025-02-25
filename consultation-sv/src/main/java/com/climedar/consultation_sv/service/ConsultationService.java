@@ -259,7 +259,7 @@ public class ConsultationService {
 
     @Scheduled(cron = "0 0 12 * * *")
     public void notifyConsultation() {
-        List<Shift> shifts = shiftRepository.getShiftsByDateAndOccupied(LocalDate.now().plusDays(1));
+        List<Shift> shifts = shiftRepository.getShiftsByDateAndOccupied(LocalDate.now().plusDays(1).toString());
         List<Consultation> consultations = consultationRepository.findAllByShiftIdIn(shifts.stream().map(Shift::getId).toList());
         Set<Long> patientIds = consultations.stream().map(Consultation::getPatientId).collect(Collectors.toSet());
         List<Patient> patients = patientRepository.findAllById(patientIds);

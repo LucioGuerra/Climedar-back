@@ -45,8 +45,8 @@ public class ShiftController {
     }
 
     @GetMapping("/date/{date}/occupy")
-    public ResponseEntity<List<ShiftModel>> getShiftsByDateAndOccupied(@PathVariable LocalDate date) {
-        return ResponseEntity.status(200).body(shiftService.getShiftsByDateAndOccupied(date));
+    public ResponseEntity<List<ShiftModel>> getShiftsByDateAndOccupied(@PathVariable String date) {
+        return ResponseEntity.status(200).body(shiftService.getShiftsByDateAndOccupied(LocalDate.parse(date)));
     }
 
     @PostMapping

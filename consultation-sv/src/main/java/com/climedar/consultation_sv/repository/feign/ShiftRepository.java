@@ -23,7 +23,7 @@ public interface ShiftRepository {
     Page<Shift> getAllShift(@RequestParam LocalDate date, @RequestParam LocalTime starTime, @RequestParam LocalTime fromTime, @RequestParam LocalTime toTime);
 
     @GetMapping("/api/shifts/date/{date}/occupy")
-    List<Shift> getShiftsByDateAndOccupied(@PathVariable LocalDate date);
+    List<Shift> getShiftsByDateAndOccupied(@PathVariable String date);
 
     @GetMapping("/api/shifts/ids")
     List<Shift> findAllById(@RequestParam Set<Long> ids);
