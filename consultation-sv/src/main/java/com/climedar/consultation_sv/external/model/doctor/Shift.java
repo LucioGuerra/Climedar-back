@@ -12,7 +12,6 @@ public class Shift {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
-    private Integer patients;
     private ShiftState state;
 
 

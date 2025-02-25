@@ -188,7 +188,10 @@ public class ConsultationService {
                     medicalServicesRepository.findAllById(updateConsultationDTO.medicalServicesId());
             List<MedicalServicesModel> medicalServicesModels = medicalServicesWrappeds.stream().map(MedicalServicesWrapped::getMedicalServices).toList();
             List<String> medicalServicesCodes = medicalServicesModels.stream().map(MedicalServicesModel::getCode).toList();
-            consultation.setMedicalServicesCode(medicalServicesCodes);
+            consultation.getMedicalServicesCode().clear();
+            for (String code: medicalServicesCodes){
+                consultation.getMedicalServicesCode().add(code);
+            }
             consultation.setFinalPrice(calculateFinalPrice(medicalServicesModels, patientRepository.findById(consultation.getPatientId())));
         }
         if (updateConsultationDTO.description() != null) {
