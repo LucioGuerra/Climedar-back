@@ -7,6 +7,7 @@ import com.climedar.patient_sv.external.model.Gender;
 import com.climedar.patient_sv.external.model.Person;
 import com.climedar.patient_sv.mapper.PatientMapper;
 import com.climedar.patient_sv.mapper.PersonMapper;
+import com.climedar.patient_sv.repository.MedicalSecureRepository;
 import com.climedar.patient_sv.repository.PatientRepository;
 import com.climedar.patient_sv.repository.feign.PersonRepository;
 import com.climedar.patient_sv.specification.PatientSpecification;
@@ -32,6 +33,7 @@ public class PatientService {
     private final PatientMapper patientMapper;
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
+    private final MedicalSecureService medicalSecureService;
 
 
     public PatientModel getPatientById(Long id) {
@@ -112,7 +114,7 @@ public class PatientService {
         }
 
         if (patientRepository.existsByPersonId(person.getPersonId())) {
-            throw new ClimedarException("DOCTOR_ALREADY_EXISTS", "Patient already exists");
+            throw new ClimedarException("PATIENT_ALREADY_EXISTS", "Patient already exists");
         }
 
         Patient patient = patientMapper.toEntity(patientModel);
@@ -139,6 +141,11 @@ public class PatientService {
         }
 
         patientMapper.updateEntity(patient, patientModel);
+
+        if (patientModel.getMedicalSecure().getId() != null) {
+            patient.setMedicalSecure(medicalSecureService.findEntityById(patientModel.getMedicalSecure().getId()));
+        }
+
         patientRepository.save(patient);
 
         return patientMapper.toModel(patient, person);

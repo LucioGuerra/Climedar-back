@@ -7,7 +7,7 @@ input PatientInput {
     email: String!
     phone: String!
     address: AddressInput!
-    medicalSecure: MedicalSecureInput!
+    medicalSecure: MedicalSecureInput
 }
 
 input AddressInput {
@@ -62,6 +62,7 @@ input UpdatePatientInput {
     email: String
     phone: String
     address: AddressInput
+    medicalSecure: MedicalSecureInput
 }
 
 input UpdateAddressInput {
