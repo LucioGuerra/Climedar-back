@@ -1,6 +1,7 @@
 package com.climedar.payment_sv.model;
 
 import com.climedar.payment_sv.entity.payment.PaymentMethod;
+import com.climedar.payment_sv.external.model.Consultation;
 import com.climedar.payment_sv.external.model.Patient;
 import lombok.Data;
 
@@ -14,4 +15,5 @@ public class PaymentModel {
     private Boolean canceled;
     private Patient patient;
     private PaymentMethod paymentMethod;
+    private Consultation consultation;
 }

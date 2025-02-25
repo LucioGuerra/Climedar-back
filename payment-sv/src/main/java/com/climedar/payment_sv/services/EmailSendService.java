@@ -14,7 +14,7 @@ public class EmailSendService {
 
     public NotificationSendEvent createPaidNotificationEvent(Payment payment, Consultation consultation, byte[] pdf) {
         NotificationSendEvent notificationSendEvent = new NotificationSendEvent();
-        notificationSendEvent.setTo(consultation.getPatient().getEmail());
+        notificationSendEvent.setTo("lucioguerra2001@gmail.com");
         notificationSendEvent.setSubject("Notificación de Consulta");
         notificationSendEvent.setMessage("Gracias por su pago. Adjunto encontrará el documento en PDF correspondiente a su consulta.");
         notificationSendEvent.setPdfFile(pdf);

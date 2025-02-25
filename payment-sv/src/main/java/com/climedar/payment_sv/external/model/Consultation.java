@@ -12,4 +12,8 @@ public class Consultation {
     Patient patient;
     BigDecimal finalPrice;
     List<MedicalServices> medicalServicesModel;
+
+    public Consultation(Long id) {
+        this.id = id;
+    }
 }
