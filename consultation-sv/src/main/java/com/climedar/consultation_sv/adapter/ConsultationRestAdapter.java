@@ -33,7 +33,7 @@ public class ConsultationRestAdapter {
         List<MedicalServicesWrapped> medicalServices = medicalServicesRepository.findAllByCode(medicalServicesCodes);
         consultation.setMedicalServicesModel(medicalServices.stream().map(MedicalServicesWrapped::getMedicalServices).toList());
 
-        System.out.println("Consultation: " + consultation.toString());
+        System.out.println("Consultation: " + consultation);
 
         return consultation;
     }

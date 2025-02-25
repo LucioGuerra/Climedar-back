@@ -12,6 +12,7 @@ input UpdateConsultationInput{
     description: String
     observation: String
     medicalServicesId: [ID]
+    shiftId: ID
 }
 
 input ConsultationSpecification{
