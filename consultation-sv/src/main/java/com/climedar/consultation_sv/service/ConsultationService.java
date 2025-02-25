@@ -70,7 +70,8 @@ public class ConsultationService {
             consultationModel.setDoctor(new Doctor(consultation.getDoctorId()));
             return consultationModel;
         }
-        return consultationMapper.toModelWithShift(consultation, shift.get());
+        ConsultationModel consultationModel = consultationMapper.toModelWithShift(consultation, shift.get());
+        return consultationModel;
     }
 
     public Page<ConsultationModel> getAllConsultations(Pageable pageable, Long patientId, Long doctorId,

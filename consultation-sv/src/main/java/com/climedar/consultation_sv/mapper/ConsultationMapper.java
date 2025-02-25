@@ -33,7 +33,7 @@ public interface ConsultationMapper {
     @Mapping(expression = "java(this.getPatient(consultation))", target = "patient")
     @Mapping(expression = "java(this.getDoctor(consultation))", target = "doctor")
     @Mapping(expression = "java(this.getMedicalServices(consultation))", target = "medicalServicesModel")
-    @Mapping(expression = "java(this.getShiftModel(consultation))", target = "shiftModel")
+    @Mapping(expression = "java(this.getShiftModel(consultation))", target = "shift")
     ConsultationModel toModelWithShift(Consultation consultation, Shift shift);
 
 

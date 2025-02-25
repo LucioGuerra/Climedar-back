@@ -25,5 +25,5 @@ public class ConsultationModel {
     private Doctor doctor;
     private Patient patient;
     private List<MedicalServicesModel> medicalServicesModel;
-    private Shift shiftModel;
+    private Shift shift;
 }
