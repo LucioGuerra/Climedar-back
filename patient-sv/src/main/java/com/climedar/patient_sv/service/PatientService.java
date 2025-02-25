@@ -96,7 +96,7 @@ public class PatientService {
         PageInfo pageInfo = new PageInfo();
         pageInfo.setTotalItems(totalItems);
         pageInfo.setItemsPerPage(itemsPerPage);
-        pageInfo.setCurrentPage(currentPage);
+        pageInfo.setCurrentPage(currentPage+1);
         pageInfo.setTotalPages(totalPages);
         patientPage.setPageInfo(pageInfo);
 

@@ -99,7 +99,7 @@ public class DoctorService {
         PageInfo pageInfo = new PageInfo();
         pageInfo.setTotalItems(totalItems);
         pageInfo.setItemsPerPage(itemsPerPage);
-        pageInfo.setCurrentPage(currentPage);
+        pageInfo.setCurrentPage(currentPage+1);
         pageInfo.setTotalPages(totalPages);
         doctorPage.setPageInfo(pageInfo);
 
