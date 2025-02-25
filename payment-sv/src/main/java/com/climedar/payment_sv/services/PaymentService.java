@@ -74,6 +74,25 @@ public class PaymentService {
         }
 
 
+        Patient patient = consultation.getPatient();
+        List<MedicalServices> medicalServices = consultation.getMedicalServicesModel();
+        Invoice invoice = payment.getInvoice();
+
+        Map<String, Object> receiptData = new HashMap<>();
+        receiptData.put("receiptNumber", String.format("%010d", payment.getId()));
+        receiptData.put("invoiceNumber", String.format("%010d", invoice.getId()));
+        receiptData.put("paymentDate", payment.getPaymentDate().toLocalDate());
+        receiptData.put("patientName", patient.getName());
+        receiptData.put("patientAddress", patient.getAddress().toString());
+        receiptData.put("patientProvince", "La Plata");
+        receiptData.put("patientDni", patient.getDni());
+        receiptData.put("patientPhone", patient.getPhone());
+        receiptData.put("patientEmail", patient.getEmail());
+        receiptData.put("finalPrice", consultation.getFinalPrice());
+        receiptData.put("services", medicalServices);
+        receiptData.put("paymentMethod", payment.getPaymentMethod().getDisplayName());
+
+        kafkaTemplate.send("notification", emailSendService.createPaidNotificationEvent(payment, consultation, exportService.getReceiptPDF(receiptData)));
         return invoiceService.getInvoiceByPayment(payment.getId());
     }
 

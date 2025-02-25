@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.climedar.library.AppTest" time="0.01" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.climedar.library.AppTest" time="0.009" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="AR"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-17\bin"/>
-    <property name="sun.java.command" value="C:\Users\lucio\AppData\Local\Temp\surefire11960946643822597548\surefirebooter-20250225085318772_3.jar C:\Users\lucio\AppData\Local\Temp\surefire11960946643822597548 2025-02-25T08-53-18_667-jvmRun1 surefire-20250225085318772_1tmp surefire_0-20250225085318772_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\lucio\AppData\Local\Temp\surefire7952452988452821084\surefirebooter-20250225091936305_3.jar C:\Users\lucio\AppData\Local\Temp\surefire7952452988452821084 2025-02-25T09-19-36_196-jvmRun1 surefire-20250225091936305_1tmp surefire_0-20250225091936305_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="E:\Hackacode\Climedar-back\biblioteca\page-request-info\target\test-classes;E:\Hackacode\Climedar-back\biblioteca\page-request-info\target\classes;C:\Users\lucio\.m2\repository\junit\junit\3.8.1\junit-3.8.1.jar;C:\Users\lucio\.m2\repository\org\projectlombok\lombok\1.18.36\lombok-1.18.36.jar;C:\Users\lucio\.m2\repository\org\springframework\data\spring-data-commons\3.4.1\spring-data-commons-3.4.1.jar;C:\Users\lucio\.m2\repository\org\springframework\spring-core\6.2.1\spring-core-6.2.1.jar;C:\Users\lucio\.m2\repository\org\springframework\spring-jcl\6.2.1\spring-jcl-6.2.1.jar;C:\Users\lucio\.m2\repository\org\springframework\spring-beans\6.2.1\spring-beans-6.2.1.jar;C:\Users\lucio\.m2\repository\org\slf4j\slf4j-api\2.0.2\slf4j-api-2.0.2.jar;C:\Users\lucio\.m2\repository\org\mapstruct\mapstruct\1.5.5.Final\mapstruct-1.5.5.Final.jar;C:\Users\lucio\.m2\repository\org\mapstruct\mapstruct-processor\1.5.5.Final\mapstruct-processor-1.5.5.Final.jar;C:\Users\lucio\.m2\repository\org\springframework\spring-context\6.2.1\spring-context-6.2.1.jar;C:\Users\lucio\.m2\repository\org\springframework\spring-aop\6.2.1\spring-aop-6.2.1.jar;C:\Users\lucio\.m2\repository\org\springframework\spring-expression\6.2.1\spring-expression-6.2.1.jar;C:\Users\lucio\.m2\repository\io\micrometer\micrometer-observation\1.14.2\micrometer-observation-1.14.2.jar;C:\Users\lucio\.m2\repository\io\micrometer\micrometer-commons\1.14.2\micrometer-commons-1.14.2.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\lucio\AppData\Local\Temp\surefire11960946643822597548\surefirebooter-20250225085318772_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\lucio\AppData\Local\Temp\surefire7952452988452821084\surefirebooter-20250225091936305_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.11+7-LTS-207"/>
