@@ -4,6 +4,8 @@ import com.climedar.notification_sv.event.NotificationSendEvent;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
+import org.eclipse.angus.mail.iap.ByteArray;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -31,7 +33,7 @@ public class NotificationService {
             helper.setTo(event.getTo());
             helper.setSubject(event.getSubject());
             helper.setText(event.getMessage(), false);
-            helper.addAttachment(event.getPdfFile().getName(), event.getPdfFile());
+            helper.addAttachment("recibo-de-pago.pdf", new ByteArrayResource(event.getPdfFile()));
             javaMailSender.send(message);
         }
     }
