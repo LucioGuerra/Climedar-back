@@ -1,6 +1,5 @@
 package com.climedar.patient_sv.mapper;
 
-import com.climedar.patient_sv.entity.MedicalSecure;
 import com.climedar.patient_sv.entity.Patient;
 import com.climedar.patient_sv.external.model.Person;
 import com.climedar.patient_sv.model.MedicalSecureModel;
@@ -14,8 +13,8 @@ import org.mapstruct.MappingTarget;
 public interface PatientMapper {
 
 
-    @Mapping(target = "medicalSecure", expression = "java(this.getMedicalSecure(patientModel))")
-    Patient toEntity(PatientModel doctorModel);
+    @Mapping(target = "medicalSecure", source = "medicalSecure", nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.IGNORE)
+    Patient toEntity(PatientModel patientModel);
 
     @Mapping(target = "personId", expression = "java(person.getPersonId())")
     @Mapping(target = "medicalSecure" , source = "patient.medicalSecure")
@@ -27,10 +26,4 @@ public interface PatientMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.IGNORE)
     void updateEntity(@MappingTarget Patient patient, PatientModel patientModel);
 
-    default MedicalSecureModel getMedicalSecure(PatientModel patientModel) {
-        if (patientModel == null) {
-            return null;
-        }
-        return patientModel.getMedicalSecure();
-    }
 }
