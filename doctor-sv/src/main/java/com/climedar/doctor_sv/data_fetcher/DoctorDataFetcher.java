@@ -40,6 +40,7 @@ public class DoctorDataFetcher {
         return graphqlAdapter.createDoctor(doctor);
     }
 
+
     @DgsMutation
     public DoctorModel updateDoctor(@InputArgument Long id, @InputArgument DoctorModel doctor) {
         return graphqlAdapter.updateDoctor(id, doctor);

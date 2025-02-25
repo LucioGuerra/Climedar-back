@@ -102,7 +102,7 @@ public class ConsultationService {
         Map<Long, Shift> shiftMap = shifts.stream().collect(Collectors.toMap(Shift::getId, Function.identity()));
 
         return consultations.map(consultation -> {
-            if (consultation.getShiftId() == null){
+            if (consultation.getShiftId() == null || consultation.getShiftId() == -1){
                 ConsultationModel consultationModel = consultationMapper.toModelWithoutShift(consultation);
                 consultationModel.setDoctor(new Doctor(consultation.getDoctorId()));
                 return consultationModel;

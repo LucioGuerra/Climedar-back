@@ -10,7 +10,7 @@ type ConsultationModel @key(fields: "id") {
     doctor: DoctorModel!
     patient: PatientModel!
     isPaid: Boolean!
-    shift: ShiftModel!
+    shift: ShiftModel
 }
 
 type ShiftModel @extends{
