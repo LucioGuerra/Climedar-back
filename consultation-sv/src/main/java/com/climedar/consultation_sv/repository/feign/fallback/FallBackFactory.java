@@ -40,6 +40,11 @@ public class FallBackFactory  implements FallbackFactory<ShiftRepository> {
             }
 
             @Override
+            public List<Shift> getShiftsByDateAndOccupied(String date) {
+                return List.of();
+            }
+
+            @Override
             public List<Shift> findAllById(Set<Long> ids) {
                 return List.of();
             }

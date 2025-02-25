@@ -46,6 +46,7 @@ public class PaymentService {
     private final ConsultationRepository consultationRepository;
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final MedicalServicesRepository medicalServicesRepository;
+    private final EmailSendService emailSendService;
 
     @Transactional
     public ResponseEntity<byte[]> createPayment(CreatePaymentDTO paymentDTO) {
@@ -72,7 +73,7 @@ public class PaymentService {
             }
         }
 
-        //todo: retornar tambien el recibo
+
         return invoiceService.getInvoiceByPayment(payment.getId());
     }
 
