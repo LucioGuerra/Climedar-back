@@ -23,7 +23,7 @@ public class CreatePersonDTO{
 
         @NotNull(message = "Birthdate cannot be null")
         @Past(message = "Birthdate must be a date in the past")
-        private LocalDate birthdate;
+        private String birthdate;
 
         @NotBlank(message = "Email cannot be empty")
         @Email(message = "Email must be a valid email address")

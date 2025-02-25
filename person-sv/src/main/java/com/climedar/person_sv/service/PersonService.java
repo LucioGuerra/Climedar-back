@@ -40,7 +40,7 @@ public class PersonService {
 
         person.setAddress(addressService.createAddress(createPersonDTO.getAddress()));
 
-        person.setBirthdate(LocalDate.now());
+        person.setBirthdate(LocalDate.parse(createPersonDTO.getBirthdate()));
         personRepository.save(person);
         return ResponseEntity.status(HttpStatus.CREATED).body(personMapper.toDTO(person));
     }
