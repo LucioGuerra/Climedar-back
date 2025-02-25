@@ -90,7 +90,7 @@ public class DoctorService {
         int totalPages = totalItems / itemsPerPage;
 
         List<DoctorModel> content = new ArrayList<>();
-        for (int i = 0; i < itemsPerPage; i++) {
+        for (int i = 0; i < itemsPerPage && i < totalItems; i++) {
             content.add(doctorModels.get((currentPage * itemsPerPage) + i));
         }
 
@@ -188,6 +188,11 @@ public class DoctorService {
         }
 
         doctorMapper.updateEntity(doctor, doctorModel);
+
+        if (doctorModel.getSpeciality() != null) {
+            doctor.setSpeciality(specialityService.findEntityById(doctorModel.getSpeciality().getId()));
+        }
+
         doctorRepository.save(doctor);
 
         return doctorMapper.toModel(doctor, person);
