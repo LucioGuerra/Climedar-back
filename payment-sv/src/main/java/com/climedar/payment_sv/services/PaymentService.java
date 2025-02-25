@@ -14,6 +14,7 @@ import com.climedar.payment_sv.external.model.medical_services.MedicalServices;
 import com.climedar.payment_sv.mapper.PaymentMapper;
 import com.climedar.payment_sv.model.PaymentModel;
 import com.climedar.payment_sv.repository.ConsultationRepository;
+import com.climedar.payment_sv.repository.MedicalServicesRepository;
 import com.climedar.payment_sv.repository.PaymentRepository;
 import com.climedar.payment_sv.specification.PaymentSpecification;
 import jakarta.persistence.EntityNotFoundException;
@@ -44,6 +45,7 @@ public class PaymentService {
     private final ExportService exportService;
     private final ConsultationRepository consultationRepository;
     private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final MedicalServicesRepository medicalServicesRepository;
 
     @Transactional
     public ResponseEntity<byte[]> createPayment(CreatePaymentDTO paymentDTO) {
@@ -62,7 +64,8 @@ public class PaymentService {
                 eventPublisher.publishEvent(new PaymentEvent(medicalService.getPrice(), payment.getPaymentDate(),
                         ((MedicalService) medicalService).getServiceType(), ((MedicalService) medicalService).getSpeciality().getName()));
             }else {
-                for (MedicalService medicalService1 : ((MedicalPackage) medicalService).getMedicalServices()) {
+                MedicalPackage medicalPackage = medicalServicesRepository.getPackageById(medicalService.getId());
+                for (MedicalService medicalService1 : medicalPackage.getMedicalServices()) {
                     eventPublisher.publishEvent(new PaymentEvent(medicalService1.getPrice(), payment.getPaymentDate(),
                             medicalService1.getServiceType(), medicalService1.getSpeciality().getName()));
                 }

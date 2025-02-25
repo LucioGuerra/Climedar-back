@@ -17,4 +17,5 @@ public interface PatientRepository {
 
     @GetMapping("/api/patients/ids")
     List<Patient> findAllById(@RequestParam Set<Long> ids);
+
 }

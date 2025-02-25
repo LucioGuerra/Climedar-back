@@ -185,4 +185,9 @@ public class ShiftService {
         kafkaTemplate.send("shift-canceled", new ShiftCanceledEvent(shift.getId()));
         return shiftMapper.toModel(shift);
     }
+
+    public List<ShiftModel> getShiftsByDateAndOccupied(LocalDate date) {
+        List<Shift> shifts = shiftRepository.findByDateAndState(date, ShiftState.OCCUPIED);
+        return shifts.stream().map(shiftMapper::toModel).toList();
+    }
 }

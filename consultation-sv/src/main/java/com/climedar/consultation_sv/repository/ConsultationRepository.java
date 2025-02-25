@@ -19,4 +19,6 @@ public interface ConsultationRepository extends JpaRepository<Consultation, Long
     Optional<Consultation> findByIdAndNotDeleted(Long id);
 
     Consultation findByShiftId(Long shiftId);
+
+    List<Consultation> findAllByShiftIdIn(List<Long> list);
 }

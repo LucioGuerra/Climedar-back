@@ -44,6 +44,11 @@ public class ShiftController {
         return ResponseEntity.status(200).body(shiftService.findAllById(ids));
     }
 
+    @GetMapping("/date/{date}/occupy")
+    public ResponseEntity<List<ShiftModel>> getShiftsByDateAndOccupied(@PathVariable LocalDate date) {
+        return ResponseEntity.status(200).body(shiftService.getShiftsByDateAndOccupied(date));
+    }
+
     @PostMapping
     public ResponseEntity<ShiftModel> createShift(@RequestParam Long doctorId, @RequestParam Duration timeOfShifts) {
         return ResponseEntity.status(201).body(shiftService.createShift(new CreateShiftDTO(doctorId, timeOfShifts,

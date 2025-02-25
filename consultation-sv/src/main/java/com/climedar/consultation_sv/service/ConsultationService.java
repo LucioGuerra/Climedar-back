@@ -25,6 +25,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +46,8 @@ public class ConsultationService {
     private final ShiftRepository shiftRepository;
     private final PatientRepository patientRepository;
     private final MedicalServicesRepository medicalServicesRepository;
+    private final EmailEventService emailEventService;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public Float getConsultationPrice(Set<Long> servicesIds, Long patientId) {
         Patient patient = null;
@@ -251,6 +255,21 @@ public class ConsultationService {
         Consultation consultation = consultationRepository.findByShiftId(event.getShiftId());
         consultation.setShiftId(-1L);
         consultationRepository.save(consultation);
+    }
+
+    @Scheduled(cron = "0 0 12 * * *")
+    public void notifyConsultation() {
+        List<Shift> shifts = shiftRepository.getShiftsByDateAndOccupied(LocalDate.now().plusDays(1));
+        List<Consultation> consultations = consultationRepository.findAllByShiftIdIn(shifts.stream().map(Shift::getId).toList());
+        Set<Long> patientIds = consultations.stream().map(Consultation::getPatientId).collect(Collectors.toSet());
+        List<Patient> patients = patientRepository.findAllById(patientIds);
+
+        Map<Long, Patient> patientMap = patients.stream().collect(Collectors.toMap(Patient::getId, Function.identity()));
+
+        consultations.forEach(consultation -> {
+            Patient patient = patientMap.get(consultation.getPatientId());
+            kafkaTemplate.send("notification", emailEventService.createConsultationNotificationEvent(consultation, patient));
+        });
     }
 
 }

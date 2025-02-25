@@ -8,6 +8,7 @@ import com.climedar.medical_service_sv.entity.MedicalServiceEntity;
 import com.climedar.medical_service_sv.external.model.Speciality;
 import com.climedar.medical_service_sv.mapper.MedicalPackageMapper;
 import com.climedar.medical_service_sv.model.MedicalPackageModel;
+import com.climedar.medical_service_sv.model.MedicalServiceModel;
 import com.climedar.medical_service_sv.repository.MedicalPackageRepository;
 import com.climedar.medical_service_sv.repository.SpecialityRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,10 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -36,7 +34,13 @@ public class PackageService {
 
     public MedicalPackageModel getPackageById(Long id) {
         MedicalPackageEntity medicalPackageEntity = medicalPackageRepository.findById(id).orElseThrow(() -> new RuntimeException("Package not found with id: " + id));
-        return medicalPackageMapper.toModel(medicalPackageEntity);
+        Set<MedicalServiceModel> services = new HashSet<>();
+        for (MedicalServiceEntity service : medicalPackageEntity.getServices()) {
+            services.add(medicalService.mapToModel(service));
+        }
+        MedicalPackageModel model = medicalPackageMapper.toModel(medicalPackageEntity);
+        model.setServices(services);
+        return model;
     }
 
     public Page<MedicalPackageModel> getAllPackages(Pageable pageable, Long specialityId, String name) {

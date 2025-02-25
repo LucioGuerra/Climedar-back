@@ -123,4 +123,8 @@ public class MedicalService {
         MedicalServiceEntity entity = medicalServiceRepository.findByCode(code).orElseThrow(() -> new EntityNotFoundException("Medical service not found with code: " + code));
         return medicalServiceMapper.toModel(entity);
     }
+
+    public MedicalServiceModel mapToModel(MedicalServiceEntity entity) {
+        return medicalServiceMapper.toModel(entity);
+    }
 }

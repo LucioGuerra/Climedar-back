@@ -1,5 +1,6 @@
 package com.climedar.payment_sv.repository;
 
+import com.climedar.payment_sv.external.model.medical_services.MedicalPackage;
 import com.climedar.payment_sv.external.model.medical_services.MedicalServicesWrapped;
 import com.climedar.payment_sv.external.model.medical_services.ServiceType;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -20,4 +21,8 @@ public interface MedicalServicesRepository {
 
     @GetMapping("/api/medical-services/public/types")
     Set<ServiceType> getAllServicesType();
+
+    @GetMapping("/api/packages/{id}")
+    MedicalPackage getPackageById(@PathVariable Long id);
+
 }

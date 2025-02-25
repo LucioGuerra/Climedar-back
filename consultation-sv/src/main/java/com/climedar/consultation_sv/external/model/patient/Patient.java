@@ -10,6 +10,7 @@ public class Patient {
     private String surname;
     private String dni;
     private String phone;
+    private String email;
     private MedicalSecure medicalSecure;
     private Address address;
 
