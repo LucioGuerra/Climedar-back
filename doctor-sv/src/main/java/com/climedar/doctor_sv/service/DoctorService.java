@@ -101,6 +101,7 @@ public class DoctorService {
         pageInfo.setItemsPerPage(itemsPerPage);
         pageInfo.setCurrentPage(currentPage);
         pageInfo.setTotalPages(totalPages);
+        doctorPage.setPageInfo(pageInfo);
 
         return doctorPage;
     }
