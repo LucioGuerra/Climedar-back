@@ -2,12 +2,15 @@ package com.climedar.notification_sv.event;
 
 import lombok.Data;
 
+import java.io.File;
+
 @Data
 public class NotificationSendEvent {
 
     private String to;
     private String subject;
     private String message;
+    private File pdfFile;
 
     public NotificationSendEvent() {
     }
