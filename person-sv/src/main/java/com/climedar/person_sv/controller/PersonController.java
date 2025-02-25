@@ -19,7 +19,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/public/persons")
+@RequestMapping("/api/persons")
 public class PersonController {
 
     private final PersonService personService;
@@ -40,16 +40,14 @@ public class PersonController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<GetPersonDTO>> getAllPersons(
-                                                        @PageableDefault(size = 10, sort = "surname", direction =
-                                                                Sort.Direction.ASC) Pageable pageable,
+    public ResponseEntity<List<GetPersonDTO>> getAllPersons(
                                                         @RequestParam(required = false) String fullName,
                                                         @RequestParam(required = false) String name,
                                                         @RequestParam(required = false) String surname,
                                                         @RequestParam(required = false) String dni,
                                                         @RequestParam(required = false) Gender gender) {
 
-        return personService.getAllPersons(pageable, fullName, name, surname, dni, gender);
+        return personService.getAllPersons(fullName, name, surname, dni, gender);
     }
 
     @GetMapping("/fullName")

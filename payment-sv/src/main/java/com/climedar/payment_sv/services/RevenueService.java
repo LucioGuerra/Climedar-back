@@ -16,6 +16,8 @@ import com.climedar.payment_sv.repository.SpecialityRepository;
 import com.climedar.payment_sv.specification.RevenueSpecification;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -25,10 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -77,22 +77,24 @@ public class RevenueService {
                         row -> (BigDecimal) row[1]
                 ));
 
+
         LocalDate current;
         switch (revenueType){
             case DAILY -> {
                 current = from;
                 while (current.isBefore(to)){
                     BigDecimal totalToCurrent = revenueMap.getOrDefault(current, BigDecimal.ZERO);
-                    RevenueLineChartDTO revenueLineChartDTO = new RevenueLineChartDTO(current, totalToCurrent);
+                    RevenueLineChartDTO revenueLineChartDTO = new RevenueLineChartDTO(current.toString(), totalToCurrent);
                     revenues.add(revenueLineChartDTO);
                     current = current.plusDays(1);
                 }
             }
             case MONTHLY -> {
                 current = from.withDayOfMonth(1);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM 'de' yyyy", new Locale("es", "ES"));
                 while (current.isBefore(to)){
                     BigDecimal totalToCurrent = revenueMap.getOrDefault(current, BigDecimal.ZERO);
-                    RevenueLineChartDTO revenueLineChartDTO = new RevenueLineChartDTO(current, totalToCurrent);
+                    RevenueLineChartDTO revenueLineChartDTO = new RevenueLineChartDTO(current.format(formatter), totalToCurrent);
                     revenues.add(revenueLineChartDTO);
                     current = current.plusMonths(1);
                 }
@@ -185,11 +187,6 @@ public class RevenueService {
 
     @PostConstruct
     public void createInitialAmount(){
-        try {
-            Thread.sleep(10*1000);
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
         List<Revenue> dailyRevenues = revenueRepository.findByDateAndRevenueType(LocalDate.now(), RevenueType.DAILY);
         List<Revenue> monthlyRevenues = revenueRepository.findByDateAndRevenueType(LocalDate.now().withDayOfMonth(1),
                 RevenueType.MONTHLY);

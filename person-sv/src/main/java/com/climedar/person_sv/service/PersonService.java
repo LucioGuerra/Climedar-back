@@ -40,7 +40,7 @@ public class PersonService {
 
         person.setAddress(addressService.createAddress(createPersonDTO.getAddress()));
 
-        person.setBirthdate(LocalDate.now());
+        person.setBirthdate(LocalDate.parse(createPersonDTO.getBirthdate()));
         personRepository.save(person);
         return ResponseEntity.status(HttpStatus.CREATED).body(personMapper.toDTO(person));
     }
@@ -81,7 +81,7 @@ public class PersonService {
         return ResponseEntity.status(HttpStatus.OK).body(personsDTO);
     }
 
-    public ResponseEntity<Page<GetPersonDTO>> getAllPersons(Pageable pageable, String fullName, String name,
+    public ResponseEntity<List<GetPersonDTO>> getAllPersons(String fullName, String name,
                                                             String surname, String dni,
                                                             Gender gender) {
 
@@ -92,8 +92,8 @@ public class PersonService {
                 .and(PersonSpecification.dniLike(dni))
                 .and(PersonSpecification.genderEqual(gender));
 
-        Page<Person> persons = personRepository.findAll(specification, pageable);
-        Page<GetPersonDTO> personsDTO = persons.map(personMapper::toDTO);
+        List<Person> persons = personRepository.findAll(specification);
+        List<GetPersonDTO> personsDTO = persons.stream().map(personMapper::toDTO).toList();
         return ResponseEntity.status(HttpStatus.OK).body(personsDTO);
     }
 }

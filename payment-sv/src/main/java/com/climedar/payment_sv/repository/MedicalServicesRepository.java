@@ -12,12 +12,12 @@ import java.util.Set;
 
 @FeignClient(name = "medical-service-sv")
 public interface MedicalServicesRepository {
-    @GetMapping("/api/public/medical-services/{id}")
+    @GetMapping("/api/medical-services/{id}")
     MedicalServicesWrapped getMedicalServiceById(@PathVariable Long id);
 
-    @GetMapping("/api/public/medical-services/ids")
+    @GetMapping("/api/medical-services/ids")
     List<MedicalServicesWrapped> findAllById(@RequestParam Set<Long> ids);
 
-    @GetMapping("/api/public/medical-services/types")
+    @GetMapping("/api/medical-services/public/types")
     Set<ServiceType> getAllServicesType();
 }

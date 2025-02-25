@@ -34,7 +34,7 @@ public class RevenueSpecification {
     }
 
     public static Specification<Revenue> byMedicalService(ServiceType medicalService) {
-        return (root, query, cb) -> medicalService == null? null : cb.equal(root.get("ServicesType"), medicalService);
+        return (root, query, cb) -> medicalService == null? null : cb.equal(root.get("medicalServiceType"), medicalService);
     }
 
 

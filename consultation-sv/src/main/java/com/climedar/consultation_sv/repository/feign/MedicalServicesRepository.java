@@ -11,9 +11,9 @@ import java.util.Set;
 @FeignClient(name = "medical-service-sv")
 public interface MedicalServicesRepository {
 
-    @GetMapping("/api/public/medical-services/ids")
+    @GetMapping("/api/medical-services/ids")
     List<MedicalServicesWrapped> findAllById(@RequestParam Set<Long> ids);
 
-    @GetMapping("/api/public/medical-services/codes")
+    @GetMapping("/api/medical-services/codes")
     List<MedicalServicesWrapped> findAllByCode(@RequestParam Set<String> codes);
 }

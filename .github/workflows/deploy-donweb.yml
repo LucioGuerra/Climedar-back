@@ -28,9 +28,10 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd /root/deploy/Climedar-back
+            git stash push --include-untracked
             git pull
-            podman stop -a
-            podman rm -a
             chmod +x run_all.sh
             chmod +x build_all.sh
+            podman stop -a
+            podman rm -a
             ./run_all.sh

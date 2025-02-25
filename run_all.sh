@@ -31,6 +31,14 @@ wait_for() {
     exit 1
 }
 
+
+podman container prune -f
+podman image prune -f
+podman system prune -f
+sudo truncate -s 0 /var/log/syslog
+sudo systemctl restart rsyslog
+
+
 # Crear la red (si no existe)
 if ! podman network exists hackacode; then
     podman network create hackacode
@@ -51,11 +59,14 @@ else
     podman run -d \
       --name hackacode-db \
       --memory 512m \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       --restart=always \
       -e MYSQL_ROOT_PASSWORD=root \
       -p 3306:3306 \
-      -v "$(pwd)/mysql/init:/docker-entrypoint-initdb.d" \
-      -v "$(pwd)/mysql/data:/var/lib/mysql" \
+      -v "./mysql/init:/docker-entrypoint-initdb.d" \
+      -v "./mysql/data:/var/lib/mysql" \
+      -v "./mysql/my.cnf:/etc/mysql/conf.d/my.cnf" \
       --network hackacode \
       docker.io/mysql:8.0
 fi
@@ -77,6 +88,9 @@ else
     podman run -d \
       --name eureka-sv \
       --memory 384m \
+      --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -p 8761:8761 \
       -v "${EUREKA_DIR}/eureka-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
       --network hackacode \
@@ -97,6 +111,9 @@ else
     podman run -d \
       --name doctor-sv \
       --memory 768m \
+      --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -108,6 +125,7 @@ else
       -e KAFKA_TRUSTSTORE_PASSWORD="${KAFKA_TRUSTSTORE_PASSWORD}" \
       -e KAFKA_USER="${KAFKA_USER}" \
       -e PROFILE=prod \
+      -e ISSUER_URI="${ISSUER_URI}" \
       -p 8083:8083 \
       -v "${DOCTOR_DIR}/doctor-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
       -v "${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro" \
@@ -124,12 +142,16 @@ else
     podman run -d \
       --name medical-service-sv \
       --memory 512m \
+      --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
       -e DB_NAME=medical_service_db \
       -e EUREKA_URL=eureka-sv:8761 \
       -e PROFILE=prod \
+      -e ISSUER_URI="${ISSUER_URI}" \
       -p 8081:8081 \
       -v "${MEDICAL_DIR}/medical-service-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
       --network hackacode \
@@ -152,6 +174,9 @@ else
     podman run -d \
       --name patient-sv \
       --memory 512m \
+      --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -163,6 +188,7 @@ else
       -e KAFKA_TRUSTSTORE_PASSWORD="${KAFKA_TRUSTSTORE_PASSWORD}" \
       -e KAFKA_USER="${KAFKA_USER}" \
       -e PROFILE=prod \
+      -e ISSUER_URI="${ISSUER_URI}" \
       -p 8082:8082 \
       -v "${PATIENT_DIR}/patient-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
       -v "${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro" \
@@ -179,6 +205,9 @@ else
     podman run -d \
       --name consultation-sv \
       --memory 768m \
+      --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -190,6 +219,7 @@ else
       -e KAFKA_TRUSTSTORE_PASSWORD="${KAFKA_TRUSTSTORE_PASSWORD}" \
       -e KAFKA_USER="${KAFKA_USER}" \
       -e PROFILE=prod \
+      -e ISSUER_URI="${ISSUER_URI}" \
       -p 8086:8086 \
       -v "${CONSULTATION_DIR}/consultation-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
       -v "${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro" \
@@ -206,6 +236,9 @@ else
     podman run -d \
       --name payment-sv \
       --memory 768m \
+      --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
@@ -217,6 +250,7 @@ else
       -e KAFKA_TRUSTSTORE_PASSWORD="${KAFKA_TRUSTSTORE_PASSWORD}" \
       -e KAFKA_USER="${KAFKA_USER}" \
       -e PROFILE=prod \
+      -e ISSUER_URI="${ISSUER_URI}" \
       -p 8085:8085 \
       -v "${PAYMENT_DIR}/payment-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
       -v "${KAFKA_TRUSTSTORE_LOCATION}:/app/certs/truststore.jks:ro" \
@@ -241,12 +275,16 @@ else
     podman run -d \
       --name person-sv \
       --memory 768m \
+      --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -e DB_USER=root \
       -e DB_PASSWORD=root \
       -e DB_URL=hackacode-db:3306 \
       -e DB_NAME=person_db \
       -e EUREKA_URL=eureka-sv:8761 \
       -e PROFILE=prod \
+      -e ISSUER_URI="${ISSUER_URI}" \
       -p 8084:8084 \
       -v "${PERSON_DIR}/person-sv-0.0.1-SNAPSHOT.jar:/app/app.jar" \
       --network hackacode \
@@ -269,6 +307,9 @@ else
     podman run -d \
       --name apollo-federation \
       --memory 256m \
+      --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -p 4000:4000 \
       --network hackacode \
       apollo-federation
@@ -288,6 +329,9 @@ else
     podman run -d \
       --name api-gateway \
       --memory 512m \
+      --restart=always \
+      --log-opt max-size=10m \
+      --log-opt max-file=3 \
       -e ISSUER_URI="${ISSUER_URI}" \
       -e EUREKA_URL=eureka-sv:8761 \
       -p 443:443 \

@@ -108,6 +108,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.climedar.library</groupId>
+			<artifactId>request-interceptor</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.climedar.library</groupId>
 			<artifactId>expection</artifactId>
 			<version>1.0</version>
 		</dependency>

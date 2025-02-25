@@ -18,30 +18,30 @@ import java.util.Set;
 @FeignClient(name = "person-sv", fallbackFactory = FallBackFactory.class)
 public interface PersonRepository {
 
-    @GetMapping("/api/public/persons/{id}")
+    @GetMapping("/api/persons/{id}")
     Person findById(@PathVariable Long id);
 
-    @GetMapping("/api/public/persons/ids")
+    @GetMapping("/api/persons/ids")
     List<Person> findAllById(@RequestParam Set<Long> ids);
 
-    @GetMapping("/api/public/persons/dni/{dni}")
+    @GetMapping("/api/persons/dni/{dni}")
     Optional<Person> findByDni(@PathVariable String dni);
 
-    @GetMapping("/api/public/persons")
-    Page<Person> getAllPersons(Pageable pageable,
+    @GetMapping("/api/persons")
+    List<Person> getAllPersons(
                                @RequestParam(required = false) String fullName,
                                @RequestParam(required = false) String name,
                                @RequestParam(required = false) String surname,
                                @RequestParam(required = false) String dni,
                                @RequestParam(required = false) Gender gender);
 
-    @PostMapping("/api/public/persons")
+    @PostMapping("/api/persons")
     Person createPerson(Person person);
 
-    @PutMapping("/api/public/persons/{id}")
+    @PutMapping("/api/persons/{id}")
     Person updatePerson(@PathVariable Long id, @RequestBody Person person);
 
-    @GetMapping("/api/public/persons/fullName")
+    @GetMapping("/api/persons/fullName")
     Page<Person> getAllPersonsByFullName(@PageableDefault(size = 10, sort = "surname", direction = Sort.Direction.ASC) Pageable pageable,
                                          @RequestParam(required = false) String fullName);
 

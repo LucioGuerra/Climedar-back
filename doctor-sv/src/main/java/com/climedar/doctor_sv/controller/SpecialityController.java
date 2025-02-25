@@ -11,7 +11,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/public/specialities")
+@RequestMapping("/api/specialities")
 public class SpecialityController {
 
     private final SpecialityService specialityService;
@@ -22,7 +22,7 @@ public class SpecialityController {
         return ResponseEntity.ok().body(specialityService.getSpecialityById(id));
     }
 
-    @GetMapping("/names")
+    @GetMapping("/public/names")
     public ResponseEntity<Set<String>> getAllSpecialitiesNames() {
         return ResponseEntity.ok().body(specialityService.getAllSpecialitiesNames());
     }

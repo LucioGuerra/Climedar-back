@@ -20,7 +20,7 @@ public interface DoctorMapper {
     DoctorModel toModel(Doctor doctor, Person person);
 
     @Mapping(target = "personId", ignore = true)
-    @Mapping(target = "speciality", source = "doctorModel.speciality")
+    @Mapping(target = "speciality", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.IGNORE)
     void updateEntity(@MappingTarget Doctor doctor, DoctorModel doctorModel);
 }
