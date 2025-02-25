@@ -85,7 +85,7 @@ public class PatientService {
         int totalPages = totalItems / itemsPerPage;
 
         List<PatientModel> content = new ArrayList<>();
-        for (int i = 0; i < itemsPerPage; i++) {
+        for (int i = 0; i < itemsPerPage && i < totalItems; i++) {
             content.add(patientModels.get((currentPage * itemsPerPage) + i));
         }
 
