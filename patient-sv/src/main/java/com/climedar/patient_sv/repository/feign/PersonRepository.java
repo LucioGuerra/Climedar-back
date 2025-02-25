@@ -28,7 +28,7 @@ public interface PersonRepository {
     Optional<Person> findByDni(@PathVariable String dni);
 
     @GetMapping("/api/persons")
-    Page<Person> getAllPersons(Pageable pageable,
+    List<Person> getAllPersons(
                                @RequestParam(required = false) String fullName,
                                @RequestParam(required = false) String name,
                                @RequestParam(required = false) String surname,

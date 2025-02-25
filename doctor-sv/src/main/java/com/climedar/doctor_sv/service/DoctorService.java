@@ -1,5 +1,6 @@
 package com.climedar.doctor_sv.service;
 
+import com.climedar.doctor_sv.dto.response.DoctorPage;
 import com.climedar.doctor_sv.entity.Doctor;
 import com.climedar.doctor_sv.external.model.Gender;
 import com.climedar.doctor_sv.external.model.Person;
@@ -9,6 +10,7 @@ import com.climedar.doctor_sv.model.DoctorModel;
 import com.climedar.doctor_sv.repository.DoctorRepository;
 import com.climedar.doctor_sv.repository.feign.PersonRepository;
 import com.climedar.doctor_sv.specification.DoctorSpecification;
+import com.climedar.library.dto.response.PageInfo;
 import com.climedar.library.exception.ClimedarException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -40,21 +42,19 @@ public class DoctorService {
         return model;
     }
 
-    public Page<DoctorModel> getAllDoctors(Pageable pageable, String fullName, String name,
+    public DoctorPage getAllDoctors(Pageable pageable, String fullName, String name,
                                     String surname, String dni,
                                     Gender gender, Long shiftId,
                                     Long specialityId) {
 
 
-        Page<Person> personPage = personRepository.getAllPersons(pageable, fullName, name, surname, dni, gender);
+        List<Person> personPage = personRepository.getAllPersons(fullName, name, surname, dni, gender);
 
         if (personPage.isEmpty()) {
-            return new PageImpl<>(Collections.emptyList(), pageable, 0);
+            return new DoctorPage();
         }
 
-        Set<Long> personIds = personPage
-                .getContent()
-                .stream()
+        Set<Long> personIds = personPage.stream()
                 .map(Person::getPersonId)
                 .collect(Collectors.toSet());
 
@@ -67,25 +67,42 @@ public class DoctorService {
         List<Doctor> doctorList = doctorRepository.findAll(doctorSpec);
 
         if (doctorList.isEmpty()) {
-            return new PageImpl<>(Collections.emptyList(), pageable, 0);
+            return new DoctorPage();
         }
 
-        Map<Long, Doctor> doctorByPersonId = doctorList
-                .stream()
+        Map<Long, Doctor> doctorByPersonId = doctorList.stream()
                 .collect(Collectors.toMap(Doctor::getPersonId, Function.identity()));
 
-        List<DoctorModel> finalDoctorModels = new ArrayList<>();
+        List<DoctorModel> doctorModels = new ArrayList<>();
 
-        for (Person person : personPage.getContent()) {
+
+        for (Person person : personPage) {
             Doctor doctor = doctorByPersonId.get(person.getPersonId());
-            if (doctor == null) {
-                continue;
+            if (doctor != null) {
+                DoctorModel model = doctorMapper.toModel(doctor, person);
+                doctorModels.add(model);
             }
-            DoctorModel model = doctorMapper.toModel(doctor, person);
-            finalDoctorModels.add(model);
         }
 
-        return new PageImpl<>(finalDoctorModels, pageable, personPage.getTotalElements());
+        int totalItems = doctorModels.size();
+        int itemsPerPage = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int totalPages = totalItems / itemsPerPage;
+
+        List<DoctorModel> content = new ArrayList<>();
+        for (int i = 0; i < itemsPerPage; i++) {
+            content.add(doctorModels.get((currentPage * itemsPerPage) + i));
+        }
+
+        DoctorPage doctorPage = new DoctorPage();
+        doctorPage.setDoctors(content);
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setTotalItems(totalItems);
+        pageInfo.setItemsPerPage(itemsPerPage);
+        pageInfo.setCurrentPage(currentPage);
+        pageInfo.setTotalPages(totalPages);
+
+        return doctorPage;
     }
 
     public Page<DoctorModel> getDoctorsByFullName(String fullName, Long specialityId, Pageable pageable) {

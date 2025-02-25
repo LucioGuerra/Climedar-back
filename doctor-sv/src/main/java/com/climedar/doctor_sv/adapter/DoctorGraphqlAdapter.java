@@ -43,14 +43,10 @@ public class DoctorGraphqlAdapter {
             specification = new DoctorSpecificationDTO();
         }
 
-        Page<DoctorModel> doctors = doctorService.getAllDoctors(pageable, specification.getFullName(), specification.getName(),
+        return doctorService.getAllDoctors(pageable, specification.getFullName(), specification.getName(),
                 specification.getSurname(), specification.getDni(), specification.getGender(),
                 specification.getShiftId(), specification.getSpecialityId());
 
-        DoctorPage doctorPage = new DoctorPage();
-        doctorPage.setDoctors(doctors.getContent());
-        doctorPage.setPageInfo(pageInfoMapper.toPageInfo(doctors));
-        return doctorPage;
 
     }
 

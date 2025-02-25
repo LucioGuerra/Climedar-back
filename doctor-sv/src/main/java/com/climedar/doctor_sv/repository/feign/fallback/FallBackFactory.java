@@ -43,9 +43,10 @@ public class FallBackFactory  implements FallbackFactory<PersonRepository> {
             }
 
             @Override
-            public Page<Person> getAllPersons(Pageable pageable, String fullName, String name, String surname, String dni, Gender gender) {
-                return new PageImpl<>(new ArrayList<>());
+            public List<Person> getAllPersons(String fullName, String name, String surname, String dni, Gender gender) {
+                return null;
             }
+
 
             @Override
             public Page<Person> getAllPersonsByFullName(Pageable pageable, String fullName) {
